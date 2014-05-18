@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dip"
+    android:layout_marginStart="8dip"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/grid_alert_display_name" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Vikalp Patel"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        />
+    <View 
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#ffca00"
+        android:layout_marginBottom="2dp"
+        />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center"
+            android:layout_weight="0.7" >
+
+            <ImageView
+                android:id="@+id/grid_alert_contact_image"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/def_contact" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/grid_alert_content_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.3"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/grid_alert_call"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:text="Call"
+                android:textColor="#000000" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="10dip"
+                android:layout_marginLeft="10dip"
+                android:background="#000000" />
+
+            <Button
+                android:id="@+id/grid_alert_message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:text="Message"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/grid_alert_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffca00"
+        android:paddingBottom="8dip"
+        android:paddingEnd="16dip"
+        android:paddingStart="16dip"
+        android:paddingTop="8dip"
+        android:text="Cancel"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

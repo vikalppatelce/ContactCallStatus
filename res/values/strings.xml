@@ -1,0 +1,41 @@
+<resources>
+
+    <string-array name="planets_array">
+        <item>Edit Profile</item>
+        <item>Settings</item>
+<!--         <item>Gallery</item> -->
+<!--         <item>Temple</item> -->
+<!--         <item>History</item> -->
+<!--         <item>Management</item> -->
+<!--         <item>Contact Us</item> -->
+    </string-array>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    
+    <!--Intro view-->
+    <string name="Page1Title">Zname</string>
+    <string name="Page2Title">Fast</string>
+    <string name="Page3Title">Free</string>
+    <string name="Page4Title">Secure</string>
+    <string name="Page5Title">Powerful</string>
+    <string name="Page6Title">Cloud-Based</string>
+    <string name="Page7Title">Private</string>
+    <string name="Page1Message">Welcome to the era of fast and upto date information</string>
+    <string name="Page2Message"><![CDATA[<b>Classes</b>]]> delivers messages faster than<![CDATA[<br/>]]>any other application</string>
+    <string name="Page3Message"><![CDATA[<b>Classes</b>]]> is free forever. No ads.<![CDATA[<br/>]]>No subscription fees</string>
+    <string name="Page4Message"><![CDATA[<b>Classes</b>]]> keeps your messages safe<![CDATA[<br/>]]>from hacker attacks</string>
+    <string name="Page5Message"><![CDATA[<b>Classes</b>]]> has no limits on the size of<![CDATA[<br/>]]>your media and chats</string>
+    <string name="Page6Message"><![CDATA[<b>Classes</b>]]> lets you access your messages<![CDATA[<br/>]]>from multiple devices</string>
+    <string name="Page7Message"><![CDATA[<b>Classes</b>]]> messages are heavily encrypted<![CDATA[<br/>]]>and can self-destruct</string>
+    
+    <string name="app_name">Zname</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">ABS ViewPager Tabs Tutorial</string>
+    <string name="str_all_contacts_fragment">All Contacts</string>
+    <string name="str_friends_contacts_fragment">Friends</string>
+    <string name="str_family_contacts_fragment">Family</string>
+    <string name="str_work_contacts_fragment">Work</string>
+    <string name="str_call_logs_fragment">Call Logs</string>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="TAG_CONTACT_NUMBER" type="id"/>
+    <item name="TAG_CONTACT_DP" type="id"/>
+    <item name="TAG_CONTACT_NAME" type="id"/>
+    <item name="TAG_PDT_ID" type="id"/>
+    <item name="TAG_PDT_NAME" type="id"/>
+    <item name="TAG_PDT_V_ID" type="id"/>
+</resources>
