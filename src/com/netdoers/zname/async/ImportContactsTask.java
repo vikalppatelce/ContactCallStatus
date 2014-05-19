@@ -25,23 +25,25 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
+import android.sax.StartElementListener;
 import android.util.Log;
 
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.Zname;
 import com.netdoers.zname.dto.Contact;
 import com.netdoers.zname.sqlite.DBConstant;
+import com.netdoers.zname.ui.MotherActivity;
 
 public class ImportContactsTask extends AsyncTask<Void, Void, String>
 {
@@ -62,9 +64,13 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 	    super.onPreExecute();
 	    {
 			if (!isFromObserver) {
-				progressDialog = new ProgressDialog(context);
-				progressDialog.setMessage("Importing Contacts");
-				progressDialog.show();
+				try {
+					progressDialog = new ProgressDialog(context);
+					progressDialog.setMessage("Importing Contacts");
+					progressDialog.show();
+				} catch (Exception e) {
+					Log.e(TAG, e.toString());
+				}
 			}
 			if (BuildConfig.DEBUG) {
 				Log.e(TAG, String.valueOf(isFromObserver));
@@ -87,7 +93,14 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 	  {
 	    super.onPostExecute(result);
 		if (!isFromObserver) {
-			progressDialog.dismiss();
+			try {
+				progressDialog.dismiss();
+				Intent i = new Intent(Zname.getApplication().getApplicationContext(),MotherActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				Zname.getApplication().getApplicationContext().startActivity(i);
+			} catch (Exception e) {
+				Log.e(TAG, e.toString());
+			}
 		}
 	  }
 	  

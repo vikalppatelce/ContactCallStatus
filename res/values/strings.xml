@@ -15,17 +15,17 @@
     
     <!--Intro view-->
     <string name="Page1Title">Zname</string>
-    <string name="Page2Title">Fast</string>
-    <string name="Page3Title">Free</string>
-    <string name="Page4Title">Secure</string>
-    <string name="Page5Title">Powerful</string>
+    <string name="Page2Title">Place</string>
+    <string name="Page3Title">Share</string>
+    <string name="Page4Title">Available</string>
+    <string name="Page5Title">Feed</string>
     <string name="Page6Title">Cloud-Based</string>
     <string name="Page7Title">Private</string>
-    <string name="Page1Message">Welcome to the era of fast and upto date information</string>
-    <string name="Page2Message"><![CDATA[<b>Classes</b>]]> delivers messages faster than<![CDATA[<br/>]]>any other application</string>
-    <string name="Page3Message"><![CDATA[<b>Classes</b>]]> is free forever. No ads.<![CDATA[<br/>]]>No subscription fees</string>
-    <string name="Page4Message"><![CDATA[<b>Classes</b>]]> keeps your messages safe<![CDATA[<br/>]]>from hacker attacks</string>
-    <string name="Page5Message"><![CDATA[<b>Classes</b>]]> has no limits on the size of<![CDATA[<br/>]]>your media and chats</string>
+    <string name="Page1Message"><![CDATA[<b>Zname</b>]]> is ur new identity.. pick any name u want.. now on<![CDATA[<br/>]]>, ur Z:name becomes ur mobile number</string>
+    <string name="Page2Message"><![CDATA[<b>Changed</b>]]>  ur city or ur service provider? Don’t worry with Z:name<![CDATA[<br/>]]>u don’t need to communicate ur new number anymore</string>
+    <string name="Page3Message"><![CDATA[<b>Be known</b>]]> by ur Z:name &amp; share ur Z:name<![CDATA[<br/>]]> instead of ur Mobile number</string>
+    <string name="Page4Message"><![CDATA[<b>Want</b>]]> to know if your friend is free to talk?<![CDATA[<br/>]]> check his calling status on Z:name</string>
+    <string name="Page5Message"><![CDATA[<b>Check</b>]]> activity feeds of ur friends &amp; do much more.<![CDATA[<br/>]]>Hop in to check out more...!</string>
     <string name="Page6Message"><![CDATA[<b>Classes</b>]]> lets you access your messages<![CDATA[<br/>]]>from multiple devices</string>
     <string name="Page7Message"><![CDATA[<b>Classes</b>]]> messages are heavily encrypted<![CDATA[<br/>]]>and can self-destruct</string>
     

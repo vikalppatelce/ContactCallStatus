@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginTop="20dp" >
+            android:layout_marginTop="15dp" >
 
             <ImageView
                 android:id="@+id/icon_image1"
@@ -34,84 +34,41 @@
             android:layout_height="fill_parent" />
 
         <TextView
-            android:id="@+id/start_messaging_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="60dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="120dp"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Z:name"
             android:textColor="#ffca00"
-            android:textSize="18dp"
-             />
+            android:textSize="22sp" />
+
         <TextView
+            android:id="@+id/start_messaging_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="80dp"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text=""
-            android:textColor="#ffffff"
-            android:textSize="15dp"
-             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="75dp"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Your name is your"
-            android:textColor="#ffca00"
-            android:textSize="16dp"
-             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="60dp"
-            android:gravity="center"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="number"
-            android:textColor="#ffca00"
-            android:textSize="16dp"
-             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/regbtn_states"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/zname_btn_default_holo_light"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Sign Up"
             android:textColor="#ffffff"
-            android:textSize="18dp"
-             />
+            android:textSize="22sp" />
 
         <LinearLayout
             android:id="@+id/bottom_pages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="150dp"
+            android:layout_marginBottom="100dp"
             android:orientation="horizontal" >
 
             <FrameLayout
@@ -142,21 +99,7 @@
                 android:layout_height="5dp"
                 android:layout_marginLeft="7dp"
                 android:background="#bbbbbb" />
-
-            <FrameLayout
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
-
-            <FrameLayout
-                android:layout_width="5dp"
-                android:layout_height="5dp"
-                android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
         </LinearLayout>
-
-
     </FrameLayout>
 
 </ScrollView>

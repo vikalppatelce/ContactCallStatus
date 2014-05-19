@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+                
+                <TextView 
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="20sp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="7dp"
+                        android:background="@drawable/accounts_glyph_name_default" />
+
+                    <EditText
+                        android:id="@+id/sign_up_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/edit_text_selector"
+                        android:hint="Full Name"
+                        android:inputType="text"
+                        android:padding="5dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="7dp"
+                        android:background="@drawable/accounts_glyph_username_default" />
+
+                    <EditText
+                        android:id="@+id/sign_up_zname"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/edit_text_selector"
+                        android:hint="Book your : Zname"
+                        android:inputType="text"
+                        android:padding="5dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="7dp"
+                        android:background="@drawable/accounts_glyph_phone_default" />
+
+                    <EditText
+                        android:id="@+id/sign_up_zname_znumber"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/edit_text_selector"
+                        android:hint="Contact Number"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:paddingLeft="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dip"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <com.netdoers.zname.utils.SquareImageView
+                    android:id="@+id/sign_up_display_picture"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dip"
+                    android:onClick="onDisplayPicture"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/def_contact" />
+
+                <TextView
+                    android:id="@+id/sign_up_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/zname_btn_default_holo_light"
+                    android:gravity="center"
+                    android:text="Sign Up"
+                    android:textColor="#ffffff"
+                    android:textSize="22sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

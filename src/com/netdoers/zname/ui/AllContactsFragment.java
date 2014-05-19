@@ -12,6 +12,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -163,9 +164,14 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+			
+				// vibration for 100 milliseconds
+				((Vibrator)getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE)).vibrate(50);
+				
 				String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
 				String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
 				String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				
 				showInputDialog(viewTagName,viewTagNumber,viewTagDp);
 				return false;
 			}
@@ -242,6 +248,9 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 		if (!TextUtils.isEmpty(photoUri)) {
 			gridAlertImage.setImageURI(Uri.parse(photoUri));
 		}
+		
+		if (gridAlertImage.getDrawable() == null)
+			gridAlertImage.setImageResource(R.drawable.def_contact);
 		
 		gridAlertCall.setOnClickListener(new View.OnClickListener() {
 			
@@ -440,6 +449,5 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 				notifyDataSetInvalidated();
 			}
 		}
-
 	}
 }

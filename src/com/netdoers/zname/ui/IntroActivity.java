@@ -1,9 +1,6 @@
 /*
- * This is the source code of Telegram for Android v. 1.3.2.
- * It is licensed under GNU GPL v. 2 or later.
- * You should have received a copy of the license in this archive (see LICENSE).
- *
- * Copyright Nikolai Kudashov, 2013.
+ * This is the source code of Zname for Android v. 0.1.1.
+ * Copyright Vikalp Patel, 2014.
  */
 
 package com.netdoers.zname.ui;
@@ -48,28 +45,22 @@ public class IntroActivity extends FragmentActivity {
 
         if (Utilities.isRTL) {
             icons = new int[] {
-                    R.drawable.intro7,
-                    R.drawable.intro6,
-                    R.drawable.intro5,
-                    R.drawable.intro4,
+            		R.drawable.intro1,
+            		R.drawable.intro2,
                     R.drawable.intro3,
                     R.drawable.intro2,
                     R.drawable.intro1
             };
             titles = new int[] {
-                    R.string.Page7Title,
-                    R.string.Page6Title,
-                    R.string.Page5Title,
-                    R.string.Page4Title,
+            		R.string.Page5Title,
+            		R.string.Page4Title,
                     R.string.Page3Title,
                     R.string.Page2Title,
                     R.string.Page1Title
             };
             messages = new int[] {
-                    R.string.Page7Message,
-                    R.string.Page6Message,
-                    R.string.Page5Message,
-                    R.string.Page4Message,
+            		R.string.Page5Message,
+            		R.string.Page4Message,
                     R.string.Page3Message,
                     R.string.Page2Message,
                     R.string.Page1Message
@@ -79,28 +70,22 @@ public class IntroActivity extends FragmentActivity {
                     R.drawable.intro1,
                     R.drawable.intro2,
                     R.drawable.intro3,
-                    R.drawable.intro4,
-                    R.drawable.intro5,
-                    R.drawable.intro6,
-                    R.drawable.intro7
+                    R.drawable.intro2,
+                    R.drawable.intro1
             };
             titles = new int[] {
                     R.string.Page1Title,
                     R.string.Page2Title,
                     R.string.Page3Title,
                     R.string.Page4Title,
-                    R.string.Page5Title,
-                    R.string.Page6Title,
-                    R.string.Page7Title
+                    R.string.Page5Title
             };
             messages = new int[] {
                     R.string.Page1Message,
                     R.string.Page2Message,
                     R.string.Page3Message,
                     R.string.Page4Message,
-                    R.string.Page5Message,
-                    R.string.Page6Message,
-                    R.string.Page7Message
+                    R.string.Page5Message
             };
         }
         viewPager = (ViewPager)findViewById(R.id.intro_view_pager);
@@ -196,7 +181,7 @@ public class IntroActivity extends FragmentActivity {
                     return;
                 }
                 startPressed = true;
-                Intent intent2 = new Intent(IntroActivity.this, MotherActivity.class);
+                Intent intent2 = new Intent(IntroActivity.this, SignUpActivity.class);
                 startActivity(intent2);
                 finish();
             }
@@ -212,8 +197,8 @@ public class IntroActivity extends FragmentActivity {
         super.onResume();
         if (justCreated) {
             if (Utilities.isRTL) {
-                viewPager.setCurrentItem(6);
-                lastPage = 6;
+                viewPager.setCurrentItem(2);
+                lastPage = 4;
             } else {
                 viewPager.setCurrentItem(0);
                 lastPage = 0;
@@ -225,7 +210,7 @@ public class IntroActivity extends FragmentActivity {
     private class IntroAdapter extends PagerAdapter {
         @Override
         public int getCount() {
-            return 7;
+            return 5;
         }
 
         @Override
@@ -253,7 +238,8 @@ public class IntroActivity extends FragmentActivity {
             for (int a = 0; a < count; a++) {
                 View child = bottomPages.getChildAt(a);
                 if (a == position) {
-                    child.setBackgroundColor(0xff2ca5e0);
+//                    child.setBackgroundColor(0xff2ca5e0);
+                    child.setBackgroundColor(0xffffca00);
                 } else {
                     child.setBackgroundColor(0xffbbbbbb);
                 }
