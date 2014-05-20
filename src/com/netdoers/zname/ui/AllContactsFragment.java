@@ -4,15 +4,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Random;
 import java.util.Set;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.Data;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,7 +43,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
@@ -41,7 +50,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.async.ImportContactsTask;
 import com.netdoers.zname.dto.Contact;
 import com.netdoers.zname.sqlite.DBConstant;
 
@@ -116,31 +124,34 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 		/*
 		 * ImportContactsTask AyncTask execute when Zname is first time launched
 		 */
-		if(!Zname.getPreferences().getFirstTime()){
-			new ImportContactsTask(getActivity(),false).execute();
-			Zname.getPreferences().setFirstTime(true);
+//		if(!Zname.getPreferences().getFirstTime() || Zname.getPreferences().getRefreshContact()){
+		if(Zname.getPreferences().getRefreshContact()){
+			new ImportFragmentContactsTask(getActivity()).execute();
+//			Zname.getPreferences().setFirstTime(true);
+			Zname.getPreferences().setRefreshContact(false);
 		}else{
-			Cursor cr = getActivity().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
-			if(cr.getCount() > 0)
-			{
-				int intColumnId = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID);
-				int intColumnContactNumber = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER);
-				int intColumnZname = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
-				int intColumnZnameDp = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS);
-				Contact c;
-				cr.moveToFirst();
-				while(cr.moveToNext())
-				{
-					c = new Contact();
-					c.setContactId(cr.getString(intColumnId));
-					c.setContactNumber(cr.getString(intColumnContactNumber));
-					c.setContactName(cr.getString(intColumnZname));
-					c.setContactPhotoUri(Uri.parse(cr.getString(intColumnZnameDp)));
-					contacts.add(c);
-				}
-			}
-			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_all_contacts, contacts);
-			contactsGridView.setAdapter(contactAdapter);
+			refreshContactsData();
+//			Cursor cr = getActivity().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
+//			if(cr.getCount() > 0)
+//			{
+//				int intColumnId = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID);
+//				int intColumnContactNumber = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER);
+//				int intColumnZname = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
+//				int intColumnZnameDp = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS);
+//				Contact c;
+//				cr.moveToFirst();
+//				while(cr.moveToNext())
+//				{
+//					c = new Contact();
+//					c.setContactId(cr.getString(intColumnId));
+//					c.setContactNumber(cr.getString(intColumnContactNumber));
+//					c.setContactName(cr.getString(intColumnZname));
+//					c.setContactPhotoUri(Uri.parse(cr.getString(intColumnZnameDp)));
+//					contacts.add(c);
+//				}
+//			}
+//			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_all_contacts, contacts);
+//			contactsGridView.setAdapter(contactAdapter);
 		}
 		
 		// Add text listner to the edit text for filtering the List
@@ -199,6 +210,7 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		getActivity().supportInvalidateOptionsMenu();
 	}
 
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -215,6 +227,33 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 			return super.onOptionsItemSelected(item);
 		}
 	}
+//	ADD CONTACTS TO CONTACTS ADAPTER
+	
+	public void refreshContactsData()
+	{
+		Cursor cr = getActivity().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
+		if(cr.getCount() > 0)
+		{
+			int intColumnId = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID);
+			int intColumnContactNumber = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER);
+			int intColumnZname = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
+			int intColumnZnameDp = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS);
+			Contact c;
+			cr.moveToFirst();
+			while(cr.moveToNext())
+			{
+				c = new Contact();
+				c.setContactId(cr.getString(intColumnId));
+				c.setContactNumber(cr.getString(intColumnContactNumber));
+				c.setContactName(cr.getString(intColumnZname));
+				c.setContactPhotoUri(Uri.parse(cr.getString(intColumnZnameDp)));
+				contacts.add(c);
+			}
+		}
+		contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_all_contacts, contacts);
+		contactsGridView.setAdapter(contactAdapter);
+	}
+	
 	
 //	View Listeners
 	
@@ -450,4 +489,238 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 			}
 		}
 	}
+	
+	/*
+	 * 
+	 */
+	public class ImportFragmentContactsTask extends AsyncTask<Void, Void, String>
+	{
+		  private Context context;
+		  private ProgressDialog progressDialog;
+		  private LinkedHashMap<String, Contact> allContacts = new LinkedHashMap<String, Contact>();
+		  private  ArrayList<Contact> contacts = new ArrayList<Contact>();
+		  private static final String TAG ="ImportContactsTask";
+
+		  public ImportFragmentContactsTask(Context context)
+		  {
+		    this.context = context;
+		  }
+		  protected void onPreExecute()
+		  {
+		    super.onPreExecute();
+		    {
+					try {
+						progressDialog = new ProgressDialog(context);
+						progressDialog.setMessage("Refreshing Contacts");
+						progressDialog.setCancelable(false);
+						progressDialog.show();
+					} catch (Exception e) {
+						Log.e(TAG, e.toString());
+					}
+		    }
+		  }
+		  @Override
+			protected String doInBackground(Void... params) {
+				// TODO Auto-generated method stub
+			  String n = null;
+			if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+				getContactsNewApi();
+			} else {
+				getContactsOldApi();
+			}
+			return n;
+			}
+		  
+		  protected void onPostExecute(String result)
+		  {
+		    super.onPostExecute(result);
+				try {
+					progressDialog.dismiss();
+					refreshContactsData();
+				} catch (Exception e) {
+					Log.e(TAG, e.toString());
+				}
+		  }
+		  
+		  /**
+			 * @see Get Contacts for 3.0+
+			 * 
+			 */
+		private void getContactsNewApi() {
+			ContentResolver cr = Zname.getApplication().getContentResolver();
+
+			String selection = Data.HAS_PHONE_NUMBER + " > '" + ("0") + "'";
+
+			Cursor cur = cr.query(Data.CONTENT_URI, new String[] { Data.CONTACT_ID,
+					Data.MIMETYPE,
+					Contacts.DISPLAY_NAME, Phone.NUMBER }, selection, null,
+					Contacts.DISPLAY_NAME);
+
+			Contact contact;
+			if (cur.getCount() > 0) {
+				while (cur.moveToNext()) {
+					String id = cur.getString(cur.getColumnIndex(Data.CONTACT_ID));
+					String mimeType = cur.getString(cur
+							.getColumnIndex(Data.MIMETYPE));
+
+					if (allContacts.containsKey(id)) {
+						// update contact
+						contact = allContacts.get(id);
+					} else {
+						contact = new Contact();
+						allContacts.put(id, contact);
+						//set contactId
+						contact.setContactId(id);
+						// set photoUri
+						contact.setContactPhotoUri(getContactPhotoUri(Long
+								.parseLong(id)));
+					}
+
+					if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
+						// set name
+						contact.setContactName(cur.getString(cur.getColumnIndex(Contacts.DISPLAY_NAME)));
+					}
+
+					if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
+						// set phone number
+						contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D+",""));
+					}
+				}
+			}
+
+			cur.close();
+			// get contacts from hashmap
+			contacts.clear();
+			contacts.addAll(allContacts.values());
+
+			// remove self contact
+			for (Contact _contact : contacts) {
+				if (_contact.getContactName() == null
+						&& _contact.getContactNumber() == null) {
+					contacts.remove(_contact);
+					break;
+				}
+			}
+
+			Zname.getApplication()
+					.getContentResolver()
+					.delete(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null);
+
+			ContentValues values;
+			for (Contact _contact : contacts) {
+				values = new ContentValues();
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID, _contact.getContactId());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER,
+						_contact.getContactNumber());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME,
+						_contact.getContactName());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS,
+						_contact.getContactPhotoUri().toString());
+				Zname.getApplication()
+						.getContentResolver()
+						.insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
+			}
+		}
+
+			/**
+			 * @see Get Contacts for 2.2+
+			 * DATA.HAS_PHONE_NUMBER was not added in < 3.0
+			 */
+		private void getContactsOldApi() {
+
+			Uri uri = ContactsContract.Contacts.CONTENT_URI;
+			String[] projection = new String[] { ContactsContract.Contacts._ID,
+					ContactsContract.Contacts.DISPLAY_NAME };
+			String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " > '"
+					+ ("0") + "'";
+			String[] selectionArgs = null;
+			String sortOrder = ContactsContract.Contacts.DISPLAY_NAME
+					+ " COLLATE LOCALIZED ASC";
+
+			ContentResolver contectResolver = Zname.getApplication()
+					.getContentResolver();
+
+			Cursor cursor = contectResolver.query(uri, projection, selection,
+					selectionArgs, sortOrder);
+			Contact contact;
+			// Load contacts one by one
+			if (cursor.moveToFirst()) {
+				while (!cursor.isAfterLast()) {
+					contact = new Contact();
+					String id = cursor.getString(cursor
+							.getColumnIndex(ContactsContract.Contacts._ID));
+
+					contact.setContactPhotoUri(getContactPhotoUri(Long
+							.parseLong(id)));
+
+					String[] phoneProj = new String[] {
+							ContactsContract.CommonDataKinds.Phone.NUMBER,
+							ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME };
+					Cursor cursorPhone = contectResolver.query(
+							ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+							phoneProj,
+							ContactsContract.CommonDataKinds.Phone.CONTACT_ID
+									+ " = ?", new String[] { id }, null);
+					if (cursorPhone.moveToFirst()) {
+						contact.setContactNumber(cursorPhone
+								.getString(
+										cursorPhone
+												.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+								.replaceAll("\\D+",""));
+					}
+					cursorPhone.close();
+
+					contact.setContactName(cursor.getString(cursor
+							.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+
+					allContacts.put(id, contact);
+					cursor.moveToNext();
+				}
+			}
+			cursor.close();
+			// get contacts from hashmap
+			contacts.clear();
+			contacts.addAll(allContacts.values());
+
+			// remove self contact
+			for (Contact _contact : contacts) {
+
+				if (_contact.getContactName() == null
+						&& _contact.getContactNumber() == null) {
+					contacts.remove(_contact);
+					break;
+				}
+			}
+			
+			Zname.getApplication()
+					.getContentResolver()
+					.delete(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null);
+
+			ContentValues values;
+			for (Contact _contact : contacts) {
+				values = new ContentValues();
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID,
+						_contact.getContactId());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER,
+						_contact.getContactNumber());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME,
+						_contact.getContactName());
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS,
+						_contact.getContactPhotoUri().toString());
+				Zname.getApplication()
+						.getContentResolver()
+						.insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
+			}
+		}
+			// Get contact photo URI for contactId
+			/**
+			 * @param contactId
+			 * @return photoUri
+			 */
+			public Uri getContactPhotoUri(long contactId) {
+				Uri photoUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+				photoUri = Uri.withAppendedPath(photoUri, Contacts.Photo.CONTENT_DIRECTORY);
+				return photoUri;
+			}
+		}
 }

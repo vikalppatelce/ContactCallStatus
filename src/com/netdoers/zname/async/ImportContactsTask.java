@@ -67,6 +67,7 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 				try {
 					progressDialog = new ProgressDialog(context);
 					progressDialog.setMessage("Importing Contacts");
+					progressDialog.setCancelable(false);
 					progressDialog.show();
 				} catch (Exception e) {
 					Log.e(TAG, e.toString());
@@ -233,7 +234,7 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 							.getString(
 									cursorPhone
 											.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-							.replaceAll("[+]", ""));
+							.replaceAll("\\D+",""));
 				}
 				cursorPhone.close();
 

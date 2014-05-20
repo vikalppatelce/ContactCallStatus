@@ -44,6 +44,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
+import com.netdoers.zname.Zname;
 import com.netdoers.zname.async.ImportContactsTask;
 
 
@@ -219,7 +220,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 		
 		MyContentObserver contentObserver = new MyContentObserver();
-		getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
+		getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, false, contentObserver);
 	}
 	
 	private class MyContentObserver extends ContentObserver {
@@ -234,7 +235,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 //            Intent importContactService = new Intent(MotherActivity.this, ImportContactsService.class);
 //            importContactService.setAction("fromObserver");
 //            startService(importContactService);
-            new ImportContactsTask(MotherActivity.this, true).execute();
+//            new ImportContactsTask(MotherActivity.this, true).execute();
+            Zname.getPreferences().setRefreshContact(true);
             
         }
     }

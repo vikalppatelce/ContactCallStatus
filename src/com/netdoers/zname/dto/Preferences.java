@@ -57,6 +57,17 @@ public class Preferences {
 	{
 		return sharedPreferences.getBoolean("isFirstTime", false);
 	}
+	
+	public void setRefreshContact(boolean flag)
+	{
+		editor = sharedPreferences.edit();
+		editor.putBoolean("isRefreshContact", flag);
+		editor.commit();
+	}
+	public boolean getRefreshContact()
+	{
+		return sharedPreferences.getBoolean("isRefreshContact", false);
+	}
 	public void setSponsorImage(String str)
 	{
 		editor = sharedPreferences.edit();

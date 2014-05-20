@@ -1,14 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     >
+    android:layout_height="match_parent" >
 
-    <TextView
+    <ListView
+        android:id="@+id/call_logs_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:divider="#ffca00"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="true"
+        android:listSelector="@drawable/list_item_selected" >
+    </ListView>
+
+    <ProgressBar
+        android:id="@+id/call_logs_progress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/str_call_logs_fragment" />
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
-</RelativeLayout>
+</FrameLayout>

@@ -53,11 +53,12 @@
             android:layout_height="match_parent"
             android:drawSelectorOnTop="true"
             android:fastScrollEnabled="true"
-            android:horizontalSpacing="3dp"
+            android:horizontalSpacing="1dp"
             android:listSelector="@drawable/list_item_selected"
+            android:scrollbarStyle="outsideInset"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="3dp" />
+            android:verticalSpacing="1dp" />
     </LinearLayout>
     <!-- </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout> -->
 
