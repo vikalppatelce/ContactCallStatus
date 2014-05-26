@@ -47,6 +47,7 @@ public class IntroActivity extends FragmentActivity {
         if(Zname.getPreferences().getUserName()!=null){
         	Intent intent = new Intent(IntroActivity.this, MotherActivity.class);
         	startActivity(intent);
+        	finish();
         }
         
         if (Utilities.isRTL) {

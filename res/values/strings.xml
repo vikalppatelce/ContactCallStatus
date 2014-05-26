@@ -10,6 +10,14 @@
 <!--         <item>Contact Us</item> -->
     </string-array>
     
+    <string-array name="call_logs_array">
+        <item>All</item>
+        <item>Missed Calls</item>
+        <item>Outgoing Calls</item>
+        <item>Incoming Calls</item>
+        <item>Select a date</item>
+    </string-array>
+    
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     

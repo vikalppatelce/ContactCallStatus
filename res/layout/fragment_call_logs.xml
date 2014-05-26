@@ -21,4 +21,87 @@
         android:layout_gravity="center"
         android:visibility="visible" />
 
+    <LinearLayout
+        android:id="@+id/call_logs_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/call_logs_menu_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/sym_action_call" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/call_logs_menu_incoming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/sym_call_incoming" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/call_logs_menu_outgoing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/sym_call_outgoing" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/call_logs_menu_missed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/sym_call_missed" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/call_logs_menu_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_menu_month" />
+    </LinearLayout>
+
 </FrameLayout>
