@@ -66,7 +66,17 @@ public class Preferences {
 	}
 	public boolean getRefreshContact()
 	{
-		return sharedPreferences.getBoolean("isRefreshContact", false);
+		return sharedPreferences.getBoolean("isRefreshCallLogs", false);
+	}
+	public void setRefreshCallLogs(boolean flag)
+	{
+		editor = sharedPreferences.edit();
+		editor.putBoolean("isRefreshContact", flag);
+		editor.commit();
+	}
+	public boolean getRefreshCallLogs()
+	{
+		return sharedPreferences.getBoolean("isRefreshCallLogs", false);
 	}
 	public void setSponsorImage(String str)
 	{
@@ -78,6 +88,45 @@ public class Preferences {
 	public String getSponsorImage()
 	{
 		String flag = sharedPreferences.getString("sponsorImage", null);
+		return flag;
+	}
+	
+	public void setUserName(String str)
+	{
+		editor = sharedPreferences.edit();
+		editor.putString("zName", str);
+		editor.commit();
+	}
+	
+	public String getUserName()
+	{
+		String flag = sharedPreferences.getString("zName", null);
+		return flag;
+	}
+	
+	public void setTotalContacts(String str)
+	{
+		editor = sharedPreferences.edit();
+		editor.putString("totalCount", str);
+		editor.commit();
+	}
+	
+	public String getTotalContacts()
+	{
+		String flag = sharedPreferences.getString("totalCount", null);
+		return flag;
+	}
+	
+	public void setLastSync(String str)
+	{
+		editor = sharedPreferences.edit();
+		editor.putString("lastSync", str);
+		editor.commit();
+	}
+	
+	public String getLastSync()
+	{
+		String flag = sharedPreferences.getString("lastSync", null);
 		return flag;
 	}
 	

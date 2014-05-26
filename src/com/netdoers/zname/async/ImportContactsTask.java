@@ -2,7 +2,7 @@
  * CATEGORY			 :- ASYNCTASK
  * DEVELOPER		 :- VIKALP PATEL
  * AIM      		 :- IMPORT CONTACT AYSNC TASK + CONTENT OBSERVER ON CONTACTS.CONTACTSCONTRACTS.DATA
- * NOTE: ISFROMOBSERVER DRIVER FOR UPDATING UI
+ * NOTE: ISFROMOBSERVER DRIVER FOR UPDATING UI | IMPORTCONTACTSSERVICE IS PREFEREABLE
  * 
  * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
  * --------------------------------------------------------------------------------------------------------------------
@@ -183,11 +183,6 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 					.getContentResolver()
 					.insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
 		}
-
-		try {
-			dev();
-		} catch (Exception e) {
-		}
 	}
 
 		/**
@@ -279,11 +274,6 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 					.getContentResolver()
 					.insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
 		}
-
-		try {
-			dev();
-		} catch (Exception e) {
-		}
 	}
 		// Get contact photo URI for contactId
 		/**
@@ -294,29 +284,5 @@ public class ImportContactsTask extends AsyncTask<Void, Void, String>
 			Uri photoUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
 			photoUri = Uri.withAppendedPath(photoUri, Contacts.Photo.CONTENT_DIRECTORY);
 			return photoUri;
-		}
-		
-		public void dev()
-		{
-			try {
-	            File sd = Environment.getExternalStorageDirectory();
-	            File data = Environment.getDataDirectory();
-
-	            if (sd.canWrite()) {
-	                String currentDBPath = "/data/data/" + Zname.getApplication().getPackageName() + "/databases/ZnameDB";
-	                String backupDBPath = "PatientDB_Dev.db";
-	                File currentDB = new File(currentDBPath);
-	                File backupDB = new File(sd, backupDBPath);
-
-	                if (currentDB.exists()) {
-	                    FileChannel src = new FileInputStream(currentDB).getChannel();
-	                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
-	                    dst.transferFrom(src, 0, src.size());
-	                    src.close();
-	                    dst.close();
-	                }
-	            }
-	        } catch (Exception e) {
-	        }
 		}
 	}

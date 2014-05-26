@@ -90,19 +90,21 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	{
 		try {
 			if(validate()){
-				if(!Zname.getPreferences().getFirstTime()){
-					try {
-						new ImportContactsTask(SignUpActivity.this,false).execute();
-						Zname.getPreferences().setFirstTime(true);
-//						finish();
-					} catch (Exception e) {
-						Log.e(TAG, e.toString());
-					}
-				}
-				else{
+//				if(!Zname.getPreferences().getFirstTime()){
+//					try {
+//						new ImportContactsTask(SignUpActivity.this,false).execute();
+//						Zname.getPreferences().setFirstTime(true);
+////						finish();
+//					} catch (Exception e) {
+//						Log.e(TAG, e.toString());
+//					}
+//				}
+//				else{
+					Zname.getPreferences().setUserName(zName.getText().toString().trim());
 					Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
 					startActivity(i);
-				}
+					finish();
+//				}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());

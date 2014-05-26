@@ -7,12 +7,13 @@ import android.os.Parcelable;
 
 public class Contact implements Parcelable {
 
+	private String contactId;
 	private String contactName;
 	private String contactNumber;
 	private Bitmap contactPhoto;
 	private Uri contactPhotoUri;
 	private String contactEmail;
-	private String contactId;
+	
 
 	public static final String CONTACTS_DATA = "CONTACTS_DATA";
 
@@ -135,12 +136,12 @@ public class Contact implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 
+		dest.writeString(contactId);
 		dest.writeString(contactName);
 		dest.writeString(contactNumber);
 		dest.writeString(contactPhotoUri.toString());
 		dest.writeString(contactEmail);
-		dest.writeString(contactId);
-
+		
 	}
 
 	/**
@@ -148,11 +149,11 @@ public class Contact implements Parcelable {
 	 */
 	public Contact(Parcel source) {
 
+		contactId = source.readString();
 		contactName = source.readString();
 		contactNumber = source.readString();
 		contactPhotoUri = Uri.parse(source.readString());
 		contactEmail = source.readString();
-		contactId = source.readString();
 	}
 
 	public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {

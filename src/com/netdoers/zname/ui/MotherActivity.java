@@ -15,12 +15,11 @@
 package com.netdoers.zname.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,8 +43,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
-import com.netdoers.zname.Zname;
-import com.netdoers.zname.async.ImportContactsTask;
 
 
 /**
@@ -219,27 +216,42 @@ public class MotherActivity extends SherlockFragmentActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		
-		MyContentObserver contentObserver = new MyContentObserver();
-		getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, false, contentObserver);
+//		ContactsContentObserver contactsContentObserver = new ContactsContentObserver();
+//		getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
+//		
+//		CallLogsContentObserver callLogsContentObserver = new CallLogsContentObserver();
+//		getContentResolver().registerContentObserver(CallLog.CONTENT_URI, false, callLogsContentObserver);
 	}
 	
-	private class MyContentObserver extends ContentObserver {
-
-        public MyContentObserver() {
-            super(null);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-//            Intent importContactService = new Intent(MotherActivity.this, ImportContactsService.class);
-//            importContactService.setAction("fromObserver");
-//            startService(importContactService);
-//            new ImportContactsTask(MotherActivity.this, true).execute();
-            Zname.getPreferences().setRefreshContact(true);
-            
-        }
-    }
+	/*
+	 * DEPRECEATED MOVES INTO IMPORTCONTACTSERVICE 
+	 */
+	
+	//////////////////////////////////////////////////////////////////////
+	// CONTENT OBSERVER
+	//////////////////////////////////////////////////////////////////////
+//	private class ContactsContentObserver extends ContentObserver {
+//        public ContactsContentObserver() {
+//            super(null);
+//        }
+//        @Override
+//        public void onChange(boolean selfChange) {
+//            super.onChange(selfChange);
+//            Zname.getPreferences().setRefreshContact(true);
+//        }
+//    }
+//	
+//	private class CallLogsContentObserver extends ContentObserver {
+//        public CallLogsContentObserver() {
+//            super(null);
+//        }
+//        @Override
+//        public void onChange(boolean selfChange) {
+//            super.onChange(selfChange);
+//            Zname.getPreferences().setRefreshCallLogs(true);
+//        }
+//    }
+	
 	public void setMotherActionBarTitle(String s)
 	{
 //		mActionBar.setTitle(s);
@@ -292,24 +304,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 			case 1:
 				imageView.setImageResource(R.drawable.ic_gear);
 				break;
-			case 2:
-				imageView.setImageResource(android.R.drawable.ic_menu_gallery);
-				break;
-			case 3:
-				imageView.setImageResource(android.R.drawable.ic_menu_info_details);
-				break;
-			case 4:
-				imageView.setImageResource(android.R.drawable.ic_menu_agenda);
-				break;
-			case 5:
-				imageView.setImageResource(android.R.drawable.ic_menu_mapmode);
-				break;
-			case 6:
-				imageView.setImageResource(android.R.drawable.ic_menu_myplaces);
-				break;
-			case 7:
-				imageView.setImageResource(android.R.drawable.ic_menu_myplaces);
-				break;
 			default:
 				break;
 			}
@@ -337,13 +331,15 @@ public class MotherActivity extends SherlockFragmentActivity {
 //		args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
 //		fragment.setArguments(args);
 
+		Intent drawerIntent = null;
 		
       switch (position) {
       case 0:
-          fragment = new AllContactsFragment();
+//          fragment = new AllContactsFragment();
           break;
       case 1:
-          fragment = new AllContactsFragment();
+//          fragment = new AllContactsFragment();
+    	  drawerIntent = new Intent(this, SettingsActivity.class);
           break;
       case 2:
           fragment = new AllContactsFragment();
@@ -365,17 +361,19 @@ public class MotherActivity extends SherlockFragmentActivity {
 //          showFeedbackActivity();
           break;
       default:
-      	fragment = new AllContactsFragment();
           break;
       }
-      fragment.setArguments(args);
-		android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-		// update selected item and title, then close the drawer
-		mDrawerList.setItemChecked(position, true);
-		setTitle(mPlanetTitles[position]);
+//      fragment.setArguments(args);
+//		android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+//		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+//
+//		// update selected item and title, then close the drawer
+//		mDrawerList.setItemChecked(position, true);
+//		setTitle(mPlanetTitles[position]);
 		mDrawerLayout.closeDrawer(mDrawerList);
+		
+		if(drawerIntent!=null)
+			startActivity(drawerIntent);
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

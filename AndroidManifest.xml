@@ -55,9 +55,21 @@
             	  android:screenOrientation="portrait"
             />
         
+        <activity android:name="com.netdoers.zname.ui.SettingsActivity"
+            	  android:screenOrientation="portrait"
+            	  android:label="Settings"
+            />
+        
+        <activity android:name="com.netdoers.zname.contactpicker.ContactPickerManager" 
+            	  android:screenOrientation="portrait"
+            />
         <provider
             android:name="com.netdoers.zname.sqlite.ZnameDB"
             android:authorities="com.netdoers.zname.SQLite.ZnameDB" />
+        
+        <service
+            android:name="com.netdoers.zname.service.ImportContactsService" 
+            />
         
     </application>
 

@@ -46,9 +46,9 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/edit_text_selector"
                         android:hint="Full Name"
+                        android:gravity="left|center"
                         android:inputType="text"
-                        android:padding="5dp"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -71,8 +71,8 @@
                         android:background="@drawable/edit_text_selector"
                         android:hint="Book your : Zname"
                         android:inputType="text"
-                        android:padding="5dp"
-                        android:paddingLeft="10dp" />
+                        android:gravity="left|center"
+                        android:paddingLeft="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,9 +94,9 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/edit_text_selector"
                         android:hint="Contact Number"
+                        android:gravity="left|center"
                         android:inputType="number"
-                        android:padding="5dp"
-                        android:paddingLeft="10dp" />
+                        android:paddingLeft="15dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -112,9 +112,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingLeft="10dip"
+                    android:layout_marginLeft="10dp"
                     android:onClick="onDisplayPicture"
                     android:scaleType="fitCenter"
+                    android:background="@drawable/face_stamp"
                     android:src="@drawable/def_contact" />
 
                 <TextView

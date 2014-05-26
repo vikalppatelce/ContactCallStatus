@@ -89,7 +89,8 @@ public class ZnameDB extends ContentProvider{
 			strBuilder.append(DBConstant.TABLE_FRIENDS_CONTACTS);
 			strBuilder.append('(');
 			strBuilder.append(DBConstant.Friends_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
-			strBuilder.append(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT ," );
+			strBuilder.append(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT UNIQUE," );
+			strBuilder.append(DBConstant.Friends_Contacts_Columns.COLUMN_DISPLAY_NAME +" TEXT ," );
 			strBuilder.append(DBConstant.Friends_Contacts_Columns.COLUMN_ZNAME_ID +" TEXT" );
 			strBuilder.append(')');
 			db.execSQL(strBuilder.toString());
@@ -103,7 +104,8 @@ public class ZnameDB extends ContentProvider{
 			strBuilder.append(DBConstant.TABLE_FAMILY_CONTACTS);
 			strBuilder.append('(');
 			strBuilder.append(DBConstant.Family_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
-			strBuilder.append(DBConstant.Family_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT ," );
+			strBuilder.append(DBConstant.Family_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT UNIQUE," );
+			strBuilder.append(DBConstant.Family_Contacts_Columns.COLUMN_DISPLAY_NAME +" TEXT ," );
 			strBuilder.append(DBConstant.Family_Contacts_Columns.COLUMN_ZNAME_ID +" TEXT" );
 			strBuilder.append(')');
 			db.execSQL(strBuilder.toString());
@@ -117,7 +119,8 @@ public class ZnameDB extends ContentProvider{
 			strBuilder.append(DBConstant.TABLE_WORK_CONTACTS);
 			strBuilder.append('(');
 			strBuilder.append(DBConstant.Work_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
-			strBuilder.append(DBConstant.Work_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT ," );
+			strBuilder.append(DBConstant.Work_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT UNIQUE," );
+			strBuilder.append(DBConstant.Work_Contacts_Columns.COLUMN_DISPLAY_NAME +" TEXT ," );
 			strBuilder.append(DBConstant.Work_Contacts_Columns.COLUMN_ZNAME_ID +" TEXT" );
 			strBuilder.append(')');
 			db.execSQL(strBuilder.toString());
@@ -125,13 +128,14 @@ public class ZnameDB extends ContentProvider{
 				Log.i(TAG, strBuilder.toString());
 			}
 			
-			//workContacts
+			//randomContacts
 			strBuilder = new StringBuilder();
 			strBuilder.append("CREATE TABLE ");
 			strBuilder.append(DBConstant.TABLE_RANDOM_CONTACTS);
 			strBuilder.append('(');
 			strBuilder.append(DBConstant.Random_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
-			strBuilder.append(DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT ," );
+			strBuilder.append(DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT UNIQUE," );
+			strBuilder.append(DBConstant.Random_Contacts_Columns.COLUMN_DISPLAY_NAME +" TEXT ," );
 			strBuilder.append(DBConstant.Random_Contacts_Columns.COLUMN_ZNAME_ID +" TEXT" );
 			strBuilder.append(')');
 			db.execSQL(strBuilder.toString());
@@ -392,21 +396,25 @@ public class ZnameDB extends ContentProvider{
 		friendsContactsProjectionMap = new HashMap<String, String>();
 		friendsContactsProjectionMap.put(DBConstant.Friends_Contacts_Columns.COLUMN_ID, DBConstant.Friends_Contacts_Columns.COLUMN_ID);
 		friendsContactsProjectionMap.put(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID);
+		friendsContactsProjectionMap.put(DBConstant.Friends_Contacts_Columns.COLUMN_DISPLAY_NAME, DBConstant.Friends_Contacts_Columns.COLUMN_DISPLAY_NAME);
 		friendsContactsProjectionMap.put(DBConstant.Friends_Contacts_Columns.COLUMN_ZNAME_ID, DBConstant.Friends_Contacts_Columns.COLUMN_ZNAME_ID);
 
 		familyContactsProjectionMap = new HashMap<String, String>();
 		familyContactsProjectionMap.put(DBConstant.Family_Contacts_Columns.COLUMN_ID, DBConstant.Family_Contacts_Columns.COLUMN_ID);
 		familyContactsProjectionMap.put(DBConstant.Family_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Family_Contacts_Columns.COLUMN_CONTACT_ID);
+		familyContactsProjectionMap.put(DBConstant.Family_Contacts_Columns.COLUMN_DISPLAY_NAME, DBConstant.Family_Contacts_Columns.COLUMN_DISPLAY_NAME);
 		familyContactsProjectionMap.put(DBConstant.Family_Contacts_Columns.COLUMN_ZNAME_ID, DBConstant.Family_Contacts_Columns.COLUMN_ZNAME_ID);
 
 		workContactsProjectionMap = new HashMap<String, String>();
 		workContactsProjectionMap.put(DBConstant.Work_Contacts_Columns.COLUMN_ID, DBConstant.Work_Contacts_Columns.COLUMN_ID);
 		workContactsProjectionMap.put(DBConstant.Work_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Work_Contacts_Columns.COLUMN_CONTACT_ID);
+		workContactsProjectionMap.put(DBConstant.Work_Contacts_Columns.COLUMN_DISPLAY_NAME, DBConstant.Work_Contacts_Columns.COLUMN_DISPLAY_NAME);
 		workContactsProjectionMap.put(DBConstant.Work_Contacts_Columns.COLUMN_ZNAME_ID, DBConstant.Work_Contacts_Columns.COLUMN_ZNAME_ID);
 
 		randomContactsProjectionMap = new HashMap<String, String>();
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_ID, DBConstant.Random_Contacts_Columns.COLUMN_ID);
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID);
+		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_DISPLAY_NAME, DBConstant.Random_Contacts_Columns.COLUMN_DISPLAY_NAME);
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_ZNAME_ID, DBConstant.Random_Contacts_Columns.COLUMN_ZNAME_ID);
 
 		}	

@@ -58,6 +58,7 @@ public class DBConstant {
 		public static final String COLUMN_ID 							= "_id";
 		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
 		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
+		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
 	}
 	
 	public static class Family_Contacts_Columns implements BaseColumns
@@ -68,6 +69,7 @@ public class DBConstant {
 		public static final String COLUMN_ID 							= "_id";
 		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
 		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
+		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
 	}
 	
 	public static class Work_Contacts_Columns implements BaseColumns
@@ -78,6 +80,7 @@ public class DBConstant {
 		public static final String COLUMN_ID 							= "_id";
 		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
 		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
+		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
 	}
 	
 	public static class Random_Contacts_Columns implements BaseColumns
@@ -88,5 +91,6 @@ public class DBConstant {
 		public static final String COLUMN_ID 							= "_id";
 		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
 		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
+		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
 	}
 }

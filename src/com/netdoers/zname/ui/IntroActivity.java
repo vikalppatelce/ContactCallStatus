@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.netdoers.zname.R;
+import com.netdoers.zname.Zname;
 import com.netdoers.zname.utils.Utilities;
 
 public class IntroActivity extends FragmentActivity {
@@ -43,6 +44,11 @@ public class IntroActivity extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.intro_layout);
 
+        if(Zname.getPreferences().getUserName()!=null){
+        	Intent intent = new Intent(IntroActivity.this, MotherActivity.class);
+        	startActivity(intent);
+        }
+        
         if (Utilities.isRTL) {
             icons = new int[] {
             		R.drawable.intro1,
