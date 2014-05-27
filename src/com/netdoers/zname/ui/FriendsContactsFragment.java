@@ -1,3 +1,16 @@
+/* HISTORY
+ * CATEGORY			 :- FRIENDS GROUP FRAGMENT
+ * DEVELOPER		 :- VIKALP PATEL
+ * AIM      		 :- FRIENDS CONTACT FRAGMENTS ATTACHED TO MOTHERACTIVITY USING VIEWPAGER + TABS
+ * NOTE:			 BASE FRAGMENT FOR GROUPS 
+ * 
+ * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
+ * --------------------------------------------------------------------------------------------------------------------
+ * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
+ * --------------------------------------------------------------------------------------------------------------------
+ * ZM001      VIKALP PATEL     16/05/2014                       CREATED
+ * --------------------------------------------------------------------------------------------------------------------
+ */
 package com.netdoers.zname.ui;
 
 import java.util.ArrayList;

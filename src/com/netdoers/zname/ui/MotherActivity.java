@@ -142,28 +142,28 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 		// Create first Tab
 //		tab = mActionBar.newTab().setText("Tab1").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment));
 		
 		// Create second Tab
 //		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
 		
 		// Create third Tab
 //		tab = mActionBar.newTab().setText("Tab3").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_family_contacts_fragment));
 		
 //		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_work_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));
 		
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
 

@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_search"
         android:orderInCategory="100"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/zname_ic_menu_search_selector"
         android:showAsAction="always"
         />
 

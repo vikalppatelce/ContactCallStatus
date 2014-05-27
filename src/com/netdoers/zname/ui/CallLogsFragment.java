@@ -491,16 +491,16 @@ public class CallLogsFragment extends SherlockFragment {
 			switch(Integer.parseInt(arrayListCallLog.get(position).getCallLogType()))
 			{
 			case 0:
-				img.setImageResource(android.R.drawable.sym_call_missed);
+				img.setImageResource(R.drawable.btn_ic_missed_selector);
 				break;
 			case 1:
-				img.setImageResource(android.R.drawable.sym_call_incoming);
+				img.setImageResource(R.drawable.btn_ic_incoming_selector);
 				break;
 			case 2:
-				img.setImageResource(android.R.drawable.sym_call_outgoing);
+				img.setImageResource(R.drawable.btn_ic_outgoing_selector);
 				break;
 			case 3:
-				img.setImageResource(android.R.drawable.sym_call_incoming);
+				img.setImageResource(R.drawable.btn_ic_call_selector);
 				break;
 			default:
 				img.setImageResource(android.R.drawable.sym_action_chat);
