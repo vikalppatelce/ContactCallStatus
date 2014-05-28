@@ -9,5 +9,5 @@
         android:icon="@drawable/zname_ic_menu_search_selector"
         android:showAsAction="always"
         />
-
+<!-- android:actionViewClass="com.actionbarsherlock.widget.SearchView" -->
 </menu>

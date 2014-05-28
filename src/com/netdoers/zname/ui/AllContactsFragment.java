@@ -14,6 +14,7 @@
  */
 package com.netdoers.zname.ui;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,26 +24,20 @@ import java.util.Set;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.CommonDataKinds.StructuredName;
-import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.Data;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +86,6 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 	//Helping reference variable
 	private ArrayList<Contact> contacts = null;
 	private LinkedHashMap<String, Contact> allContacts = new LinkedHashMap<String, Contact>();
-	
 	
 	//Indexing for the list
 	HashMap<String, Integer> alphaIndexer;
@@ -232,8 +226,29 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 	    super.onCreateOptionsMenu(menu, inflater);
 	    menu.clear();
 	    inflater.inflate(R.menu.all_contacts_menu, menu);
+	    /*
+	     * ACTIONBAR SHERLOCK SEARCH VIEW
+	     */
+//	    SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//	    final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//	    
+//	    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//			@Override
+//			public boolean onQueryTextSubmit(String query) {
+//				// TODO Auto-generated method stub
+//				contactAdapter.getFilter().filter(query);
+//				return false;
+//			}
+//			@Override
+//			public boolean onQueryTextChange(String newText) {
+//				// TODO Auto-generated method stub
+//				contactAdapter.getFilter().filter(newText);
+//				return false;
+//			}
+//		});
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -507,8 +522,9 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 
 					for (int i = 0, l = originalList.size(); i < l; i++) {
 						Contact contact = originalList.get(i);
-						if (contact.toString().toLowerCase().contains(constraint))
+						if (contact.toString().toLowerCase().contains(constraint)){
 							filteredItems.add(contact);
+						}
 					}
 					result.count = filteredItems.size();
 					result.values = filteredItems;

@@ -30,7 +30,7 @@ public class Preferences {
 		sharedPreferences = context.getSharedPreferences("Cache", Context.MODE_PRIVATE);
 	}
 	
-	public void setUserLoginDTO(UserLoginDTO userLoginDTO)
+	public void setUserLoginDTO(RegistrationDTO userLoginDTO)
 	{
 		editor = sharedPreferences.edit();
 		editor.putString("userId", userLoginDTO.getSign_id());
@@ -39,9 +39,9 @@ public class Preferences {
 		editor.commit();
 	}
 	
-	public UserLoginDTO getUserLoginDTO()
+	public RegistrationDTO getUserLoginDTO()
 	{
-		UserLoginDTO userLoginDTO = new UserLoginDTO();
+		RegistrationDTO userLoginDTO = new RegistrationDTO();
 		userLoginDTO.setSign_id(sharedPreferences.getString("userId", null));
 		userLoginDTO.setUserName(sharedPreferences.getString("name", null));
 		userLoginDTO.setPassHash(sharedPreferences.getString("passHash", null));//ADDED 1000E
@@ -205,6 +205,18 @@ public class Preferences {
 	{
 		String deviceId = sharedPreferences.getString("deviceId", "Device Id Not Found");
 				return deviceId;
+	}
+	
+	public void setHash(String id)
+	{
+		editor = sharedPreferences.edit();
+		editor.putString("hash", id);
+		editor.commit();
+	}
+	public String getHash()
+	{
+		String deviceId = sharedPreferences.getString("hash",null);
+		return deviceId;
 	}
 	public void setDeviceSize(String id)
 	{

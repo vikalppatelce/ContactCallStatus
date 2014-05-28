@@ -6,4 +6,6 @@
     <item name="TAG_PDT_ID" type="id"/>
     <item name="TAG_PDT_NAME" type="id"/>
     <item name="TAG_PDT_V_ID" type="id"/>
+    <item name="TAG_CALL_LOG_DATE" type="id"/>
+    <item name="TAG_CALL_LOG_POSITION" type="id"/>
 </resources>

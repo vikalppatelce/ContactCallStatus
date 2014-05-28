@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+<!--         <com.netdoers.zname.utils.PagerSlidingTabStrip -->
+<!-- 	    	android:id="@+id/pager_sliding_tab_strip" -->
+<!--     		android:layout_width="match_parent" -->
+<!--     		android:layout_height="48dip" /> -->
+        
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="fill_parent"
@@ -39,7 +44,7 @@
             android:layout_gravity="start"
             android:background="#ffa500"
             android:choiceMode="singleChoice"
-            android:divider="#C0C0C0"
+            android:divider="#FFFFFF"
             android:dividerHeight="1dp" />
     </android.support.v4.widget.DrawerLayout>
 

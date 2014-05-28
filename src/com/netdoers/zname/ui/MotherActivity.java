@@ -43,6 +43,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
+import com.netdoers.zname.utils.PagerSlidingTabStrip;
 
 
 /**
@@ -54,6 +55,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 	// Declare Variables
 	ActionBar mActionBar;
 	ViewPager mPager;
+	PagerSlidingTabStrip pagerSlidingTabStrp; 
 	Tab tab;
 	Typeface stylefontActionBar;
 	
@@ -119,6 +121,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 		ViewPagerAdapter viewpageradapter = new ViewPagerAdapter(fm);
 		// Set the View Pager Adapter into ViewPager
 		mPager.setAdapter(viewpageradapter);
+		//PAGER SLIDING TAB STRIP
+//		pagerSlidingTabStrp = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding_tab_strip);
+//		pagerSlidingTabStrp.setViewPager(mPager);
+//		pagerSlidingTabStrp.setOnPageChangeListener(ViewPagerListener);
 		
 		// Capture tab button clicks
 		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -163,6 +169,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));
 		
+//		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
@@ -199,7 +206,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 			public void onDrawerClosed(View view) {
 				getSupportActionBar().setTitle(mTitle);
 				supportInvalidateOptionsMenu();
-//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 				// invalidateOptionsMenu(); // creates call to
 				// onPrepareOptionsMenu()
 			}
@@ -208,7 +215,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 			public void onDrawerOpened(View drawerView) {
 				getSupportActionBar().setTitle(mDrawerTitle);
 				supportInvalidateOptionsMenu();
-//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 				// invalidateOptionsMenu(); // creates call to
 				// onPrepareOptionsMenu()
 			}
@@ -299,10 +306,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 		    String s = values[position];
 			switch (position) {
 			case 0:
-				imageView.setImageResource(android.R.drawable.ic_menu_edit);
+				imageView.setImageResource(R.drawable.ic_drawer_edit);
 				break;
 			case 1:
-				imageView.setImageResource(R.drawable.ic_gear);
+				imageView.setImageResource(R.drawable.ic_drawer_gear);
 				break;
 			default:
 				break;

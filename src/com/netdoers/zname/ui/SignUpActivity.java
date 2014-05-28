@@ -1,25 +1,48 @@
 package com.netdoers.zname.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore.MediaColumns;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.async.ImportContactsTask;
+import com.netdoers.zname.dto.RegistrationDTO;
+import com.netdoers.zname.service.RequestBuilder;
+import com.netdoers.zname.service.ResponseParser;
+import com.netdoers.zname.service.RestClient;
 
 public class SignUpActivity extends SherlockFragmentActivity {
 	
@@ -38,6 +61,9 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	
 	//VARIABLES
 	String picturePath = null;
+	String strPicturePath = null;
+	Uri currentFileUri,outputFileUri;
+	String strZnameDp = null;
 	
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -90,20 +116,25 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	{
 		try {
 			if(validate()){
-//				if(!Zname.getPreferences().getFirstTime()){
-//					try {
-//						new ImportContactsTask(SignUpActivity.this,false).execute();
-//						Zname.getPreferences().setFirstTime(true);
-////						finish();
-//					} catch (Exception e) {
-//						Log.e(TAG, e.toString());
-//					}
-//				}
-//				else{
-					Zname.getPreferences().setUserName(zName.getText().toString().trim());
-					Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
-					startActivity(i);
-					finish();
+//				String strFullName = fullName.getText().toString().trim();
+//				String strzName = zName.getText().toString().trim();
+//				String strzNumber = zNumber.getText().toString().trim();
+//				
+//				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//				String device_id = mTelephonyMgr.getDeviceId();
+//				String device_name = getDeviceName();
+//				String myVersion = android.os.Build.VERSION.RELEASE;
+//				
+//				if(isNetworkAvailable()){
+//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_name,myVersion);
+//					if(!TextUtils.isEmpty(strZnameDp))
+//						new RegistrationUploadTask().execute();
+				
+				Zname.getPreferences().setUserName("DEFAULT");
+				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+				startActivity(i);
+				finish();
+				
 //				}
 			}
 		} catch (Exception e) {
@@ -111,6 +142,47 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		}
 	}
 	
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+	}
+	
+    public String getDeviceName() {
+  	  try
+  	  {
+  		  String manufacturer = Build.MANUFACTURER;
+      	  String model = Build.MODEL;
+      	  if (model.startsWith(manufacturer)) {
+      	    return capitalize(model);
+      	  } else {
+      	    return capitalize(manufacturer) + " " + model;
+      	  }
+  	  }
+  	  catch(Exception e)
+  	  {
+  		  return "Device Unidentified";
+  	  }
+  	}
+  
+	private String capitalize(String s) {
+		try {
+			if (s == null || s.length() == 0) {
+				return "";
+			}
+			char first = s.charAt(0);
+			if (Character.isUpperCase(first)) {
+				return s;
+			} else {
+				return Character.toUpperCase(first) + s.substring(1);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+				return "";
+		}
+	} 
 	public void onDisplayPicture(View v)
 	{
 		
@@ -154,6 +226,51 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		return true;
 	}
 	
+	public void getImagePath()
+	{
+		File imageDirectory =null;
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) 
+		{
+			imageDirectory = new File(AppConstants.IMAGE_DIRECTORY_PATH);
+		}
+		else
+		{
+			imageDirectory = new File(AppConstants.IMAGE_DIRECTORY_PATH_DATA);
+		}
+
+		imageDirectory.mkdirs();
+		File tempFile = new File(imageDirectory, getVideoName()+ AppConstants.EXTENSION);
+		outputFileUri = Uri.fromFile( tempFile );
+		currentFileUri = outputFileUri;
+	}
+
+	public void copy(File src, File dst) throws IOException {
+	    InputStream in = new FileInputStream(src);
+	    OutputStream out = new FileOutputStream(dst);
+
+	    // Transfer bytes from in to out
+	    byte[] buf = new byte[1024];
+	    int len;
+	    while ((len = in.read(buf)) > 0) {
+	        out.write(buf, 0, len);
+	    }
+	    in.close();
+	    out.close();
+	}
+	
+	public static String getVideoName()
+	{
+		String name = "zname";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		try {
+			name = sdf.format(new Date(System.currentTimeMillis()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return name;
+	}
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -168,8 +285,105 @@ public class SignUpActivity extends SherlockFragmentActivity {
 					cursor.close();
 					
 					zNameDisplayPicture.setImageURI(Uri.parse(picturePath));
+					
+					getImagePath();
+					try {
+						copy(new File(picturePath), new File(currentFileUri.getPath()));
+						strZnameDp = currentFileUri.getPath().toString().substring(currentFileUri.getPath().toString().lastIndexOf("/") + 1);
+						strPicturePath = picturePath;
+						} 
+					catch (IOException e) 
+					{
+						Log.e("IMPORT_PICTURE", e.toString());
+					}
 				}
 			}
 		}
 	
+	public class RegistrationTask extends AsyncTask<String, Void, RegistrationDTO>
+	{
+		Context context;
+		ProgressDialog progressDialog;
+		RegistrationDTO res = null;
+		String errorvalue = null;
+		public RegistrationTask(Context context){
+			this.context = context;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressDialog = new ProgressDialog(context);
+			progressDialog.setMessage("Registration...");
+			progressDialog.show();
+		}
+		
+		@Override
+		protected RegistrationDTO doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			JSONObject dataToSend = RequestBuilder.getRegistraionData(params[0], params[1], params[2], params[3], params[4],params[5],params[6]);
+			Log.i(TAG, dataToSend.toString());
+			try {
+				String str = RestClient.postData(AppConstants.URLS.BASE_URL, dataToSend);
+				res = ResponseParser.getRegistrationResponse(str);
+				try{
+					JSONObject object = new JSONObject(str);
+					errorvalue = object.getString("error");
+				}
+				catch(JSONException e){
+					Log.e(TAG, e.toString());
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Log.e(TAG, e.toString());
+			}
+			Log.i(TAG, res.toString());
+			return res;
+		}
+		
+		@Override
+		protected void onPostExecute(RegistrationDTO result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			if(progressDialog!=null)
+				progressDialog.dismiss();
+			
+			if(result!=null && result.isStatus()){
+				Zname.getPreferences().setUserName(result.getUserName());
+				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+				startActivity(i);
+				finish();
+			}else{
+				if(!TextUtils.isEmpty(errorvalue))
+					Toast.makeText(SignUpActivity.this, errorvalue, Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	public class RegistrationUploadTask extends AsyncTask<Void, Void, Void>
+	{
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			try{
+				if(!TextUtils.isEmpty(strZnameDp)){
+					String typ = "image";
+					if(!TextUtils.isEmpty(strPicturePath))
+					{
+						File f = new File(strPicturePath);
+						String s = RestClient.postRecordedFile1(typ, f, RequestBuilder.getUploadData(), AppConstants.URLS.MEDIA_BASE_URL);
+						Log.i("MediaUpload", RequestBuilder.getUploadData().toString());
+					}
+				}	
+			}
+			catch(Exception e){
+			Log.e(TAG, e.toString());	
+			}
+			return null;
+		}
+		
+	}
 }

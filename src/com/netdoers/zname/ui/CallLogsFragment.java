@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
@@ -115,9 +116,12 @@ public class CallLogsFragment extends SherlockFragment {
 			        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
 			            mIsScrollingUp = false;
 			            callLogsMenu.setVisibility(View.GONE);
+//			            getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 			        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
 			            mIsScrollingUp = true;
 			            callLogsMenu.setVisibility(View.VISIBLE);
+//			            getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			            
 			        }
 
 			        mLastFirstVisibleItem = currentFirstVisibleItem;
@@ -491,7 +495,7 @@ public class CallLogsFragment extends SherlockFragment {
 			switch(Integer.parseInt(arrayListCallLog.get(position).getCallLogType()))
 			{
 			case 0:
-				img.setImageResource(R.drawable.btn_ic_missed_selector);
+				img.setImageResource(R.drawable.btn_ic_call_selector);
 				break;
 			case 1:
 				img.setImageResource(R.drawable.btn_ic_incoming_selector);
@@ -500,12 +504,14 @@ public class CallLogsFragment extends SherlockFragment {
 				img.setImageResource(R.drawable.btn_ic_outgoing_selector);
 				break;
 			case 3:
-				img.setImageResource(R.drawable.btn_ic_call_selector);
+				img.setImageResource(R.drawable.btn_ic_missed_selector);
 				break;
 			default:
-				img.setImageResource(android.R.drawable.sym_action_chat);
+				img.setImageResource(R.drawable.btn_ic_call_selector);
 				break;
 			}
+			
+			view.setTag(R.id.TAG_CALL_LOG_POSITION, position);
 			
 			return view;
 		}
