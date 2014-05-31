@@ -128,9 +128,7 @@ public class CallLogsFragment extends SherlockFragment {
 			            mIsScrollingUp = true;
 			            callLogsMenu.setVisibility(View.VISIBLE);
 //			            getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-			            
 			        }
-
 			        mLastFirstVisibleItem = currentFirstVisibleItem;
 			    } 
 			}
@@ -139,7 +137,6 @@ public class CallLogsFragment extends SherlockFragment {
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
 				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -249,6 +246,7 @@ public class CallLogsFragment extends SherlockFragment {
 		arrayListCallLog.clear();
 		new AsyncLoadCallLogs(0,"ALL").execute();
 	}
+	
 	public void getCallIncoming(){
 		arrayListCallLog.clear();
 		new AsyncLoadCallLogs(1,"INCOMING").execute();
@@ -261,6 +259,7 @@ public class CallLogsFragment extends SherlockFragment {
 		arrayListCallLog.clear();
 		new AsyncLoadCallLogs(3,"MISSED").execute();
 	}
+	
 	public void getCallDate(){
 		arrayListCallLog.clear();
 		DialogFragment newFragment = new FromDatePickerFragment();
@@ -274,19 +273,19 @@ public class CallLogsFragment extends SherlockFragment {
 		CallLog calllog;
 		
 		switch (logType) {
-		case 0:
+		case 0://ALL
 			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=1" +" OR "+ android.provider.CallLog.Calls.TYPE+"=2" + " OR " + android.provider.CallLog.Calls.TYPE+"=3", null, android.provider.CallLog.Calls.DATE +" DESC");
 			break;
-		case 1:
-			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=0", null, android.provider.CallLog.Calls.DATE +" DESC");
-			break;
-		case 2:
+		case 1://INCOMING
 			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=1", null, android.provider.CallLog.Calls.DATE +" DESC");
 			break;
-		case 3:
+		case 2://OUTGOING
 			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=2", null, android.provider.CallLog.Calls.DATE +" DESC");
 			break;
-		case 4:
+		case 3://MISSED
+			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=3", null, android.provider.CallLog.Calls.DATE +" DESC");
+			break;
+		case 4://DATE
 			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.DATE+">"+strDate, null, android.provider.CallLog.Calls.DATE +" ASC");
 			break;
 		default:
@@ -302,6 +301,10 @@ public class CallLogsFragment extends SherlockFragment {
 		
 		cursor.moveToFirst();
 		while(cursor.moveToNext()){
+			
+			if(cursor.getString(callLogNumber).contains("-"))
+				continue;
+			
 			calllog = new CallLog();
 			calllog.setCallLogName(cursor.getString(callLogName));
 			calllog.setCallLogNumber(cursor.getString(callLogNumber));
@@ -313,7 +316,7 @@ public class CallLogsFragment extends SherlockFragment {
 //				try {
 //					photoFromNumber = getContactPhotoFromNumber(cursor.getString(callLogNumber));
 //				} catch (Exception e) {
-//
+//					Log.e(TAG, e.toString());
 //				}
 //				calllog.setCallLogPhotoUri(
 //						photoFromNumber!=null 
@@ -330,12 +333,13 @@ public class CallLogsFragment extends SherlockFragment {
 	}
 
 	//GET DATA TIME FROM EPOCHTIME
+	@SuppressWarnings("deprecation")
 	public String getCallLogDate(long milliseconds) {
 		String formattedDate = null;
 		Date date = new Date(milliseconds);
 		//return DateFormat.getDateTimeInstance().format(new Date());
 		formattedDate = String.valueOf(date.getDate());
-		formattedDate = formattedDate + "/" + String.valueOf(date.getMonth());
+		formattedDate = formattedDate + "/" + String.valueOf(date.getMonth()+1);
 		formattedDate = formattedDate + "/" + String.valueOf(date.getYear()+1900);
 		return formattedDate;
 	}
@@ -360,17 +364,18 @@ public class CallLogsFragment extends SherlockFragment {
 		int phoneContactID = new Random().nextInt();
 		Cursor cursor = null;
 		Cursor contactLookupCursor = Zname.getApplication().getContentResolver().query(Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNumber)),new String[] { PhoneLookup.DISPLAY_NAME,PhoneLookup._ID }, null, null, null);
-		while (contactLookupCursor.moveToNext()) {
-			try {
-				phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
-				cursor = Zname.getApplication().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI,null,DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID+ "=?",new String[] { String.valueOf(phoneContactID) },null);
-				if (cursor.getCount() > 0) {
-					cursor.moveToFirst();
-					photoString = cursor.getString(cursor.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS));
+		if(contactLookupCursor.getCount() > 0){
+			contactLookupCursor.moveToFirst();
+				try {
+					phoneContactID = contactLookupCursor.getInt(contactLookupCursor.getColumnIndexOrThrow(PhoneLookup._ID));
+					cursor = Zname.getApplication().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI,null,DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID+ "=?",new String[] { String.valueOf(phoneContactID) },null);
+					if (cursor.getCount() > 0) {
+						cursor.moveToFirst();
+						photoString = cursor.getString(cursor.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS));
+					}
+				} catch (Exception e) {
+					Log.e(TAG, e.toString());
 				}
-			} catch (Exception e) {
-				Log.e(TAG, e.toString());
-			}
 		}
 		if (cursor != null) {
 			cursor.close();
@@ -474,7 +479,8 @@ public class CallLogsFragment extends SherlockFragment {
 			TextView t2 = (TextView)view.findViewById(R.id.list_item_call_log_number);
 			TextView t3 = (TextView)view.findViewById(R.id.list_item_call_log_date);
 			TextView t4 = (TextView)view.findViewById(R.id.list_item_call_log_header_separator);
-			ImageView img = (ImageView)view.findViewById(R.id.list_item_call_log_type);
+			ImageView imgLogType = (ImageView)view.findViewById(R.id.list_item_call_log_type);
+//			ImageView img = (ImageView)view.findViewById(R.id.grid_item_display_picture);
 			
 			t1.setText(arrayListCallLog.get(position).getCallLogName());
 			t2.setText(arrayListCallLog.get(position).getCallLogNumber());
@@ -490,6 +496,11 @@ public class CallLogsFragment extends SherlockFragment {
 //					? arrayListCallLog.get(position).getCallLogPhotoUri()
 //					: null		
 //					);
+//			img.setImageURI(arrayListCallLog.get(position).getCallLogPhotoUri());
+//			
+//			if(img.getDrawable() == null)
+//				img.setImageResource(R.drawable.def_contact);
+			
 			if(position == 0)
 				t4.setText(arrayListCallLog.get(position).getCallLogDate());
 				
@@ -507,19 +518,19 @@ public class CallLogsFragment extends SherlockFragment {
 			switch(Integer.parseInt(arrayListCallLog.get(position).getCallLogType()))
 			{
 			case 0:
-				img.setImageResource(R.drawable.btn_ic_call_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_call_selector);
 				break;
 			case 1:
-				img.setImageResource(R.drawable.btn_ic_incoming_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_incoming_selector);
 				break;
 			case 2:
-				img.setImageResource(R.drawable.btn_ic_outgoing_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_outgoing_selector);
 				break;
 			case 3:
-				img.setImageResource(R.drawable.btn_ic_missed_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_missed_selector);
 				break;
 			default:
-				img.setImageResource(R.drawable.btn_ic_call_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_call_selector);
 				break;
 			}
 			

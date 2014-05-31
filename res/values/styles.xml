@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Zname" parent="@style/Theme.Sherlock.Light">
         <item name="actionBarItemBackground">@drawable/selectable_background_zname</item>
@@ -52,7 +52,7 @@
     </style>
 	
     <style name="PopupMenu.Zname" parent="@style/Widget.Sherlock.Light.ListPopupWindow">	
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_zname</item>	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_zname</item>
     </style>
 	
     <style name="DropDownListView.Zname" parent="@style/Widget.Sherlock.Light.ListView.DropDown">

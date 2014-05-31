@@ -27,8 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
         android:background="@color/transparent"
-        android:visibility="gone"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/call_logs_menu_all"
@@ -38,6 +38,22 @@
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/btn_ic_call_selector" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/call_logs_menu_missed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_ic_missed_selector" />
 
         <View
             android:layout_width="match_parent"
@@ -70,22 +86,6 @@
             android:padding="5dp"
             android:scaleType="fitCenter"
             android:src="@drawable/btn_ic_outgoing_selector" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:background="@android:color/white" />
-
-        <ImageView
-            android:id="@+id/call_logs_menu_missed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_ic_missed_selector" />
 
         <View
             android:layout_width="match_parent"
