@@ -6,6 +6,7 @@
 package com.netdoers.zname.ui;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -17,10 +18,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
 import com.netdoers.zname.utils.Utilities;
@@ -37,6 +38,9 @@ public class IntroActivity extends FragmentActivity {
     private int[] titles;
     private int[] messages;
     
+    //DECLARE VARIABLES
+    private TextView txtZname, txtSignIn, txtSignUp, txtSwipe;
+    static Typeface styleFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +100,22 @@ public class IntroActivity extends FragmentActivity {
             };
         }
         viewPager = (ViewPager)findViewById(R.id.intro_view_pager);
-        TextView startMessagingButton = (TextView) findViewById(R.id.start_messaging_button);
+        txtSignUp = (TextView) findViewById(R.id.intro_txtview_signup);
+        txtSignIn = (TextView) findViewById(R.id.intro_txtview_signin);
+        txtSwipe = (TextView) findViewById(R.id.intro_txtview_swipe);
+        txtZname = (TextView) findViewById(R.id.intro_txtview_logo);
         topImage1 = (ImageView)findViewById(R.id.icon_image1);
         topImage2 = (ImageView)findViewById(R.id.icon_image2);
         bottomPages = (ViewGroup)findViewById(R.id.bottom_pages);
         		
+        styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+        
+        txtSignIn.setTypeface(styleFont);
+        txtSignUp.setTypeface(styleFont);
+        txtSwipe.setTypeface(styleFont);
+        txtZname.setTypeface(styleFont);
+        
+        
         topImage2.setVisibility(View.GONE);
         viewPager.setAdapter(new IntroAdapter());
         viewPager.setPageMargin(0);
@@ -181,7 +196,7 @@ public class IntroActivity extends FragmentActivity {
             }
         });
 
-        startMessagingButton.setOnClickListener(new View.OnClickListener() {
+        txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (startPressed) {
@@ -223,13 +238,16 @@ public class IntroActivity extends FragmentActivity {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View view = View.inflate(container.getContext(), R.layout.intro_view_layout, null);
-            TextView headerTextView = (TextView)view.findViewById(R.id.header_text);
-            TextView messageTextView = (TextView)view.findViewById(R.id.message_text);
+            TextView headerTextView = (TextView)view.findViewById(R.id.intro_header_text);
+            TextView messageTextView = (TextView)view.findViewById(R.id.intro_message_text);
             container.addView(view, 0);
 
             headerTextView.setText(getString(titles[position]));
             messageTextView.setText(Html.fromHtml(getString(messages[position])));
 
+            headerTextView.setTypeface(styleFont);
+            messageTextView.setTypeface(styleFont);
+            
             return view;
         }
 

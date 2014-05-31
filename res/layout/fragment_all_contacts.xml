@@ -29,11 +29,11 @@
 
             <EditText
                 android:id="@+id/search_txt"
-                style="@style/EditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="9"
-                android:drawableLeft="@drawable/edit_search"
+                android:background="@drawable/zname_textfield_default_holo_light"
+                android:drawableLeft="@drawable/zname_ic_menu_add_selected"
                 android:inputType="textNoSuggestions"
                 android:singleLine="true" />
 
@@ -53,12 +53,12 @@
             android:layout_height="match_parent"
             android:drawSelectorOnTop="true"
             android:fastScrollEnabled="true"
-            android:horizontalSpacing="1dp"
-            android:listSelector="@drawable/list_item_selected"
+            android:horizontalSpacing="3dp"
+            android:listSelector="@drawable/zname_list_selector_holo_light"
             android:scrollbarStyle="outsideInset"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="1dp" />
+            android:verticalSpacing="3dp" />
     </LinearLayout>
     <!-- </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout> -->
 

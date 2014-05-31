@@ -30,6 +30,7 @@
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_zname</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Zname</item>
 		<item name="actionBarSize">40dip</item>
+		<item name="autoScaleTextViewStyle">@style/autoScaleTextView</item>
     </style>
 
     <style name="ActionBar.Solid.Zname" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
@@ -88,5 +89,9 @@
         <item name="android:padding">10dp</item>
         <item name="android:textColorPrimaryInverse">#000000</item>
     </style>
-
+    
+    <style name="autoScaleTextView">
+ 	<!-- use the next line to alter the minimum text size (uncomment first)-->
+        <item name="@attr/minTextSize">10dp</item>
+    </style>
 </resources>

@@ -9,22 +9,22 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/grid_alert_display_name" 
+        android:id="@+id/grid_alert_display_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:text="Vikalp Patel"
         android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:gravity="center"
-        />
-    <View 
+        android:textSize="20sp" />
+
+    <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#ffca00"
         android:layout_marginBottom="2dp"
-        />
+        android:background="@color/background_action_bar_orange" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -41,8 +41,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                 />
+                android:scaleType="fitCenter" />
         </FrameLayout>
 
         <LinearLayout
@@ -64,8 +63,8 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:layout_marginRight="10dip"
                 android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
                 android:background="#000000" />
 
             <Button
@@ -82,7 +81,7 @@
         android:id="@+id/grid_alert_cancel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#ffca00"
+        android:background="@color/background_action_bar_orange"
         android:paddingBottom="8dip"
         android:paddingEnd="16dip"
         android:paddingStart="16dip"

@@ -10,11 +10,11 @@
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
+ * ZM002      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.ui;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,16 +28,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +57,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
@@ -79,6 +77,9 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 	ImageView searchClose;	
 	EditText searchField;
 	ProgressDialog progressDialog;
+	
+	//TYPEFACE
+	static Typeface styleFont;
 
 	//Android helping reference variable
 	private ContactAdapter contactAdapter = null;
@@ -96,7 +97,7 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+//		setHasOptionsMenu(true); COMMENTED ZM002
 	}
 
 	//	private PullToRefreshLayout mPullToRefreshLayout;
@@ -125,6 +126,7 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 //         .allChildrenArePullable()
 //         .listener(this)
 //         .setup(mPullToRefreshLayout);
+		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
         // View Listeners
 		searchClose.setOnClickListener(new OnClickListener() {
@@ -222,43 +224,26 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 		getActivity().unregisterReceiver(broadcastReceiver);
 	}
 
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	    super.onCreateOptionsMenu(menu, inflater);
-	    menu.clear();
-	    inflater.inflate(R.menu.all_contacts_menu, menu);
-	    /*
-	     * ACTIONBAR SHERLOCK SEARCH VIEW
-	     */
-//	    SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-//	    final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-//	    
-//	    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//			@Override
-//			public boolean onQueryTextSubmit(String query) {
-//				// TODO Auto-generated method stub
-//				contactAdapter.getFilter().filter(query);
-//				return false;
-//			}
-//			@Override
-//			public boolean onQueryTextChange(String newText) {
-//				// TODO Auto-generated method stub
-//				contactAdapter.getFilter().filter(newText);
-//				return false;
-//			}
-//		});
-	}
+//	SC ZM002 	
+//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//	    super.onCreateOptionsMenu(menu, inflater);
+//	    menu.clear();
+//	    inflater.inflate(R.menu.all_contacts_menu, menu);
+//	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_search:
-			openSearchLayout();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.action_search:
+////			openSearchLayout();
+//			Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+//			startActivity(searchIntent);
+//			return true;
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
+//	}
+//	EC ZM002
 	
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -335,9 +320,17 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 		Button gridAlertCancel = (Button)dialog.findViewById(R.id.grid_alert_cancel);
 		
 		gridAlertName.setText(name);
+		
+		gridAlertMessage.setTypeface(styleFont);
+		gridAlertCall.setTypeface(styleFont);
+		gridAlertName.setTypeface(styleFont);
+		gridAlertCancel.setTypeface(styleFont);
+		
 		if (!TextUtils.isEmpty(photoUri)) {
 			gridAlertImage.setImageURI(Uri.parse(photoUri));
 		}
+		
+		final String contactNumber = number; 
 		
 		if (gridAlertImage.getDrawable() == null)
 			gridAlertImage.setImageResource(R.drawable.def_contact);
@@ -347,7 +340,9 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				Intent callIntent = new Intent(Intent.ACTION_DIAL);
+				callIntent.setData(Uri.parse("tel:"+Uri.encode(contactNumber)));
+				startActivity(callIntent);				
 			}
 		});
 		
@@ -356,7 +351,8 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contactNumber)));
+	            startActivity(smsIntent);
 			}
 		});
 		
@@ -470,6 +466,8 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 				TextView displayName = (TextView) view.findViewById(R.id.grid_item_display_name);
 				ImageView displayPicture = (ImageView) view.findViewById(R.id.grid_item_display_picture);
 				TextView displayZname = (TextView) view.findViewById(R.id.grid_item_zname);
+				ImageView imgCall = (ImageView) view.findViewById(R.id.grid_item_call);
+				ImageView imgMsg = (ImageView) view.findViewById(R.id.grid_item_message);
 
 				displayPicture.setImageURI(contact.getContactPhotoUri());
 
@@ -478,9 +476,32 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 
 				displayName.setText(contact.getContactName());
 				displayZname.setText(contact.getContactNumber());
+				
+				displayName.setTypeface(styleFont);
+				displayZname.setTypeface(styleFont);
+				
 				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber());
 				view.setTag(R.id.TAG_CONTACT_DP, contact.getContactPhotoUri());
 				view.setTag(R.id.TAG_CONTACT_NAME, contact.getContactName());
+				
+				imgCall.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent callIntent = new Intent(Intent.ACTION_DIAL);
+				          callIntent.setData(Uri.parse("tel:"+Uri.encode(contact.getContactNumber())));
+				          startActivity(callIntent);
+					}
+				});
+				
+				imgMsg.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contact.getContactNumber())));
+			            startActivity(smsIntent);
+					}
+				});
 			}
 			return view;
 		}

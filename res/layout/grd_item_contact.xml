@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto/com.netdoers.zname"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_background"
-    android:orientation="vertical" >
+    android:background="@drawable/card_frame"
+    android:orientation="vertical"
+    tools:ignore="ResAuto" >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -13,65 +16,68 @@
             android:id="@+id/grid_item_display_picture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/face_stamp"
             android:scaleType="fitCenter" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
+            android:layout_gravity="left|top"
             android:background="@color/transparent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="40dp"
+            >
 
             <ImageView
                 android:id="@+id/grid_item_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
+                android:layout_gravity="left|center"
+                android:layout_weight="1"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="5dp"
-                android:src="@android:drawable/sym_action_call" />
+                android:src="@drawable/btn_ic_call_selector" />
 
             <ImageView
                 android:id="@+id/grid_item_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
+                android:layout_gravity="left|center"
+                android:layout_weight="1"
                 android:layout_marginRight="2dp"
-                android:layout_marginTop="5dp"
-                android:src="@android:drawable/sym_action_chat" />
+                android:layout_marginTop="20dp"
+                android:src="@drawable/zname_ic_message" />
         </LinearLayout>
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="center_vertical"
         android:background="@android:color/white"
         android:orientation="vertical" >
 
-        <TextView
+        <com.netdoers.zname.utils.AutoScaleTextView
             android:id="@+id/grid_item_display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="5dp"
+            android:paddingTop="2dp"
             android:textColor="@android:color/darker_gray"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:minTextSize="12sp" />
 
-        <TextView
+        <com.netdoers.zname.utils.AutoScaleTextView
             android:id="@+id/grid_item_zname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="0.5"
-            android:paddingBottom="5dp"
+            android:layout_gravity="center_vertical"
+            android:paddingBottom="2dp"
             android:paddingLeft="20dp"
             android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:minTextSize="10sp" />
     </LinearLayout>
 
 </LinearLayout>

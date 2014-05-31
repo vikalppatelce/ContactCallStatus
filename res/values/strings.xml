@@ -37,6 +37,9 @@
     <string name="Page6Message"><![CDATA[<b>Classes</b>]]> lets you access your messages<![CDATA[<br/>]]>from multiple devices</string>
     <string name="Page7Message"><![CDATA[<b>Classes</b>]]> messages are heavily encrypted<![CDATA[<br/>]]>and can self-destruct</string>
     
+    <!-- Sign Up -->
+    <string name="SignUpAgree"><![CDATA[<b>By signing up</b>]]> I agree to the <![CDATA[<br/>]]>Zname Terms of Use.</string>
+    
     <string name="app_name">Zname</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">ABS ViewPager Tabs Tutorial</string>

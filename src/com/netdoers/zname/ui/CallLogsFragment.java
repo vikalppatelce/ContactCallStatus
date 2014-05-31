@@ -13,6 +13,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
 import com.netdoers.zname.dto.CallLog;
@@ -55,6 +57,9 @@ public class CallLogsFragment extends SherlockFragment {
 	
 	//DECLARE COLLECTION
 	private ArrayList<CallLog> arrayListCallLog = null;
+	
+	//TYPEFACE 
+	static Typeface styleFont;
 	
 	//DECLARE ADAPTER
 	private CallLogAdapter callLogsAdapter = null;
@@ -101,6 +106,8 @@ public class CallLogsFragment extends SherlockFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
+		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
 // VIEW LISTENERS
 		callLogsListView.setOnScrollListener(new OnScrollListener() {
@@ -268,7 +275,7 @@ public class CallLogsFragment extends SherlockFragment {
 		
 		switch (logType) {
 		case 0:
-			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, null, null, android.provider.CallLog.Calls.DATE +" DESC");
+			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=1" +" OR "+ android.provider.CallLog.Calls.TYPE+"=2" + " OR " + android.provider.CallLog.Calls.TYPE+"=3", null, android.provider.CallLog.Calls.DATE +" DESC");
 			break;
 		case 1:
 			cursor = Zname.getApplication().getContentResolver().query(android.provider.CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.TYPE+"=0", null, android.provider.CallLog.Calls.DATE +" DESC");
@@ -472,6 +479,11 @@ public class CallLogsFragment extends SherlockFragment {
 			t1.setText(arrayListCallLog.get(position).getCallLogName());
 			t2.setText(arrayListCallLog.get(position).getCallLogNumber());
 			t3.setText(arrayListCallLog.get(position).getCallLogTime());
+			
+			t1.setTypeface(styleFont);
+			t2.setTypeface(styleFont);
+			t3.setTypeface(styleFont);
+			t4.setTypeface(styleFont);
 			
 //			img.setImageURI(
 //					arrayListCallLog.get(position).getCallLogPhotoUri()!=null

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.MediaColumns;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -47,13 +48,14 @@ import com.netdoers.zname.service.RestClient;
 public class SignUpActivity extends SherlockFragmentActivity {
 	
 	//DECLARE VIEW
-	EditText fullName, zName, zNumber;
-	TextView signUp;
-	ImageView zNameDisplayPicture;
-	ActionBar mActionBar;
+	private EditText fullName, zName, zNumber;
+	private TextView signUp,agreeTerms;
+	private ImageView zNameDisplayPicture;
+	private ActionBar mActionBar;
+
 	
 	//TYPEFACE
-	Typeface stylefontActionBar;
+	static Typeface styleFont;
 	
 	//CONSTANT
 	public static final int IMPORT_PICTURE 					= 10001;
@@ -70,15 +72,23 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sign_up_layout);
 		
-		stylefontActionBar = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-	
 		//GET VIEW FROM LAYOUT
 		fullName = (EditText)findViewById(R.id.sign_up_name);
 		zName = (EditText)findViewById(R.id.sign_up_zname);
 		zNumber = (EditText)findViewById(R.id.sign_up_zname_znumber);
 		signUp = (TextView)findViewById(R.id.sign_up_button);
+		agreeTerms = (TextView)findViewById(R.id.sign_up_txt_agree);
 		zNameDisplayPicture = (ImageView)findViewById(R.id.sign_up_display_picture);
 		
+		agreeTerms.setText(Html.fromHtml(getString(R.string.SignUpAgree)));
+		
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		
+		fullName.setTypeface(styleFont);
+		zName.setTypeface(styleFont);
+		zNumber.setTypeface(styleFont);
+		signUp.setTypeface(styleFont);
+		agreeTerms.setTypeface(styleFont);
 		
 		//GET ACTION BAR
 		mActionBar = getSupportActionBar();
@@ -107,7 +117,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			}
 			TextView yourTextView = (TextView) findViewById(titleId);
 			yourTextView.setText(str);
-			yourTextView.setTypeface(stylefontActionBar);
+			yourTextView.setTypeface(styleFont);
 		} catch (Exception e) {
 			Log.e("ActionBar Style", e.toString());
 		}

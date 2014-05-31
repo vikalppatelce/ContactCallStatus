@@ -10,6 +10,7 @@
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     27/05/2014                       CLONED FROM FRIENDS FRAGMENT
+ * ZM003      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -23,21 +24,27 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.GridView;
@@ -45,11 +52,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.contactpicker.ContactPickerManager;
 import com.netdoers.zname.dto.Contact;
@@ -67,7 +73,11 @@ public class WorkContactsFragment extends SherlockFragment {
 	GridView contactsGridView;
 	ImageView searchClose;	
 	EditText searchField;
+	Button addContact;
 
+	//TYPEFACE
+	static Typeface styleFont;
+	
     //ADAPTER
 	private ContactAdapter contactAdapter = null;
 	
@@ -86,7 +96,7 @@ public class WorkContactsFragment extends SherlockFragment {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+//		setHasOptionsMenu(true); COMMENTED ZM003
 	}
 	
 	/* (non-Javadoc)
@@ -101,6 +111,7 @@ public class WorkContactsFragment extends SherlockFragment {
 		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout);
 		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
 		searchField = (EditText) view.findViewById(R.id.friends_search_txt);
+		addContact = (Button) view.findViewById(R.id.friends_btn_add);
 		return view;
 	}
 
@@ -117,6 +128,8 @@ public class WorkContactsFragment extends SherlockFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
+		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
 	// View Listeners
 	searchClose.setOnClickListener(new OnClickListener() {
@@ -136,7 +149,35 @@ public class WorkContactsFragment extends SherlockFragment {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 			// call the filter with the current text on the editbox
-			contactAdapter.getFilter().filter(s.toString());
+			try {
+				contactAdapter.getFilter().filter(s.toString());
+			} catch (Exception e) {
+				Log.e(TAG, e.toString());
+			}
+		}
+	});
+	
+	contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
+			// TODO Auto-generated method stub
+			// vibration for 100 milliseconds
+			((Vibrator)getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE)).vibrate(50);
+			
+			String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
+			String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
+			String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
+			
+			showInputDialog(viewTagName,viewTagNumber,viewTagDp);
+			return false;
+		}
+	});
+	addContact.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			openAddContactsLayout();
 		}
 	});
 	contacts = new ArrayList<Contact>();
@@ -148,26 +189,27 @@ public class WorkContactsFragment extends SherlockFragment {
 		super.onResume();
 			refreshContactsData();
 	}
-	
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	    super.onCreateOptionsMenu(menu, inflater);
-	    menu.clear();
-	    inflater.inflate(R.menu.friends_contacts_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.friends_action_search:
-			openSearchLayout();
-			return true;
-		case R.id.action_add:
-			openAddContactsLayout();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+//	 SC ZM003
+//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//	    super.onCreateOptionsMenu(menu, inflater);
+//	    menu.clear();
+//	    inflater.inflate(R.menu.friends_contacts_menu, menu);
+//	}
+//	
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.friends_action_search:
+//			openSearchLayout();
+//			return true;
+//		case R.id.action_add:
+//			openAddContactsLayout();
+//			return true;
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
+//	}
+//	EC ZM003
 	
 //	View Listeners
 	public void onCloseSearchLayout(View v)
@@ -185,7 +227,70 @@ public class WorkContactsFragment extends SherlockFragment {
 		Intent addContacts = new Intent(getActivity(), ContactPickerManager.class);
 		startActivityForResult(addContacts, ADD_CONTACT);
 	}
-	
+//	ALERT DIALOG
+	public void showInputDialog(String name,String number,String photoUri)
+	{
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.grid_view_alert_dialog);
+		
+		TextView gridAlertName = (TextView)dialog.findViewById(R.id.grid_alert_display_name);
+		TextView gridAlertCall = (TextView)dialog.findViewById(R.id.grid_alert_call);
+		TextView gridAlertMessage = (TextView)dialog.findViewById(R.id.grid_alert_message);
+		ImageView gridAlertImage = (ImageView)dialog.findViewById(R.id.grid_alert_contact_image);
+		Button gridAlertCancel = (Button)dialog.findViewById(R.id.grid_alert_cancel);
+		
+		gridAlertName.setText(name);
+		
+		gridAlertMessage.setTypeface(styleFont);
+		gridAlertCall.setTypeface(styleFont);
+		gridAlertName.setTypeface(styleFont);
+		gridAlertCancel.setTypeface(styleFont);
+		
+		if (!TextUtils.isEmpty(photoUri)) {
+			gridAlertImage.setImageURI(Uri.parse(photoUri));
+		}
+		
+		final String contactNumber = number; 
+		
+		if (gridAlertImage.getDrawable() == null)
+			gridAlertImage.setImageResource(R.drawable.def_contact);
+		
+		gridAlertCall.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent callIntent = new Intent(Intent.ACTION_DIAL);
+				callIntent.setData(Uri.parse("tel:"+Uri.encode(contactNumber)));
+				startActivity(callIntent);				
+			}
+		});
+		
+		gridAlertMessage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contactNumber)));
+	            startActivity(smsIntent);
+			}
+		});
+		
+		gridAlertCancel.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
 //	ADD CONTACTS TO CONTACTS ADAPTER
 	
 	public void refreshContactsData()
@@ -338,6 +443,8 @@ public class WorkContactsFragment extends SherlockFragment {
 				TextView displayName = (TextView) view.findViewById(R.id.grid_item_display_name);
 				ImageView displayPicture = (ImageView) view.findViewById(R.id.grid_item_display_picture);
 				TextView displayZname = (TextView) view.findViewById(R.id.grid_item_zname);
+				ImageView imgCall = (ImageView) view.findViewById(R.id.grid_item_call);
+				ImageView imgMsg = (ImageView) view.findViewById(R.id.grid_item_message);
 
 				displayPicture.setImageURI(contact.getContactPhotoUri());
 
@@ -346,9 +453,32 @@ public class WorkContactsFragment extends SherlockFragment {
 
 				displayName.setText(contact.getContactName());
 				displayZname.setText(contact.getContactNumber());
+				
+				displayName.setTypeface(styleFont);
+				displayZname.setTypeface(styleFont);
+				
 				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber());
 				view.setTag(R.id.TAG_CONTACT_DP, contact.getContactPhotoUri());
 				view.setTag(R.id.TAG_CONTACT_NAME, contact.getContactName());
+				
+				imgCall.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent callIntent = new Intent(Intent.ACTION_DIAL);
+				          callIntent.setData(Uri.parse("tel:"+Uri.encode(contact.getContactNumber())));
+				          startActivity(callIntent);
+					}
+				});
+				
+				imgMsg.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contact.getContactNumber())));
+			            startActivity(smsIntent);
+					}
+				});
 			}
 			return view;
 		}

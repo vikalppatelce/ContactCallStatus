@@ -33,6 +33,7 @@
         <item name="android:fastScrollThumbDrawable">@drawable/selector_fast_scroll_thumb</item>
         <item name="android:fastScrollPreviewBackgroundLeft">@drawable/_ics_fastscroll_label_left</item>
         <item name="android:fastScrollPreviewBackgroundRight">@drawable/_ics_fastscroll_label_right</item>
+        <item name="com.netdoers.zname:autoScaleTextViewStyle">@style/autoScaleTextView</item>
     </style>
 
     <style name="ActionBar.Solid.Zname" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
@@ -58,5 +59,8 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Zname</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Zname</item>
     </style>
-
+    <style name="autoScaleTextView">
+ 	<!-- use the next line to alter the minimum text size (uncomment first)-->
+        <item name="@attr/minTextSize">10dp</item>
+    </style>
 </resources>

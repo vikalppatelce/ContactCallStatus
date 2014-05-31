@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.netdoers.zname"
     android:versionCode="2"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -60,9 +60,15 @@
             	  android:label="Settings"
             />
         
+        <activity android:name="com.netdoers.zname.ui.SearchActivity"
+            	  android:screenOrientation="portrait"
+            	  android:label="Search"
+            />
+        
         <activity android:name="com.netdoers.zname.contactpicker.ContactPickerManager" 
             	  android:screenOrientation="portrait"
             />
+        
         <provider
             android:name="com.netdoers.zname.sqlite.ZnameDB"
             android:authorities="com.netdoers.zname.SQLite.ZnameDB" />

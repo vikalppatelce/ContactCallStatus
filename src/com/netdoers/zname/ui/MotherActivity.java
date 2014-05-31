@@ -28,6 +28,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
@@ -57,7 +60,12 @@ public class MotherActivity extends SherlockFragmentActivity {
 	ViewPager mPager;
 	PagerSlidingTabStrip pagerSlidingTabStrp; 
 	Tab tab;
-	Typeface stylefontActionBar;
+	
+	//TYPEFACE
+	Typeface styleFont;
+	
+	//CONSTANTS
+	public static final String TAG = "MotherActivity";
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -76,7 +84,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		// Get the view from activity_main.xml
 		setContentView(R.layout.activity_mother);
 		
-		stylefontActionBar = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
 		
 		// Activate Navigation Mode Tabs
 		mActionBar = getSupportActionBar();
@@ -276,7 +284,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 			}
 			TextView yourTextView = (TextView) findViewById(titleId);
 			yourTextView.setText(str);
-			yourTextView.setTypeface(stylefontActionBar);
+			yourTextView.setTypeface(styleFont);
 		} catch (Exception e) {
 			Log.e("ActionBar Style", e.toString());
 		}
@@ -301,7 +309,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		    ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
 		    textView.setText(values[position]);
 		    
-		    textView.setTypeface(stylefontActionBar);
+		    textView.setTypeface(styleFont);
 		    // Change the icon for Windows and iPhone
 		    String s = values[position];
 			switch (position) {
@@ -382,6 +390,15 @@ public class MotherActivity extends SherlockFragmentActivity {
 		if(drawerIntent!=null)
 			startActivity(drawerIntent);
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.friends_contacts_menu, menu);
+		return true;
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -393,14 +410,34 @@ public class MotherActivity extends SherlockFragmentActivity {
 					mDrawerLayout.openDrawer(mDrawerList);
 				}
 			} catch (Exception e) {
+				Log.e(TAG, e.toString());
 			}
 			return true;
-//		case R.id.action_help:
-//			openHelpFrameLayout();
-//			return true;
+		case R.id.action_add:
+			return true;
+		case R.id.action_search:
+			Intent searchIntent = new Intent(this,SearchActivity.class);
+			startActivity(searchIntent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_MENU) {
+	    	try {
+				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+					mDrawerLayout.closeDrawer(mDrawerList);
+				} else {
+					mDrawerLayout.openDrawer(mDrawerList);
+				}
+			} catch (Exception e) {
+				Log.e(TAG, e.toString());
+			}
+	        return true;
+	    } else {
+	        return super.onKeyUp(keyCode, event);
+	    }
 	}
 	/**
 	 * When using the ActionBarDrawerToggle, you must call it during
@@ -420,4 +457,5 @@ public class MotherActivity extends SherlockFragmentActivity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+	
 }
