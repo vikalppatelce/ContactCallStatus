@@ -262,6 +262,9 @@ public class ImportContactsService extends Service {
 					String id = cursor.getString(cursor
 							.getColumnIndex(ContactsContract.Contacts._ID));
 
+					//set contactId
+					contact.setContactId(id);
+					
 					contact.setContactPhotoUri(getContactPhotoUri(Long
 							.parseLong(id)));
 

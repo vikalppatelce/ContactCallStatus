@@ -65,6 +65,10 @@
             	  android:label="Search"
             />
         
+        <activity android:name="com.netdoers.zname.ui.ProfileActivity"
+            	  android:screenOrientation="portrait"
+            />
+        
         <activity android:name="com.netdoers.zname.contactpicker.ContactPickerManager" 
             	  android:screenOrientation="portrait"
             />

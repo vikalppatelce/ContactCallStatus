@@ -42,6 +42,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,9 +55,6 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
@@ -189,6 +187,24 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 				return false;
 			}
 		});
+		
+		contactsGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
+				String viewTagName = view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				String viewTagPhoto	= view.getTag(R.id.TAG_CONTACT_PHOTO_ID).toString();
+				Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID, viewTagId);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, viewTagName);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO, viewTagPhoto);
+				profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(profileIntent);
+			}
+		});
 		/*
 		 * Import Contact Service
 		 */
@@ -259,8 +275,8 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
     		refreshContactsData();	
     	}
     }
+    
 //	ADD CONTACTS TO CONTACTS ADAPTER
-	
 	public void refreshContactsData()
 	{
 		Cursor cr = getActivity().getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
@@ -483,6 +499,8 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber());
 				view.setTag(R.id.TAG_CONTACT_DP, contact.getContactPhotoUri());
 				view.setTag(R.id.TAG_CONTACT_NAME, contact.getContactName());
+				view.setTag(R.id.TAG_CONTACT_ID, contact.getContactId());
+				view.setTag(R.id.TAG_CONTACT_PHOTO_ID, contact.getContactPhotoUri());
 				
 				imgCall.setOnClickListener(new View.OnClickListener() {
 					@Override

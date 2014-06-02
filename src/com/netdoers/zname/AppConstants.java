@@ -53,6 +53,16 @@ public class AppConstants {
 		public static final String UPLOAD_URL = "expense_image_upload.php";
 		public static final String MEDIA_UPLOAD_URL = "file_upload.php";
 	}
+
+	public interface TAGS
+	{
+		public interface INTENT
+		{
+			public static final String TAG_NAME ="name";
+			public static final String TAG_ID ="_id";
+			public static final String TAG_PHOTO ="photo";
+		}
+	}
 	
 	public interface RESPONSES
 	{

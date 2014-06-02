@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<!--
+     File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -34,6 +35,7 @@
         <item name="android:fastScrollPreviewBackgroundLeft">@drawable/_ics_fastscroll_label_left</item>
         <item name="android:fastScrollPreviewBackgroundRight">@drawable/_ics_fastscroll_label_right</item>
         <item name="com.netdoers.zname:autoScaleTextViewStyle">@style/autoScaleTextView</item>
+        <item name="android:actionBarWidgetTheme">@style/Overflow.Text.Color</item>
     </style>
 
     <style name="ActionBar.Solid.Zname" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
@@ -43,7 +45,7 @@
         <item name="android:progressBarStyle">@style/ProgressBar.Zname</item>
         <item name="android:titleTextStyle">@style/MyTheme.TitleTextStyle</item>
     </style>
-    
+
     <style name="MyTheme.TitleTextStyle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
@@ -53,14 +55,21 @@
         <item name="android:background">@drawable/ab_transparent_zname</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Zname</item>
     </style>
-    
+
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Zname.Widget" parent="@style/Theme.Sherlock">
         <item name="android:popupMenuStyle">@style/PopupMenu.Zname</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Zname</item>
     </style>
+
     <style name="autoScaleTextView">
- 	<!-- use the next line to alter the minimum text size (uncomment first)-->
+
+        <!-- use the next line to alter the minimum text size (uncomment first) -->
         <item name="@attr/minTextSize">10dp</item>
     </style>
+
+    <style name="Overflow.Text.Color" parent="Widget">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
