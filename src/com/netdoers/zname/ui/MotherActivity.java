@@ -9,6 +9,7 @@
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
+ * ZM002      VIKALP PATEL     03/06/2014                       SUPPRESSED DRAWER 
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -20,18 +21,14 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,13 +65,15 @@ public class MotherActivity extends SherlockFragmentActivity {
 	//CONSTANTS
 	public static final String TAG = "MotherActivity";
 	
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private ActionBarDrawerToggle mDrawerToggle;
-
-	private CharSequence mDrawerTitle;
-	private CharSequence mTitle;
-	private String[] mPlanetTitles;
+//	SU ZM002
+//	private DrawerLayout mDrawerLayout;
+//	private ListView mDrawerList;
+//	private ActionBarDrawerToggle mDrawerToggle;
+//
+//	private CharSequence mDrawerTitle;
+//	private CharSequence mTitle;
+//	private String[] mPlanetTitles;
+//	EU ZM002
 
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
@@ -182,55 +181,56 @@ public class MotherActivity extends SherlockFragmentActivity {
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
+// 		SU ZM002
+//		mTitle = mDrawerTitle = getTitle();
+//		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+//		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//
+//		// set a custom shadow that overlays the main content when the drawer
+//		// opens
+//		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
+//		// set up the drawer's list view with items and click listener
+//		MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, mPlanetTitles);
+//		mDrawerList.setAdapter(adapter);
+////		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+////				R.layout.drawer_list_item, mPlanetTitles));
+//		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		mTitle = mDrawerTitle = getTitle();
-		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-		MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, mPlanetTitles);
-		mDrawerList.setAdapter(adapter);
-//		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-//				R.layout.drawer_list_item, mPlanetTitles));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//		 enable ActionBar app icon to behave as action to toggle nav drawer
 
-		// enable ActionBar app icon to behave as action to toggle nav drawer
-
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
+//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//		getSupportActionBar().setHomeButtonEnabled(true);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the sliding drawer and the action bar app icon
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
-		) {
-			@Override
-			public void onDrawerClosed(View view) {
-				getSupportActionBar().setTitle(mTitle);
-				supportInvalidateOptionsMenu();
-				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-				// invalidateOptionsMenu(); // creates call to
-				// onPrepareOptionsMenu()
-			}
-
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				getSupportActionBar().setTitle(mDrawerTitle);
-				supportInvalidateOptionsMenu();
-				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-				// invalidateOptionsMenu(); // creates call to
-				// onPrepareOptionsMenu()
-			}
-		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+//		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+//		mDrawerLayout, /* DrawerLayout object */
+//		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+//		R.string.drawer_open, /* "open drawer" description for accessibility */
+//		R.string.drawer_close /* "close drawer" description for accessibility */
+//		) {
+//			@Override
+//			public void onDrawerClosed(View view) {
+//				getSupportActionBar().setTitle(mTitle);
+//				supportInvalidateOptionsMenu();
+//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//				// invalidateOptionsMenu(); // creates call to
+//				// onPrepareOptionsMenu()
+//			}
+//
+//			@Override
+//			public void onDrawerOpened(View drawerView) {
+//				getSupportActionBar().setTitle(mDrawerTitle);
+//				supportInvalidateOptionsMenu();
+//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//				// invalidateOptionsMenu(); // creates call to
+//				// onPrepareOptionsMenu()
+//			}
+//		};
+//		mDrawerLayout.setDrawerListener(mDrawerToggle);
+//		EU ZM002
 		
 //		ContactsContentObserver contactsContentObserver = new ContactsContentObserver();
 //		getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
@@ -386,7 +386,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 //		// update selected item and title, then close the drawer
 //		mDrawerList.setItemChecked(position, true);
 //		setTitle(mPlanetTitles[position]);
-		mDrawerLayout.closeDrawer(mDrawerList);
+//		mDrawerLayout.closeDrawer(mDrawerList); COMMENTED ZM002
 		
 		if(drawerIntent!=null)
 			startActivity(drawerIntent);
@@ -404,21 +404,27 @@ public class MotherActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			try {
-				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-					mDrawerLayout.closeDrawer(mDrawerList);
-				} else {
-					mDrawerLayout.openDrawer(mDrawerList);
-				}
-			} catch (Exception e) {
-				Log.e(TAG, e.toString());
-			}
+//			SU ZM002
+//			try {
+//				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+//					mDrawerLayout.closeDrawer(mDrawerList);
+//				} else {
+//					mDrawerLayout.openDrawer(mDrawerList);
+//				}
+//			} catch (Exception e) {
+//				Log.e(TAG, e.toString());
+//			}
+//			EU ZM002
 			return true;
 		case R.id.action_add:
 			return true;
 		case R.id.action_search:
 			Intent searchIntent = new Intent(this,SearchActivity.class);
 			startActivity(searchIntent);
+			return true;
+		case R.id.action_settings:
+			Intent settingIntent = new Intent(this, SettingsActivity.class);
+			startActivity(settingIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -427,11 +433,13 @@ public class MotherActivity extends SherlockFragmentActivity {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_MENU) {
 	    	try {
-				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-					mDrawerLayout.closeDrawer(mDrawerList);
-				} else {
-					mDrawerLayout.openDrawer(mDrawerList);
-				}
+//	    		SU ZM002
+//				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+//					mDrawerLayout.closeDrawer(mDrawerList);
+//				} else {
+//					mDrawerLayout.openDrawer(mDrawerList);
+//				}
+//	    		EU ZM002
 			} catch (Exception e) {
 				Log.e(TAG, e.toString());
 			}
@@ -449,14 +457,14 @@ public class MotherActivity extends SherlockFragmentActivity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		mDrawerToggle.syncState();
+//		mDrawerToggle.syncState();   COMMENTED ZM002
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggls
-		mDrawerToggle.onConfigurationChanged(newConfig);
+//		mDrawerToggle.onConfigurationChanged(newConfig); COMMENTED ZM002
 	}
 	
 }

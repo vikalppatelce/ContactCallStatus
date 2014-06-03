@@ -52,13 +52,17 @@
             android:layout_weight="0.3"
             android:orientation="vertical" >
 
-            <Button
+            <TextView
                 android:id="@+id/grid_alert_call"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
+                android:drawableLeft="@drawable/btn_ic_call_selected"
+                android:padding="3dp"
+                android:gravity="center"
                 android:text="Call"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="18sp" />
 
             <View
                 android:layout_width="fill_parent"
@@ -67,13 +71,17 @@
                 android:layout_marginRight="10dip"
                 android:background="#000000" />
 
-            <Button
+            <TextView
                 android:id="@+id/grid_alert_message"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
+                android:drawableLeft="@drawable/zname_ic_message"
+                android:gravity="center"
+                android:padding="3dp"
                 android:text="Message"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 

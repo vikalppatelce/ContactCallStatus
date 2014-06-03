@@ -43,7 +43,7 @@
     <string name="app_name">Zname</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">ABS ViewPager Tabs Tutorial</string>
-    <string name="str_all_contacts_fragment">All Contacts</string>
+    <string name="str_all_contacts_fragment">Contacts</string>
     <string name="str_friends_contacts_fragment">Friends</string>
     <string name="str_family_contacts_fragment">Family</string>
     <string name="str_work_contacts_fragment">Work</string>

@@ -10,6 +10,7 @@
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
+ * ZM003      VIKALP PATEL     30/05/2014                       MOVE SEARCH INTO SEARCH ACTIVITY
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.ui;
@@ -37,10 +38,11 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,12 +52,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.contactpicker.ContactPickerManager;
@@ -70,11 +68,12 @@ import com.netdoers.zname.sqlite.DBConstant;
 public class FriendsContactsFragment extends SherlockFragment {
 	
 	//DECLARE VARIABLES
-	LinearLayout searchContactLayout;
+	
 	GridView contactsGridView;
-	ImageView searchClose;	
-	EditText searchField;
 	Button addContact;
+//	ImageView searchClose; SU ZM003
+//	LinearLayout searchContactLayout;
+//	EditText searchField;  EU ZM003
 
 	//TYPEFACE
 	static Typeface styleFont;
@@ -109,10 +108,10 @@ public class FriendsContactsFragment extends SherlockFragment {
 		// Get the view from fragmenttab2.xml
 		View view = inflater.inflate(R.layout.fragment_friends, container, false);
 		contactsGridView = (GridView)view.findViewById(R.id.gridview_friends);
-		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout);
-		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
-		searchField = (EditText) view.findViewById(R.id.friends_search_txt);
 		addContact = (Button) view.findViewById(R.id.friends_btn_add);
+//		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout); SU ZM003
+//		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
+//		searchField = (EditText) view.findViewById(R.id.friends_search_txt); EU ZM003
 		return view;
 	}
 
@@ -133,30 +132,32 @@ public class FriendsContactsFragment extends SherlockFragment {
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
 	// View Listeners
-	searchClose.setOnClickListener(new OnClickListener() {
-	@Override
-		public void onClick(View v) {
-		// TODO Auto-generated method stub
-		onCloseSearchLayout(v);	
-		}
-	});
-	searchField.addTextChangedListener(new TextWatcher() {
-		@Override
-		public void afterTextChanged(Editable s) {
-		}
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		}
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			// call the filter with the current text on the editbox
-				try {
-					contactAdapter.getFilter().filter(s.toString());
-				} catch (Exception e) {
-					Log.e(TAG, e.toString());
-				}
-		}
-	});
+//		SU ZM003
+//	searchClose.setOnClickListener(new OnClickListener() {
+//	@Override
+//		public void onClick(View v) {
+//		// TODO Auto-generated method stub
+//		onCloseSearchLayout(v);	
+//		}
+//	});
+//	searchField.addTextChangedListener(new TextWatcher() {
+//		@Override
+//		public void afterTextChanged(Editable s) {
+//		}
+//		@Override
+//		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//		}
+//		@Override
+//		public void onTextChanged(CharSequence s, int start, int before, int count) {
+//			// call the filter with the current text on the editbox
+//				try {
+//					contactAdapter.getFilter().filter(s.toString());
+//				} catch (Exception e) {
+//					Log.e(TAG, e.toString());
+//				}
+//		}
+//	});
+//		EU ZM003
 	
 	contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -218,16 +219,18 @@ public class FriendsContactsFragment extends SherlockFragment {
 //	EC ZM002
 	
 //	View Listeners
-	public void onCloseSearchLayout(View v)
-	{
-		searchContactLayout.setVisibility(View.GONE);
-		searchField.setText("");
-	}
-
-	public void openSearchLayout()
-	{
-		searchContactLayout.setVisibility(View.VISIBLE);
-	}
+//	SU ZM003
+//	public void onCloseSearchLayout(View v)
+//	{
+//		searchContactLayout.setVisibility(View.GONE);
+//		searchField.setText("");
+//	}
+//
+//	public void openSearchLayout()
+//	{
+//		searchContactLayout.setVisibility(View.VISIBLE);
+//	}
+//	EU ZM003
 	public void openAddContactsLayout()
 	{
 		Intent addContacts = new Intent(getActivity(), ContactPickerManager.class);

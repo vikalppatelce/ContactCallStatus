@@ -11,6 +11,7 @@
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     27/05/2014                       CLONED FROM FRIENDS FRAGMENT
  * ZM003      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
+ * ZM004      VIKALP PATEL     03/06/2014                       MOVE SEARCH INTO SEARCH ACTIVITY
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -69,11 +70,12 @@ import com.netdoers.zname.sqlite.DBConstant;
 public class WorkContactsFragment extends SherlockFragment {
 
 	//DECLARE VARIABLES
-	LinearLayout searchContactLayout;
 	GridView contactsGridView;
-	ImageView searchClose;	
-	EditText searchField;
 	Button addContact;
+//	LinearLayout searchContactLayout; SU ZM004
+//	ImageView searchClose;	
+//	EditText searchField; EU ZM004
+	
 
 	//TYPEFACE
 	static Typeface styleFont;
@@ -108,10 +110,10 @@ public class WorkContactsFragment extends SherlockFragment {
 		// Get the view from fragmenttab2.xml
 		View view = inflater.inflate(R.layout.fragment_friends, container, false);
 		contactsGridView = (GridView)view.findViewById(R.id.gridview_friends);
-		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout);
-		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
-		searchField = (EditText) view.findViewById(R.id.friends_search_txt);
 		addContact = (Button) view.findViewById(R.id.friends_btn_add);
+//		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout); SU ZM004
+//		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
+//		searchField = (EditText) view.findViewById(R.id.friends_search_txt); EU ZM004
 		return view;
 	}
 
@@ -132,30 +134,32 @@ public class WorkContactsFragment extends SherlockFragment {
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
 	// View Listeners
-	searchClose.setOnClickListener(new OnClickListener() {
-	@Override
-		public void onClick(View v) {
-		// TODO Auto-generated method stub
-		onCloseSearchLayout(v);	
-		}
-	});
-	searchField.addTextChangedListener(new TextWatcher() {
-		@Override
-		public void afterTextChanged(Editable s) {
-		}
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		}
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
-			// call the filter with the current text on the editbox
-			try {
-				contactAdapter.getFilter().filter(s.toString());
-			} catch (Exception e) {
-				Log.e(TAG, e.toString());
-			}
-		}
-	});
+//		SU ZM004
+//	searchClose.setOnClickListener(new OnClickListener() {
+//	@Override
+//		public void onClick(View v) {
+//		// TODO Auto-generated method stub
+//		onCloseSearchLayout(v);	
+//		}
+//	});
+//	searchField.addTextChangedListener(new TextWatcher() {
+//		@Override
+//		public void afterTextChanged(Editable s) {
+//		}
+//		@Override
+//		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//		}
+//		@Override
+//		public void onTextChanged(CharSequence s, int start, int before, int count) {
+//			// call the filter with the current text on the editbox
+//			try {
+//				contactAdapter.getFilter().filter(s.toString());
+//			} catch (Exception e) {
+//				Log.e(TAG, e.toString());
+//			}
+//		}
+//	});
+//		EU ZM004
 	
 	contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() {
 		@Override
@@ -212,16 +216,18 @@ public class WorkContactsFragment extends SherlockFragment {
 //	EC ZM003
 	
 //	View Listeners
-	public void onCloseSearchLayout(View v)
-	{
-		searchContactLayout.setVisibility(View.GONE);
-		searchField.setText("");
-	}
-
-	public void openSearchLayout()
-	{
-		searchContactLayout.setVisibility(View.VISIBLE);
-	}
+//	SU ZM004
+//	public void onCloseSearchLayout(View v)
+//	{
+//		searchContactLayout.setVisibility(View.GONE);
+//		searchField.setText("");
+//	}
+//
+//	public void openSearchLayout()
+//	{
+//		searchContactLayout.setVisibility(View.VISIBLE);
+//	}
+//	EU ZM004
 	public void openAddContactsLayout()
 	{
 		Intent addContacts = new Intent(getActivity(), ContactPickerManager.class);

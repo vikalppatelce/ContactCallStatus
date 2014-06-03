@@ -132,11 +132,12 @@ public class SignUpActivity extends SherlockFragmentActivity {
 //				
 //				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 //				String device_id = mTelephonyMgr.getDeviceId();
+//				String device_IMSI = mTelephonyMgr.getSubscriberId();
 //				String device_name = getDeviceName();
 //				String myVersion = android.os.Build.VERSION.RELEASE;
 //				
 //				if(isNetworkAvailable()){
-//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_name,myVersion);
+//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
 //					if(!TextUtils.isEmpty(strZnameDp))
 //						new RegistrationUploadTask().execute();
 				
@@ -332,7 +333,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		@Override
 		protected RegistrationDTO doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			JSONObject dataToSend = RequestBuilder.getRegistraionData(params[0], params[1], params[2], params[3], params[4],params[5],params[6]);
+			JSONObject dataToSend = RequestBuilder.getRegistraionData(params[0], params[1], params[2], params[3], params[4],params[5],params[6],params[7]);
 			Log.i(TAG, dataToSend.toString());
 			try {
 				String str = RestClient.postData(AppConstants.URLS.BASE_URL, dataToSend);
