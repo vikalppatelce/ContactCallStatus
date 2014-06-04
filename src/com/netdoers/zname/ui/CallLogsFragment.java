@@ -39,7 +39,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.dto.CallLog;
+import com.netdoers.zname.beans.CallLog;
 import com.netdoers.zname.sqlite.DBConstant;
 
 /**

@@ -56,9 +56,9 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
+import com.netdoers.zname.beans.Contact;
+import com.netdoers.zname.beans.ContactPicker;
 import com.netdoers.zname.contactpicker.ContactPickerManager;
-import com.netdoers.zname.dto.Contact;
-import com.netdoers.zname.dto.ContactPicker;
 import com.netdoers.zname.sqlite.DBConstant;
 
 /**
@@ -463,7 +463,11 @@ public class FriendsContactsFragment extends SherlockFragment {
 					displayPicture.setImageResource(R.drawable.def_contact);
 
 				displayName.setText(contact.getContactName());
-				displayZname.setText(contact.getContactNumber());
+				displayZname.setText(
+							contact.getContactNumber().contains(",")
+							?contact.getContactNumber().toString().substring(0, contact.getContactNumber().toString().indexOf(","))
+						    :contact.getContactNumber()
+							);
 				
 				displayName.setTypeface(styleFont);
 				displayZname.setTypeface(styleFont);

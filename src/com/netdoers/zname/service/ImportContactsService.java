@@ -9,6 +9,7 @@
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED 
+ * ZM002      VIKALP PATEL     04/06/2014                       ADDED ALL CONTACTS IN BEANS
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.service;
@@ -36,7 +37,7 @@ import android.util.Log;
 
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.dto.Contact;
+import com.netdoers.zname.beans.Contact;
 import com.netdoers.zname.sqlite.DBConstant;
 
 public class ImportContactsService extends Service {
@@ -195,7 +196,14 @@ public class ImportContactsService extends Service {
 
 					if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
 						// set phone number
-						contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D+",""));
+//						SU ZM002
+//						contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D+",""));
+						if (contact.getContactNumber().toString().length() == 0) {
+							contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", ""));
+						} else {
+							contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "")));//One can add possible contacts "(-/,"
+						}
+//						EU ZM002
 					}
 				}
 			}
@@ -276,14 +284,30 @@ public class ImportContactsService extends Service {
 							phoneProj,
 							ContactsContract.CommonDataKinds.Phone.CONTACT_ID
 									+ " = ?", new String[] { id }, null);
+//					SU ZM002
+//					if (cursorPhone.moveToFirst()) {
+//						contact.setContactNumber(cursorPhone
+//								.getString(
+//										cursorPhone
+//												.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+//								.replaceAll("\\D+",""));
+//					}
+//					cursorPhone.close();
+					
 					if (cursorPhone.moveToFirst()) {
-						contact.setContactNumber(cursorPhone
-								.getString(
-										cursorPhone
-												.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-								.replaceAll("\\D+",""));
+						do {
+							if (contact.getContactNumber().toString().length() == 0) {
+								contact.setContactNumber(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", ""));
+							} else {
+								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", "")));
+							}	
+						} while (cursorPhone.moveToNext());
 					}
-					cursorPhone.close();
+					
+					if (cursorPhone != null) {
+						cursorPhone.close();
+					}
+//					EU ZM002
 
 					contact.setContactName(cursor.getString(cursor
 							.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));

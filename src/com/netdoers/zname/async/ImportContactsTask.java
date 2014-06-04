@@ -41,7 +41,7 @@ import android.util.Log;
 
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.dto.Contact;
+import com.netdoers.zname.beans.Contact;
 import com.netdoers.zname.sqlite.DBConstant;
 import com.netdoers.zname.ui.MotherActivity;
 

@@ -59,8 +59,9 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
+import com.netdoers.zname.R.string;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.dto.Contact;
+import com.netdoers.zname.beans.Contact;
 import com.netdoers.zname.service.ImportContactsService;
 import com.netdoers.zname.sqlite.DBConstant;
 
@@ -203,10 +204,12 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 				String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
 				String viewTagName = view.getTag(R.id.TAG_CONTACT_NAME).toString();
 				String viewTagPhoto	= view.getTag(R.id.TAG_CONTACT_PHOTO_ID).toString();
-				Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+				String viewTagNumber	= view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
+				Intent profileIntent = new Intent(getActivity(), ProfileNotZnameActivity.class);
 				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID, viewTagId);
 				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, viewTagName);
 				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO, viewTagPhoto);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NUMBER, viewTagNumber);
 				profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(profileIntent);
 			}
@@ -498,7 +501,13 @@ public class AllContactsFragment extends SherlockFragment /*implements OnRefresh
 					displayPicture.setImageResource(R.drawable.def_contact);
 
 				displayName.setText(contact.getContactName());
-				displayZname.setText(contact.getContactNumber());
+				displayZname.setText(
+						 contact.getContactNumber().contains(",")
+						?contact.getContactNumber().toString().substring(0, contact.getContactNumber().toString().indexOf(","))
+						:contact.getContactNumber()
+						);
+				
+				
 				
 				displayName.setTypeface(styleFont);
 				displayZname.setTypeface(styleFont);

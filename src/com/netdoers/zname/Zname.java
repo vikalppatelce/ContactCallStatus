@@ -20,7 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
-import com.netdoers.zname.dto.Preferences;
+import com.netdoers.zname.beans.Preferences;
 import com.netdoers.zname.errorreporting.ExceptionHandler;
 import com.netdoers.zname.service.DataController;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;

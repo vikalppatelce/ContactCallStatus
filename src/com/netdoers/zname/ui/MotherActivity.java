@@ -418,6 +418,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 			return true;
 		case R.id.action_add:
 			return true;
+		case R.id.action_edit:
+			Intent profileIntent = new Intent(this, ProfileActivity.class);
+			startActivity(profileIntent);
+			return true;
 		case R.id.action_search:
 			Intent searchIntent = new Intent(this,SearchActivity.class);
 			startActivity(searchIntent);

@@ -40,7 +40,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
-import com.netdoers.zname.dto.RegistrationDTO;
+import com.netdoers.zname.beans.RegistrationDTO;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.ResponseParser;
 import com.netdoers.zname.service.RestClient;

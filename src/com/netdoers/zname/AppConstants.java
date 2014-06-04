@@ -61,6 +61,7 @@ public class AppConstants {
 			public static final String TAG_NAME ="name";
 			public static final String TAG_ID ="_id";
 			public static final String TAG_PHOTO ="photo";
+			public static final String TAG_NUMBER ="number";
 		}
 	}
 	
@@ -118,3 +119,4 @@ public class AppConstants {
 	public static final String projectsByVendorToAdd = "[{\"pid\":\"148\",\"project_name\":\"Bajaj Allianz UP Phase 2\",\"client_name\":\"Bajaj Allianz\"},{\"pid\":\"50\",\"project_name\":\"CASA_Sarita\",\"client_name\":\"HDFC\"},{\"pid\":\"30\",\"project_name\":\"Gold Loan_Sarita\",\"client_name\":\"HDFC\"},{\"pid\":\"35\",\"project_name\":\"Gold Loan_Sukirti\",\"client_name\":\"HDFC\"},{\"pid\":\"79\",\"project_name\":\"HDFC\",\"client_name\":\"HDFC\"},{\"pid\":\"128\",\"project_name\":\"HDFC\",\"client_name\":\"HDFC\"},{\"pid\":\"122\",\"project_name\":\"Hindustan Unilever\",\"client_name\":\"Hindustan Unilever\"},{\"pid\":\"83\",\"project_name\":\"Makers-Raymond\",\"client_name\":\"Makers-Raymond\"},{\"pid\":\"175\",\"project_name\":\"Philips\",\"client_name\":\"Philips\"},{\"pid\":\"142\",\"project_name\":\"Philips MP\",\"client_name\":\"Philips\"},{\"pid\":\"36\",\"project_name\":\"Vodafone\",\"client_name\":\"Vodafone\"},{\"pid\":\"56\",\"project_name\":\"Vodafone\",\"client_name\":\"Vodafone\"},{\"pid\":\"149\",\"project_name\":\"Vodafone UP\",\"client_name\":\"Vodafone\"}]";
 	public static final String paintingType = "[\"highway\",\"wall\",\"shop\"]";
 }
+
