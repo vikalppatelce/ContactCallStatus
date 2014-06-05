@@ -31,7 +31,7 @@ public class AppConstants {
 //		public static final String BASE_URL =  "http://www.netdoers.com/projects/smarthumanoid1/services/api.php";
 //		public static final String MEDIA_BASE_URL =  "http://www.netdoers.com/projects/smarthumanoid1/services/file_upload.php";
 		//API V2
-		public static final String BASE_URL =  "http://www.netdoers.com/projects/smarthumanoid1/services/api_v2.php";
+		public static final String BASE_URL =  "http://myzname.netdoers.com/api/v1/znames";
 		public static final String MEDIA_BASE_URL =  "http://www.netdoers.com/projects/smarthumanoid1/services/file_upload_v2.php";
 		public static final String SPONSOR_URL =  "http://netdoers.com/projects/smarthumanoid1/images/appsponser/"; 
 		public static final String SOCIAL_URL =  "http://netdoers.com/projects/smarthumanoid1/sharing/cases.php?user_id=";

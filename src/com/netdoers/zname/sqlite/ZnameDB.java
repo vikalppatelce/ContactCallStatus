@@ -9,6 +9,7 @@
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
  * ZMDB1      VIKALP PATEL     16/05/2014                       CREATED
+ * ZMDB2      VIKALP PATEL     05/06/2014                       ADDED TABLE : USERSTATUS
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -44,12 +45,14 @@ public class ZnameDB extends ContentProvider{
 	private static final int FAMILYCONTACTS = 3;
 	private static final int WORKCONTACTS = 4;
 	private static final int RANDOMCONTACTS = 5;
+	private static final int USERSTATUS = 6;
 	
 	private static HashMap<String, String> allContactsProjectionMap;
 	private static HashMap<String, String> friendsContactsProjectionMap;
 	private static HashMap<String, String> familyContactsProjectionMap;
 	private static HashMap<String, String> workContactsProjectionMap;
 	private static HashMap<String, String> randomContactsProjectionMap;
+	private static HashMap<String, String> userStatusProjectionMap;
 	
 	private static class OpenHelper extends SQLiteOpenHelper {
 
@@ -142,6 +145,21 @@ public class ZnameDB extends ContentProvider{
 			if (BuildConfig.DEBUG) {
 				Log.i(TAG, strBuilder.toString());
 			}
+			
+			//userstatus
+			strBuilder = new StringBuilder();
+			strBuilder.append("CREATE TABLE ");
+			strBuilder.append(DBConstant.TABLE_STATUS);
+			strBuilder.append('(');
+			strBuilder.append(DBConstant.User_Status_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
+			strBuilder.append(DBConstant.User_Status_Columns.COLUMN_ZNAME_ID +" TEXT ," );
+			strBuilder.append(DBConstant.User_Status_Columns.COLUMN_STATUS +" TEXT ," );
+			strBuilder.append(DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE +" NUMBER DEFAULT 0" );
+			strBuilder.append(')');
+			db.execSQL(strBuilder.toString());
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, strBuilder.toString());
+			}
 		}
 
 		
@@ -152,6 +170,7 @@ public class ZnameDB extends ContentProvider{
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_FAMILY_CONTACTS);
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_WORK_CONTACTS);
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_RANDOM_CONTACTS);
+			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_STATUS);
 			
 			onCreate(db);
 		}
@@ -188,6 +207,9 @@ public class ZnameDB extends ContentProvider{
 		case RANDOMCONTACTS:
 			count = db.delete(DBConstant.TABLE_RANDOM_CONTACTS, where, whereArgs);
 			break;
+		case USERSTATUS:
+			count = db.delete(DBConstant.TABLE_STATUS, where, whereArgs);
+			break;
 		
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -211,7 +233,8 @@ public class ZnameDB extends ContentProvider{
 			return DBConstant.Work_Contacts_Columns.CONTENT_TYPE;
 		case RANDOMCONTACTS:
 			return DBConstant.Random_Contacts_Columns.CONTENT_TYPE;
-		
+		case USERSTATUS:
+			return DBConstant.User_Status_Columns.CONTENT_TYPE;
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -222,7 +245,7 @@ public class ZnameDB extends ContentProvider{
 	public Uri insert(Uri uri, ContentValues initialValues) {
 		// TODO Auto-generated method stub
 		if (sUriMatcher.match(uri) != ALLCONTACTS && sUriMatcher.match(uri) != FRIENDSCONTACTS
-					&& sUriMatcher.match(uri) != FAMILYCONTACTS
+					&& sUriMatcher.match(uri) != FAMILYCONTACTS && sUriMatcher.match(uri) != USERSTATUS
 			&& sUriMatcher.match(uri) != WORKCONTACTS && sUriMatcher.match(uri) != RANDOMCONTACTS) 
 		{ 
 			throw new IllegalArgumentException("Unknown URI " + uri); 
@@ -286,6 +309,15 @@ public class ZnameDB extends ContentProvider{
 					return noteUri;
 				}
 				break;
+			case USERSTATUS:
+				 rowId = db.insertWithOnConflict(DBConstant.TABLE_STATUS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+				if (rowId > 0) 
+				{
+					Uri noteUri = ContentUris.withAppendedId(DBConstant.User_Status_Columns.CONTENT_URI, rowId);
+					getContext().getContentResolver().notifyChange(noteUri, null);
+					return noteUri;
+				}
+				break;
 				
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
@@ -328,6 +360,10 @@ public class ZnameDB extends ContentProvider{
 			qb.setTables(DBConstant.TABLE_RANDOM_CONTACTS);
 			qb.setProjectionMap(randomContactsProjectionMap);
 			break;
+		case USERSTATUS:
+			qb.setTables(DBConstant.TABLE_STATUS);
+			qb.setProjectionMap(userStatusProjectionMap);
+			break;
 		
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -361,6 +397,9 @@ public class ZnameDB extends ContentProvider{
 		case RANDOMCONTACTS:
 			count = db.update(DBConstant.TABLE_RANDOM_CONTACTS, values, where, whereArgs);
 			break;
+		case USERSTATUS:
+			count = db.update(DBConstant.TABLE_STATUS, values, where, whereArgs);
+			break;
 
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -378,6 +417,8 @@ public class ZnameDB extends ContentProvider{
 
 		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_WORK_CONTACTS, WORKCONTACTS);
 		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_RANDOM_CONTACTS, RANDOMCONTACTS);
+		
+		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_STATUS, USERSTATUS);
 
 		allContactsProjectionMap = new HashMap<String, String>();
 		allContactsProjectionMap.put(DBConstant.All_Contacts_Columns.COLUMN_ID, DBConstant.All_Contacts_Columns.COLUMN_ID);
@@ -416,6 +457,12 @@ public class ZnameDB extends ContentProvider{
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Random_Contacts_Columns.COLUMN_CONTACT_ID);
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_DISPLAY_NAME, DBConstant.Random_Contacts_Columns.COLUMN_DISPLAY_NAME);
 		randomContactsProjectionMap.put(DBConstant.Random_Contacts_Columns.COLUMN_ZNAME_ID, DBConstant.Random_Contacts_Columns.COLUMN_ZNAME_ID);
+		
+		userStatusProjectionMap = new HashMap<String, String>();
+		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_ID, DBConstant.User_Status_Columns.COLUMN_ID);
+		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_ZNAME_ID, DBConstant.User_Status_Columns.COLUMN_ZNAME_ID);
+		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_STATUS, DBConstant.User_Status_Columns.COLUMN_STATUS);
+		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE, DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE);
 
 		}	
 }

@@ -56,7 +56,11 @@
     <string name="str_profile_status_read_hint">I\'m reading...</string>
     <string name="str_profile_status_place_hint">I\'m @</string>
     <string name="str_profile_status_random_hint">Random thought...</string>
-
+	<string name="str_profile_status_grid_head">SELECT YOUR STATUS</string>
+	<string name="str_profile_status">STATUS</string>
+	<string name="str_profile_contact">CONTACT</string>
+	<string name="str_profile_status_update">Update</string>
+    
     <!-- Settings -->
     <string name="about">About</string>
     <string name="about_summary">About Zname</string>
