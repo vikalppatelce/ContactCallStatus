@@ -30,7 +30,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 			// Open HomeFragment.java
 		case 0:
-			AllContactsFragment homeFragment = new AllContactsFragment();
+			ContactsFragment homeFragment = new ContactsFragment();
 			return homeFragment;
 			// Open PlaceOrderFragment.java
 		case 1:

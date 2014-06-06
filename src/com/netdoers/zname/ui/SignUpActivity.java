@@ -44,6 +44,7 @@ import com.netdoers.zname.beans.RegistrationDTO;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.ResponseParser;
 import com.netdoers.zname.service.RestClient;
+import com.netdoers.zname.utils.ImageCompression;
 
 public class SignUpActivity extends SherlockFragmentActivity {
 	
@@ -126,27 +127,27 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	{
 		try {
 			if(validate()){
-//				String strFullName = fullName.getText().toString().trim();
-//				String strzName = zName.getText().toString().trim();
-//				String strzNumber = zNumber.getText().toString().trim();
-//				
-//				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//				String device_id = mTelephonyMgr.getDeviceId();
-//				String device_IMSI = mTelephonyMgr.getSubscriberId();
-//				String device_name = getDeviceName();
-//				String myVersion = android.os.Build.VERSION.RELEASE;
-//				
-//				if(isNetworkAvailable()){
-//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
+				String strFullName = fullName.getText().toString().trim();
+				String strzName = zName.getText().toString().trim();
+				String strzNumber = zNumber.getText().toString().trim();
+				
+				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String device_id = mTelephonyMgr.getDeviceId();
+				String device_IMSI = mTelephonyMgr.getSubscriberId();
+				String device_name = getDeviceName();
+				String myVersion = android.os.Build.VERSION.RELEASE;
+				
+				if(isNetworkAvailable()){
+					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
 //					if(!TextUtils.isEmpty(strZnameDp))
 //						new RegistrationUploadTask().execute();
+//				
+//				Zname.getPreferences().setUserName("DEFAULT");
+//				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+//				startActivity(i);
+//				finish();
 				
-				Zname.getPreferences().setUserName("DEFAULT");
-				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
-				startActivity(i);
-				finish();
-				
-//				}
+				}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());
@@ -234,6 +235,11 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			fullName.setFocusable(true);
 			return false;
 		}
+		
+		if(TextUtils.isEmpty(strZnameDp)){
+			Toast.makeText(this, "Please select display picture", Toast.LENGTH_SHORT).show();
+			return false;
+		}
 		return true;
 	}
 	
@@ -301,7 +307,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 					try {
 						copy(new File(picturePath), new File(currentFileUri.getPath()));
 						strZnameDp = currentFileUri.getPath().toString().substring(currentFileUri.getPath().toString().lastIndexOf("/") + 1);
-						strPicturePath = picturePath;
+						strPicturePath = ImageCompression.compressImage(picturePath);;
 						} 
 					catch (IOException e) 
 					{
@@ -317,6 +323,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		ProgressDialog progressDialog;
 		RegistrationDTO res = null;
 		String errorvalue = null;
+		boolean successvalue = false;
 		public RegistrationTask(Context context){
 			this.context = context;
 		}
@@ -338,12 +345,14 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			try {
 				String str = RestClient.postData(AppConstants.URLS.BASE_URL, dataToSend);
 				res = ResponseParser.getRegistrationResponse(str);
-				try{
-					JSONObject object = new JSONObject(str);
-					errorvalue = object.getString("error");
-				}
-				catch(JSONException e){
-					Log.e(TAG, e.toString());
+				JSONObject object = new JSONObject(str);
+				if(!(successvalue = object.getBoolean("status"))){
+					try{
+						errorvalue = object.getString("errors");
+					}
+					catch(JSONException e){
+						Log.e(TAG, e.toString());
+					}
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -362,31 +371,57 @@ public class SignUpActivity extends SherlockFragmentActivity {
 				progressDialog.dismiss();
 			
 			if(result!=null && result.isStatus()){
-				Zname.getPreferences().setUserName(result.getUserName());
-				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
-				startActivity(i);
-				finish();
+				
+				Zname.getPreferences().setUserName(result.getZname());
+				Zname.getPreferences().setApiKey(res.getApikey());
+				Zname.getPreferences().setUserNumber(zNumber.getText().toString());
+				if(!TextUtils.isEmpty(strZnameDp)){
+					new RegistrationUploadTask(SignUpActivity.this).execute();
+				}
+				else {
+					Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+					startActivity(i);
+					finish();
+				}
+					
 			}else{
 				if(!TextUtils.isEmpty(errorvalue))
 					Toast.makeText(SignUpActivity.this, errorvalue, Toast.LENGTH_SHORT).show();
+				    zName.setError("Unavailable");
+				    zName.requestFocus();
 			}
 		}
 	}
 	
 	public class RegistrationUploadTask extends AsyncTask<Void, Void, Void>
 	{
+		Context context;
+		ProgressDialog progressDialog;
+
+		public RegistrationUploadTask(Context context){
+			this.context = context;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			progressDialog = new ProgressDialog(context);
+			progressDialog.setMessage("Registration...");
+			progressDialog.show();
+		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			try{
 				if(!TextUtils.isEmpty(strZnameDp)){
-					String typ = "image";
+					String typ = "profile_pic";
 					if(!TextUtils.isEmpty(strPicturePath))
 					{
 						File f = new File(strPicturePath);
-						String s = RestClient.postRecordedFile1(typ, f, RequestBuilder.getUploadData(), AppConstants.URLS.MEDIA_BASE_URL);
-						Log.i("MediaUpload", RequestBuilder.getUploadData().toString());
+						String s = RestClient.uploadFile(typ, f, AppConstants.URLS.MEDIA_BASE_URL+Zname.getPreferences().getApiKey()+"/profilepic");
+						Log.i("MediaUpload", s.toString());
 					}
 				}	
 			}
@@ -396,5 +431,17 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			return null;
 		}
 		
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			if(progressDialog!=null)
+				progressDialog.dismiss();
+
+			Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+			startActivity(i);
+			finish();
+		}
 	}
 }

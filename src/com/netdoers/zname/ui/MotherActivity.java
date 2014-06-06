@@ -358,19 +358,19 @@ public class MotherActivity extends SherlockFragmentActivity {
     	  drawerIntent = new Intent(this, SettingsActivity.class);
           break;
       case 2:
-          fragment = new AllContactsFragment();
+          fragment = new ContactsFragment();
           break;
       case 3:
-          fragment = new AllContactsFragment();
+          fragment = new ContactsFragment();
           break;
       case 4:
-          fragment = new AllContactsFragment();
+          fragment = new ContactsFragment();
           break;
       case 5:
-          fragment = new AllContactsFragment();
+          fragment = new ContactsFragment();
           break;
       case 6:
-          fragment = new AllContactsFragment();
+          fragment = new ContactsFragment();
           break;
       case 7:
 //          fragment = new SendFeedbackFragment();
