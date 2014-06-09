@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -302,7 +304,9 @@ public class CallLogsFragment extends SherlockFragment {
 		cursor.moveToFirst();
 		while(cursor.moveToNext()){
 			
-			if(cursor.getString(callLogNumber).contains("-"))
+//			if(cursor.getString(callLogNumber).contains("-"))
+//				continue;
+			if(StringUtils.isAlphanumeric(cursor.getString(callLogNumber)))
 				continue;
 			
 			calllog = new CallLog();

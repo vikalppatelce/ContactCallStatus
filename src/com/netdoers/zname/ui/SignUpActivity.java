@@ -26,8 +26,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.MediaColumns;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -105,6 +107,26 @@ public class SignUpActivity extends SherlockFragmentActivity {
 				onSignUp(v);
 			}
 		});
+		
+		zName.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+//				if(validateZname())
+//					new ZnameAvailableTask(zName.getText().toString()).execute();
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	public void fontActionBar(String str)
@@ -127,27 +149,27 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	{
 		try {
 			if(validate()){
-				String strFullName = fullName.getText().toString().trim();
-				String strzName = zName.getText().toString().trim();
-				String strzNumber = zNumber.getText().toString().trim();
-				
-				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-				String device_id = mTelephonyMgr.getDeviceId();
-				String device_IMSI = mTelephonyMgr.getSubscriberId();
-				String device_name = getDeviceName();
-				String myVersion = android.os.Build.VERSION.RELEASE;
-				
-				if(isNetworkAvailable()){
-					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
+//				String strFullName = fullName.getText().toString().trim();
+//				String strzName = zName.getText().toString().trim();
+//				String strzNumber = zNumber.getText().toString().trim();
+//				
+//				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//				String device_id = mTelephonyMgr.getDeviceId();
+//				String device_IMSI = mTelephonyMgr.getSubscriberId();
+//				String device_name = getDeviceName();
+//				String myVersion = android.os.Build.VERSION.RELEASE;
+//				
+//				if(isNetworkAvailable()){
+//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
 //					if(!TextUtils.isEmpty(strZnameDp))
 //						new RegistrationUploadTask().execute();
 //				
-//				Zname.getPreferences().setUserName("DEFAULT");
-//				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
-//				startActivity(i);
-//				finish();
+				Zname.getPreferences().setUserName("DEFAULT");
+				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+				startActivity(i);
+				finish();
 				
-				}
+//				}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());
@@ -218,8 +240,13 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			return false;
 		}
 		
-		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("[a-zA-Z0-9-.:&]+")){
-			zName.setError("Alphanumeric  - : & . are allowed");
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+")){
+			zName.setError("Must start with alphabets or number");
+			zName.setFocusable(true);
+			return false;
+		}
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("[a-zA-Z0-9-.&]+")){
+			zName.setError("Alphanumeric  - & . are allowed");
 			zName.setFocusable(true);
 			return false;
 		}
@@ -238,6 +265,27 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		
 		if(TextUtils.isEmpty(strZnameDp)){
 			Toast.makeText(this, "Please select display picture", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean validateZname()
+	{
+		if(!TextUtils.isEmpty(zName.getText().toString()) && zName.getText().toString().trim().length() < 2){
+			zName.setError("Please enter atleast 3 characters");
+			zName.setFocusable(true);
+			return false;
+		}
+		
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+")){
+			zName.setError("Must start with alphabets or number");
+			zName.setFocusable(true);
+			return false;
+		}
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("[a-zA-Z0-9-.&]+")){
+			zName.setError("Alphanumeric  - & . are allowed");
+			zName.setFocusable(true);
 			return false;
 		}
 		return true;
@@ -316,6 +364,56 @@ public class SignUpActivity extends SherlockFragmentActivity {
 				}
 			}
 		}
+
+	public class ZnameAvailableTask extends AsyncTask<Void, Void, Void>{
+		String verifyZname;
+		boolean successvalue = false;
+		String errorvalue;
+		
+		public ZnameAvailableTask(String verifyZname){
+			this.verifyZname=verifyZname;
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+		JSONObject dataToSend = RequestBuilder.getZnameAvaliabeData(verifyZname);
+		Log.i(TAG, dataToSend.toString());
+				try {
+					String str = RestClient.postData(AppConstants.URLS.BASE_URL, dataToSend);
+					JSONObject object = new JSONObject(str);
+					if(!(successvalue = object.getBoolean("available"))){
+					try{
+						errorvalue = object.getString("errors");
+						}
+					catch(JSONException e){
+						Log.e(TAG, e.toString());
+						}
+					}
+				} catch (Exception e) {
+							// TODO Auto-generated catch block
+				Log.e(TAG, e.toString());
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(!successvalue){
+				zName.setError("Already taken");
+			}
+		}
+		
+	}
+	
 	
 	public class RegistrationTask extends AsyncTask<String, Void, RegistrationDTO>
 	{

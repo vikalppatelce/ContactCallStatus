@@ -69,7 +69,7 @@ public class ZnameDB extends ContentProvider{
 			strBuilder.append(DBConstant.TABLE_ALL_CONTACTS);
 			strBuilder.append('(');
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," );
-			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT ," );
+			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT UNIQUE," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_ID +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME +" TEXT ," );
