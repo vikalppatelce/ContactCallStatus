@@ -55,15 +55,11 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	private TextView signUp,agreeTerms;
 	private ImageView zNameDisplayPicture;
 	private ActionBar mActionBar;
-
-	
 	//TYPEFACE
 	static Typeface styleFont;
-	
 	//CONSTANT
 	public static final int IMPORT_PICTURE 					= 10001;
 	public static final String TAG 							= "SignUpActivity";
-	
 	//VARIABLES
 	String picturePath = null;
 	String strPicturePath = null;

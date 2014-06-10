@@ -168,7 +168,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		
 		// Create third Tab
 //		tab = mActionBar.newTab().setText("Tab3").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact_selector).setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_family_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_family_contacts_fragment));
 		

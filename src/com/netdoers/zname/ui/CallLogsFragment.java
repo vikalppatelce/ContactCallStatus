@@ -29,6 +29,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -43,6 +44,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -51,7 +54,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
@@ -127,6 +129,22 @@ public class CallLogsFragment extends SherlockFragment {
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
 // VIEW LISTENERS
+		callLogsListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				String _name = view.getTag(R.id.TAG_CONTACT_NAME).toString().equalsIgnoreCase("Unknown") 
+						  ? "Unknown"
+						 :view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				
+				Intent callLogDetailIntent = new Intent(getActivity(), CallLogsDetailsActivity.class);
+				callLogDetailIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NUMBER, view.getTag(R.id.TAG_CONTACT_NUMBER).toString());
+				callLogDetailIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, _name);
+				startActivity(callLogDetailIntent);
+			}
+		});
+		
 		callLogsListView.setOnScrollListener(new OnScrollListener() {
 			
 			@Override
@@ -310,48 +328,49 @@ public class CallLogsFragment extends SherlockFragment {
 			break;
 		}
 		
-		int callLogName = cursor.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME);
-		int callLogNumber = cursor.getColumnIndex(android.provider.CallLog.Calls.NUMBER);
-		int callLogType = cursor.getColumnIndex(android.provider.CallLog.Calls.TYPE);
-		int callLogDate = cursor.getColumnIndex(android.provider.CallLog.Calls.DATE);
-//		int callLogDuration = cursor.getColumnIndex(android.provider.CallLog.Calls.DURATION);
-		
-		cursor.moveToFirst();
-		while(cursor.moveToNext()){
-
-			if (StringUtils.isAlphanumeric(cursor.getString(callLogNumber))){
-				continue;
-			}
+		if (cursor.getCount() > 0) {
+			int callLogName = cursor.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME);
+			int callLogNumber = cursor.getColumnIndex(android.provider.CallLog.Calls.NUMBER);
+			int callLogType = cursor.getColumnIndex(android.provider.CallLog.Calls.TYPE);
+			int callLogDate = cursor.getColumnIndex(android.provider.CallLog.Calls.DATE);
+//			int callLogDuration = cursor.getColumnIndex(android.provider.CallLog.Calls.DURATION);
 			
-			if(cursor.getString(callLogNumber).contains("-") && !StringUtils.isAlpha(cursor.getString(callLogNumber))){
-					continue;	
-			}
-			
-			calllog = new CallLog();
-			calllog.setCallLogName(cursor.getString(callLogName));
-			calllog.setCallLogNumber(cursor.getString(callLogNumber));
-			calllog.setCallLogType(cursor.getString(callLogType));
-			calllog.setCallLogDate(getCallLogDate(Long.valueOf(cursor.getString(callLogDate))));
-			calllog.setCallLogTime(getCallLogTime(Long.valueOf(cursor.getString(callLogDate))));
-//			try {
-//				String photoFromNumber=null;
+			while(cursor.moveToNext()){
+				if (StringUtils.isAlphanumeric(cursor.getString(callLogNumber))){
+					continue;
+				}
+				if(cursor.getString(callLogNumber).contains("-") && !StringUtils.isAlpha(cursor.getString(callLogNumber))){
+						continue;	
+				}
+				calllog = new CallLog();
+				calllog.setCallLogName(cursor.getString(callLogName));
+				calllog.setCallLogNumber(cursor.getString(callLogNumber));
+				calllog.setCallLogType(cursor.getString(callLogType));
+				calllog.setCallLogDate(getCallLogDate(Long.valueOf(cursor.getString(callLogDate))));
+				calllog.setCallLogTime(getCallLogTime(Long.valueOf(cursor.getString(callLogDate))));
 //				try {
-//					photoFromNumber = getContactPhotoFromNumber(cursor.getString(callLogNumber));
+//					String photoFromNumber=null;
+//					try {
+//						photoFromNumber = getContactPhotoFromNumber(cursor.getString(callLogNumber));
+//					} catch (Exception e) {
+//						Log.e(TAG, e.toString());
+//					}
+//					calllog.setCallLogPhotoUri(
+//							photoFromNumber!=null 
+//							? Uri.parse(photoFromNumber) 
+//							: null
+//							);
+//					
 //				} catch (Exception e) {
 //					Log.e(TAG, e.toString());
 //				}
-//				calllog.setCallLogPhotoUri(
-//						photoFromNumber!=null 
-//						? Uri.parse(photoFromNumber) 
-//						: null
-//						);
-//				
-//			} catch (Exception e) {
-//				Log.e(TAG, e.toString());
-//			}
-			arrayListCallLog.add(calllog);
+				arrayListCallLog.add(calllog);
+			}
 		}
+
 		
+		if(cursor!=null)
+			cursor.close();
 	}
 
 	//GET DATA TIME FROM EPOCHTIME
@@ -504,7 +523,9 @@ public class CallLogsFragment extends SherlockFragment {
 			ImageView imgLogType = (ImageView)view.findViewById(R.id.list_item_call_log_type);
 //			ImageView img = (ImageView)view.findViewById(R.id.grid_item_display_picture);
 			
-			t1.setText(arrayListCallLog.get(position).getCallLogName());
+			String _name = arrayListCallLog.get(position).getCallLogName()!=null ? arrayListCallLog.get(position).getCallLogName(): "Unknown";
+			
+			t1.setText(_name);
 			t2.setText(arrayListCallLog.get(position).getCallLogNumber());
 			t3.setText(arrayListCallLog.get(position).getCallLogTime());
 			
@@ -533,7 +554,7 @@ public class CallLogsFragment extends SherlockFragment {
 					t4.setVisibility(view.VISIBLE);
 					t4.setText(arrayListCallLog.get(position).getCallLogDate());
 				}
-			} catch (Exception e) {
+			} catch (ArrayIndexOutOfBoundsException e) {
 				Log.e(TAG, e.toString());
 			}
 			
@@ -557,6 +578,8 @@ public class CallLogsFragment extends SherlockFragment {
 			}
 			
 			view.setTag(R.id.TAG_CALL_LOG_POSITION, position);
+			view.setTag(R.id.TAG_CONTACT_NUMBER, arrayListCallLog.get(position).getCallLogNumber());
+			view.setTag(R.id.TAG_CONTACT_NAME, _name);
 			
 			return view;
 		}

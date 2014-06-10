@@ -69,6 +69,11 @@
         <activity
             android:name="com.netdoers.zname.contactpicker.ContactPickerManager"
             android:screenOrientation="portrait" />
+        
+        <activity 
+            android:name="com.netdoers.zname.ui.CallLogsDetailsActivity"
+            android:screenOrientation="portrait"
+            />
 
         <provider
             android:name="com.netdoers.zname.sqlite.ZnameDB"
@@ -78,11 +83,6 @@
         <service android:name="com.netdoers.zname.service.PushPullContactsService" />
 
         <receiver android:name="com.netdoers.zname.receiver.ReceiverInComingCall" >
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.netdoers.zname.receiver.ReceiverOutGoingCall" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
