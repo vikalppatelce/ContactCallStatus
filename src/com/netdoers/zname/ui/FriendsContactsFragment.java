@@ -11,6 +11,7 @@
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
  * ZM003      VIKALP PATEL     30/05/2014                       MOVE SEARCH INTO SEARCH ACTIVITY
+ * ZM004      VIKALP PATEL     09/06/2014                       MIGRATION : GRIDVIEW INTO LISTVIEW
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.ui;
@@ -32,24 +33,20 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
@@ -69,7 +66,8 @@ public class FriendsContactsFragment extends SherlockFragment {
 	
 	//DECLARE VARIABLES
 	
-	GridView contactsGridView;
+//	GridView contactsGridView; SU ZM004
+	ListView contactsListView; //EU ZM004
 	Button addContact;
 //	ImageView searchClose; SU ZM003
 //	LinearLayout searchContactLayout;
@@ -107,7 +105,8 @@ public class FriendsContactsFragment extends SherlockFragment {
 			Bundle savedInstanceState) {
 		// Get the view from fragmenttab2.xml
 		View view = inflater.inflate(R.layout.fragment_friends, container, false);
-		contactsGridView = (GridView)view.findViewById(R.id.gridview_friends);
+//		contactsGridView = (GridView)view.findViewById(R.id.gridview_friends); SU ZM004
+		contactsListView = (ListView)view.findViewById(R.id.listview_friends); //EU ZM004
 		addContact = (Button) view.findViewById(R.id.friends_btn_add);
 //		searchContactLayout = (LinearLayout)view.findViewById(R.id.friends_search_txt_layout); SU ZM003
 //		searchClose = (ImageView)view.findViewById(R.id.friends_clear_srch_button);
@@ -158,9 +157,8 @@ public class FriendsContactsFragment extends SherlockFragment {
 //		}
 //	});
 //		EU ZM003
-	
-	contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
+//		contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() { SU ZM004
+		contactsListView.setOnItemLongClickListener(new OnItemLongClickListener() {// EU ZM004
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
@@ -322,7 +320,7 @@ public class FriendsContactsFragment extends SherlockFragment {
 			}
 			
 			Contact c;
-			cr.moveToFirst();
+//			cr.moveToFirst();
 			while(cr.moveToNext())
 			{
 				c = new Contact();
@@ -351,8 +349,10 @@ public class FriendsContactsFragment extends SherlockFragment {
 		}
 		
 		if(contacts.size() > 0){
-			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_friends, contacts);
-			contactsGridView.setAdapter(contactAdapter);	
+//			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_friends, contacts); SU ZM004
+//			contactsGridView.setAdapter(contactAdapter);	
+			contactAdapter = new ContactAdapter(getActivity(), R.id.listview_friends, contacts);
+			contactsListView.setAdapter(contactAdapter); //EU ZM004
 		}
 	}
 	
@@ -447,16 +447,24 @@ public class FriendsContactsFragment extends SherlockFragment {
 
 			if (view == null) {
 				LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = vi.inflate(R.layout.grd_item_contact, null);
+//				view = vi.inflate(R.layout.grd_item_contact, null); SU ZM004
+				view = vi.inflate(R.layout.list_item_contact, null); //EU ZM004
 			}
 			final Contact contact = contactList.get(position);
 			if (contact != null) {
-				TextView displayName = (TextView) view.findViewById(R.id.grid_item_display_name);
-				ImageView displayPicture = (ImageView) view.findViewById(R.id.grid_item_display_picture);
-				TextView displayZname = (TextView) view.findViewById(R.id.grid_item_zname);
-				ImageView imgCall = (ImageView) view.findViewById(R.id.grid_item_call);
-				ImageView imgMsg = (ImageView) view.findViewById(R.id.grid_item_message);
+//				 SU ZM004
+//				TextView displayName = (TextView) view.findViewById(R.id.grid_item_display_name);
+//				ImageView displayPicture = (ImageView) view.findViewById(R.id.grid_item_display_picture);
+//				TextView displayZname = (TextView) view.findViewById(R.id.grid_item_zname);
+//				ImageView imgCall = (ImageView) view.findViewById(R.id.grid_item_call);
+//				ImageView imgMsg = (ImageView) view.findViewById(R.id.grid_item_message);
 
+				TextView displayName = (TextView) view.findViewById(R.id.list_item_display_name);
+				ImageView displayPicture = (ImageView) view.findViewById(R.id.list_item_display_picture);
+				TextView displayZname = (TextView) view.findViewById(R.id.list_item_zname);
+				ImageView imgCall = (ImageView) view.findViewById(R.id.list_item_call);
+				ImageView imgMsg = (ImageView) view.findViewById(R.id.list_item_message);
+//				 EU ZM004
 				displayPicture.setImageURI(contact.getContactPhotoUri());
 
 				if (displayPicture.getDrawable() == null)

@@ -32,8 +32,8 @@
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Zname</item>
         <item name="android:actionBarSize">40dip</item>
         <item name="android:fastScrollThumbDrawable">@drawable/selector_fast_scroll_thumb</item>
-        <item name="android:fastScrollPreviewBackgroundLeft">@drawable/_ics_fastscroll_label_left</item>
-        <item name="android:fastScrollPreviewBackgroundRight">@drawable/_ics_fastscroll_label_right</item>
+<!--         <item name="android:fastScrollPreviewBackgroundLeft">@drawable/_ics_fastscroll_label_left</item> -->
+<!--         <item name="android:fastScrollPreviewBackgroundRight">@drawable/_ics_fastscroll_label_right</item> -->
         <item name="com.netdoers.zname:autoScaleTextViewStyle">@style/autoScaleTextView</item>
         <item name="android:actionBarWidgetTheme">@style/Overflow.Text.Color</item>
     </style>

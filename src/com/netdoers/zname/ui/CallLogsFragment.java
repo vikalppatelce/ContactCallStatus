@@ -1,3 +1,18 @@
+/* HISTORY
+ * CATEGORY			 :- BASE ACTIVITY
+ * DEVELOPER		 :- VIKALP PATEL
+ * AIM      		 :- ACTIVITY FOR VIEW PAGER + FRAGMENTS
+ * NOTE: ROOT OF THE CONTACTS SCREEN. [ALL, FRIENDS, FAMILY, WORK, RANDOM] 
+ * ISSUE: https://github.com/JakeWharton/ActionBarSherlock/issues/828
+ * 
+ * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
+ * --------------------------------------------------------------------------------------------------------------------
+ * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
+ * --------------------------------------------------------------------------------------------------------------------
+ * ZM001      VIKALP PATEL     16/05/2014                       CREATED
+ * ZM002      VIKALP PATEL     09/06/2014                       SUPPRESSED MENU : DATE
+ * --------------------------------------------------------------------------------------------------------------------
+ */
 package com.netdoers.zname.ui;
 
 import java.text.ParseException;
@@ -55,7 +70,7 @@ public class CallLogsFragment extends SherlockFragment {
 	ListView callLogsListView;
 	ProgressBar callLogsProgress;
 	LinearLayout callLogsMenu;
-	ImageView callLogsAll, callLogsMissed, callLogsIncoming, callLogsOutGoing, callLogsDate;
+	ImageView callLogsAll, callLogsMissed, callLogsIncoming, callLogsOutGoing;//, callLogsDate; COMMENTED ZM002
 	
 	//DECLARE COLLECTION
 	private ArrayList<CallLog> arrayListCallLog = null;
@@ -91,7 +106,7 @@ public class CallLogsFragment extends SherlockFragment {
 		callLogsIncoming = (ImageView)view.findViewById(R.id.call_logs_menu_incoming);
 		callLogsOutGoing = (ImageView)view.findViewById(R.id.call_logs_menu_outgoing);
 		callLogsMissed = (ImageView)view.findViewById(R.id.call_logs_menu_missed);
-		callLogsDate = (ImageView)view.findViewById(R.id.call_logs_menu_date);
+//		callLogsDate = (ImageView)view.findViewById(R.id.call_logs_menu_date); COMMENTED ZM002
 		return view;
 	}
 
@@ -174,15 +189,15 @@ public class CallLogsFragment extends SherlockFragment {
 			}
 		});
 		
-		callLogsDate.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				getCallDate();
-			}
-		});
-
-
+//		 SC ZM002
+//		callLogsDate.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				getCallDate();
+//			}
+//		});
+//		 EC ZM002
 	}
 	
 	
@@ -303,11 +318,14 @@ public class CallLogsFragment extends SherlockFragment {
 		
 		cursor.moveToFirst();
 		while(cursor.moveToNext()){
-			
-//			if(cursor.getString(callLogNumber).contains("-"))
-//				continue;
-			if(StringUtils.isAlphanumeric(cursor.getString(callLogNumber)))
+
+			if (StringUtils.isAlphanumeric(cursor.getString(callLogNumber))){
 				continue;
+			}
+			
+			if(cursor.getString(callLogNumber).contains("-") && !StringUtils.isAlpha(cursor.getString(callLogNumber))){
+					continue;	
+			}
 			
 			calllog = new CallLog();
 			calllog.setCallLogName(cursor.getString(callLogName));

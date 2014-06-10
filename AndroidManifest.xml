@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.netdoers.zname"
-    android:versionCode="4"
+    android:versionCode="5"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="10"
-         />
+    <uses-sdk android:minSdkVersion="10" />
 
     <supports-screens
         android:anyDensity="true"
@@ -20,7 +18,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -78,6 +76,17 @@
 
         <service android:name="com.netdoers.zname.service.ImportContactsService" />
         <service android:name="com.netdoers.zname.service.PushPullContactsService" />
+
+        <receiver android:name="com.netdoers.zname.receiver.ReceiverInComingCall" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.netdoers.zname.receiver.ReceiverOutGoingCall" >
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

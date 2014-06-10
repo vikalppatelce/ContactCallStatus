@@ -7,10 +7,12 @@
         android:id="@+id/call_logs_list_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="1dp"
         android:divider="#ffca00"
         android:dividerHeight="1dp"
         android:drawSelectorOnTop="true"
-        android:listSelector="@drawable/list_item_selected" >
+        android:listSelector="@drawable/zname_list_selector_holo_light" >
     </ListView>
 
     <ProgressBar
@@ -28,7 +30,7 @@
         android:layout_gravity="right|center_vertical"
         android:background="@color/transparent"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <ImageView
             android:id="@+id/call_logs_menu_all"
@@ -87,21 +89,22 @@
             android:scaleType="fitCenter"
             android:src="@drawable/btn_ic_outgoing_selector" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:background="@android:color/white" />
+        <!-- <View -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="1dp" -->
+        <!-- android:layout_marginLeft="3dp" -->
+        <!-- android:layout_marginRight="3dp" -->
+        <!-- android:background="@android:color/white" /> -->
 
-        <ImageView
-            android:id="@+id/call_logs_menu_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_menu_calendar" />
+
+        <!-- <ImageView -->
+        <!-- android:id="@+id/call_logs_menu_date" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_gravity="center" -->
+        <!-- android:padding="5dp" -->
+        <!-- android:scaleType="fitCenter" -->
+        <!-- android:src="@drawable/ic_menu_calendar" /> -->
     </LinearLayout>
 
 </FrameLayout>
