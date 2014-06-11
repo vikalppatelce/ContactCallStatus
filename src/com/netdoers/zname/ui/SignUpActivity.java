@@ -108,8 +108,12 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
-//				if(validateZname())
-//					new ZnameAvailableTask(zName.getText().toString()).execute();
+				if(validateZname()){
+					zName.setError(null);
+					if(isNetworkAvailable()){
+						new ZnameAvailableTask(zName.getText().toString()).execute();	
+					}
+				}
 			}
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -373,23 +377,15 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-		JSONObject dataToSend = RequestBuilder.getZnameAvaliabeData(verifyZname);
-		Log.i(TAG, dataToSend.toString());
+//		JSONObject dataToSend = RequestBuilder.getZnameAvaliabeData(verifyZname);
+		Log.i(TAG, AppConstants.URLS.AVAILABLE_URL+verifyZname);
 				try {
-					String str = RestClient.postData(AppConstants.URLS.BASE_URL, dataToSend);
+					String str = RestClient.getData(AppConstants.URLS.AVAILABLE_URL+verifyZname);
 					JSONObject object = new JSONObject(str);
-					if(!(successvalue = object.getBoolean("available"))){
-					try{
-						errorvalue = object.getString("errors");
-						}
-					catch(JSONException e){
-						Log.e(TAG, e.toString());
-						}
-					}
+					successvalue = object.getBoolean("exist");
 				} catch (Exception e) {
-							// TODO Auto-generated catch block
 				Log.e(TAG, e.toString());
-			}
+				}
 			return null;
 		}
 
@@ -403,8 +399,8 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			if(!successvalue){
-				zName.setError("Already taken");
+			if(successvalue){
+				zName.setError("Unavailable");
 			}
 		}
 		
