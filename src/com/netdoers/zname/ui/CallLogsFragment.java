@@ -24,12 +24,16 @@ import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -66,13 +70,14 @@ import com.netdoers.zname.sqlite.DBConstant;
  *
  */
 @SuppressLint({ "SimpleDateFormat", "ValidFragment" })
-public class CallLogsFragment extends SherlockFragment {
+public class CallLogsFragment extends SherlockFragment implements OnRefreshListener{
 
 	//DECLARE VIEW
 	ListView callLogsListView;
 	ProgressBar callLogsProgress;
 	LinearLayout callLogsMenu;
 	ImageView callLogsAll, callLogsMissed, callLogsIncoming, callLogsOutGoing;//, callLogsDate; COMMENTED ZM002
+	PullToRefreshLayout mPullToRefreshLayout;	
 	
 	//DECLARE COLLECTION
 	private ArrayList<CallLog> arrayListCallLog = null;
@@ -91,7 +96,9 @@ public class CallLogsFragment extends SherlockFragment {
 	private boolean mIsScrollingUp;
 	private String strLogDate;
 
-	
+	//CONTENT OBSERVER;
+	CallLogContentObserver callLogContentObserver;
+		
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -108,6 +115,7 @@ public class CallLogsFragment extends SherlockFragment {
 		callLogsIncoming = (ImageView)view.findViewById(R.id.call_logs_menu_incoming);
 		callLogsOutGoing = (ImageView)view.findViewById(R.id.call_logs_menu_outgoing);
 		callLogsMissed = (ImageView)view.findViewById(R.id.call_logs_menu_missed);
+		mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.call_pull_to_refresh);
 //		callLogsDate = (ImageView)view.findViewById(R.id.call_logs_menu_date); COMMENTED ZM002
 		return view;
 	}
@@ -128,7 +136,14 @@ public class CallLogsFragment extends SherlockFragment {
 		
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
+		callLogContentObserver = new CallLogContentObserver();
+		
 // VIEW LISTENERS
+		ActionBarPullToRefresh.from(getActivity())
+        .allChildrenArePullable()
+        .listener(this)
+        .setup(mPullToRefreshLayout);
+		
 		callLogsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -223,6 +238,11 @@ public class CallLogsFragment extends SherlockFragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
+		getActivity().getContentResolver().registerContentObserver(
+				android.provider.CallLog.CONTENT_URI, false,
+				callLogContentObserver);
+		
 		if(Zname.getPreferences().getRefreshCallLogs()){
 			Zname.getPreferences().setRefreshCallLogs(false);
 			arrayListCallLog = null;
@@ -238,6 +258,13 @@ public class CallLogsFragment extends SherlockFragment {
 				callLogsListView.setAdapter(callLogsAdapter);	
 			}
 		}
+	}
+	
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		getActivity().getContentResolver().unregisterContentObserver(callLogContentObserver);
 	}
 	
 	//ASYNCTASK -> LOAD CALL LOGS
@@ -295,6 +322,37 @@ public class CallLogsFragment extends SherlockFragment {
 		new AsyncLoadCallLogs(3,"MISSED").execute();
 	}
 	
+	private class AsyncObserverCallLog extends AsyncTask<Void, Void, Void>
+	{
+		private int logType = 0;
+		private String strLog = null;
+		
+		public AsyncObserverCallLog(int logType, String strLog){
+			this.logType = logType;
+			this.strLog = strLog;
+		}
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			getCallLogs(logType,strLog);
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			// set contact adapter
+			// set the progress to GONE
+			if (arrayListCallLog != null) {
+				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
+				callLogsListView.setAdapter(callLogsAdapter);
+			}
+		}
+	}
 	public void getCallDate(){
 		arrayListCallLog.clear();
 		DialogFragment newFragment = new FromDatePickerFragment();
@@ -334,6 +392,8 @@ public class CallLogsFragment extends SherlockFragment {
 			int callLogType = cursor.getColumnIndex(android.provider.CallLog.Calls.TYPE);
 			int callLogDate = cursor.getColumnIndex(android.provider.CallLog.Calls.DATE);
 //			int callLogDuration = cursor.getColumnIndex(android.provider.CallLog.Calls.DURATION);
+			
+			arrayListCallLog.clear();
 			
 			while(cursor.moveToNext()){
 				if (StringUtils.isAlphanumeric(cursor.getString(callLogNumber))){
@@ -478,6 +538,54 @@ public class CallLogsFragment extends SherlockFragment {
 			if(!TextUtils.isEmpty(strLogDate))
 				new AsyncLoadCallLogs(4,strLogDate).execute();
 		}
+	}
+//	CONTENT OBSERVER
+	private class CallLogContentObserver extends ContentObserver {
+        public CallLogContentObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            new AsyncObserverCallLog(0, "ALL");
+        }
+    }
+	@Override
+	public void onRefreshStarted(View view) {
+		// TODO Auto-generated method stub
+        /**
+         * Simulate Refresh with 4 seconds sleep
+         */
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                	if(arrayListCallLog == null){
+            			arrayListCallLog = new ArrayList<CallLog>();
+            			getCallLogs(0,"ALL");
+            		}
+                	else{
+                		getCallLogs(0,"ALL");
+                	}
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                // Notify PullToRefreshLayout that the refresh has finished
+                mPullToRefreshLayout.setRefreshComplete();
+                if (arrayListCallLog != null) {
+    				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
+    				callLogsListView.setAdapter(callLogsAdapter);
+    			}
+            }
+        }.execute();
 	}
 	
 	//ADAPTER CALL LOG

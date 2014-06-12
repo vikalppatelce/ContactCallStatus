@@ -69,10 +69,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.contactpicker.ContactPickerManager"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:noHistory="true"
+             />
         <activity
             android:name="com.netdoers.zname.ui.CallLogsDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.netdoers.zname.ui.AddZnameActivity"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="com.netdoers.zname.sqlite.ZnameDB"

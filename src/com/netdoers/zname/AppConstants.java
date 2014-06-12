@@ -1,15 +1,14 @@
 /* HISTORY
- * CATEGORY 		:- ACTIVITY
+ * CATEGORY 		:- CONSTANTS
  * DEVELOPER		:- VIKALP PATEL
- * AIM			    :- ADD IPD ACTIVITY
- * DESCRIPTION 		:- SAVE IPD
+ * AIM			    :- APPLICATION CONSTANTS
+ * DESCRIPTION 		:- USE APPLICATION CONSTANTS
  * 
  * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
  * --------------------------------------------------------------------------------------------------------------------
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
- * 1000B      VIKALP PATEL    07/02/2014        RELEASE         ADD VIDEO EXTENSION
- * 1000E      VIKALP PATEL    15/02/2014        RELEASE         ADDED PASS HASH IN JSON
+ * 10001      VIKALP PATEL    16/05/2014                        CREATED
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname;
@@ -18,8 +17,11 @@ import android.os.Environment;
 
 public class AppConstants {
 
-	public interface URLS
-	{
+	///////////////////////////////////////////
+	// WEBSERVICES-URL
+	//////////////////////////////////////////
+	
+	public interface URLS{
 		//public static final String BASE_URL = "http://beta.manavit.com/adwallz/";
 		//public static final String BASE_URL = "http://www.google.com/";
 		//public static final String BASE_URL =  "http://www.netdoers.com/projects/smarthumanoid1/services/";
@@ -56,10 +58,11 @@ public class AppConstants {
 		public static final String MEDIA_UPLOAD_URL = "file_upload.php";
 	}
 
-	public interface TAGS
-	{
-		public interface INTENT
-		{
+	/////////////////////////////////////
+	// VIEW TAGS CONSTANTS
+	////////////////////////////////////
+	public interface TAGS{
+		public interface INTENT{
 			public static final String TAG_NAME ="name";
 			public static final String TAG_ID ="_id";
 			public static final String TAG_PHOTO ="photo";
@@ -67,31 +70,26 @@ public class AppConstants {
 		}
 	}
 	
-	public interface RESPONSES
-	{
-		public interface RegistrationResponse
-		{
+	public interface RESPONSES{
+		public interface RegistrationResponse{
 			public static String STATUS = "status";
 			public static String ZNAME = "zname";
 			public static String API_KEY="api_key";
 			public static String ERROR = "errors";
 		}
 		
-		public interface ProjectsResponse
-		{
+	public interface ProjectsResponse{
 			public static String PID = "pid";
 			public static String PROJECT = "project";
 			public static String COMPANY = "company";
 		}
-		public interface VendorProjectsResponse
-		{
+	public interface VendorProjectsResponse{
 			public static String PID = "pid";
 			public static String PROJECT = "project_name";
 			public static String COMPANY = "client_name";
 		}
 		
-		public interface PreviousImagesResponse
-		{
+	public interface PreviousImagesResponse{
 			public static String PROJECT = "project";
 			public static String WORK_TITLE = "work_title";
 			public static String IMAGE = "image";
@@ -101,11 +99,16 @@ public class AppConstants {
 			public static String SIZE = "size";
 		}
 	}
+	
 	public static final String NETWORK_NOT_AVAILABLE = "Network not available";
 	public static final String IMAGE_DIRECTORY_PATH = Environment.getExternalStorageDirectory().getPath()+"/Zname";
 	public static final String IMAGE_DIRECTORY_PATH_DATA = Zname.getApplication().getApplicationContext().getFilesDir().getAbsolutePath();
 	public static final String EXTENSION = ".jpg";
 	public static final String VIDEO_EXTENSION = ".mp4";
+	
+	//////////////////////////////////////////
+	// APPLICATION FONT STYLE
+	//////////////////////////////////////////
 	
 //	public static final String fontStyle = "fonts/RobotoCondensedBold.ttf";
 	public static final String fontStyle = "fonts/Georgia.ttf";

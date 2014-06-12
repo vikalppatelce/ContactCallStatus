@@ -2,14 +2,14 @@
  * CATEGORY			 :- BASE ACTIVITY
  * DEVELOPER		 :- VIKALP PATEL
  * AIM      		 :- ACTIVITY FOR VIEW PAGER + FRAGMENTS
- * NOTE: ROOT OF THE CONTACTS SCREEN. [ALL, FRIENDS, FAMILY, WORK, RANDOM] 
+ * NOTE: ROOT OF THE CONTACTS SCREEN. [ALL, FRIENDS, FAMILY, WORK, CALL LOG] 
  * 
  * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
  * --------------------------------------------------------------------------------------------------------------------
  * INDEX       DEVELOPER		DATE			FUNCTION		DESCRIPTION
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
- * ZM002      VIKALP PATEL     03/06/2014                       SUPPRESSED DRAWER 
+ * ZM002      VIKALP PATEL     03/06/2014                       SUPPRESSED DRAWER OVER OVERFLOW MENU
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -291,6 +291,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 		}
 	}
 	
+	/////////////////////////////////////////////
+	// ARRAY ADAPTER FOR DRAWER
+	/////////////////////////////////////////////
+	
 	public class MySimpleArrayAdapter extends ArrayAdapter<String> {
 		  private final Context context;
 		  private final String[] values;
@@ -392,6 +396,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 			startActivity(drawerIntent);
 	}
 	
+	////////////////////////////////////////////////
+	// ACTIVITY CREATED : OPTIONS INSIDE ABS
+	///////////////////////////////////////////////
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
@@ -400,6 +408,9 @@ public class MotherActivity extends SherlockFragmentActivity {
 		return true;
 	}
 	
+	////////////////////////////////////////////////
+	// OPTIONS IN ABS : SELECTED
+	///////////////////////////////////////////////
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -417,6 +428,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 //			EU ZM002
 			return true;
 		case R.id.action_add:
+			Intent addZnameIntent = new Intent(this, AddZnameActivity.class);
+			startActivity(addZnameIntent);
 			return true;
 		case R.id.action_edit:
 			Intent profileIntent = new Intent(this, ProfileActivity.class);

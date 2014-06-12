@@ -336,6 +336,15 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		}
 		return name;
 	}
+	
+	private void galleryAddPic() {
+	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    File f = new File(currentFileUri.getPath());
+	    Uri contentUri = Uri.fromFile(f);
+	    mediaScanIntent.setData(contentUri);
+	    this.sendBroadcast(mediaScanIntent);
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -354,8 +363,9 @@ public class SignUpActivity extends SherlockFragmentActivity {
 					getImagePath();
 					try {
 						copy(new File(picturePath), new File(currentFileUri.getPath()));
-						strZnameDp = currentFileUri.getPath().toString().substring(currentFileUri.getPath().toString().lastIndexOf("/") + 1);
+						strZnameDp = picturePath.toString().substring(picturePath.toString().lastIndexOf("/") + 1);
 						strPicturePath = ImageCompression.compressImage(picturePath);;
+						galleryAddPic();
 						} 
 					catch (IOException e) 
 					{
