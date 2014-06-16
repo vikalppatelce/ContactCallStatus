@@ -291,6 +291,22 @@ public class MotherActivity extends SherlockFragmentActivity {
 		}
 	}
 	
+	public String getActionBarTitle(){
+		try {
+			int titleId;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				titleId = getResources().getIdentifier("action_bar_title","id", "android");
+			} else {
+				titleId = R.id.abs__action_bar_title;
+			}
+			TextView yourTextView = (TextView) findViewById(titleId);
+			return yourTextView.getText().toString();
+		} catch (Exception e) {
+			Log.e("ActionBar Style", e.toString());
+			return null;
+		}
+	}
+	
 	/////////////////////////////////////////////
 	// ARRAY ADAPTER FOR DRAWER
 	/////////////////////////////////////////////
@@ -437,6 +453,25 @@ public class MotherActivity extends SherlockFragmentActivity {
 			return true;
 		case R.id.action_search:
 			Intent searchIntent = new Intent(this,SearchActivity.class);
+			String _title = getActionBarTitle(); 
+			
+			searchIntent.putExtra(SearchActivity.SEARCH_TYPE, _title);
+			String value = "5";
+			
+			if(_title.equalsIgnoreCase(getString(R.string.str_all_contacts_fragment)) || _title.equalsIgnoreCase(getString(R.string.app_name))){
+			}else{
+				if(_title.equalsIgnoreCase(getString(R.string.str_friends_contacts_fragment))){
+					value = "0";
+			    }else {
+			    	if(_title.equalsIgnoreCase(getString(R.string.str_family_contacts_fragment))){
+			    		  value = "1";
+			        }else{
+				    value = "2";
+			        }
+			    }
+			}
+			
+			searchIntent.putExtra(SearchActivity.GROUP_TYPE, value);
 			startActivity(searchIntent);
 			return true;
 		case R.id.action_settings:

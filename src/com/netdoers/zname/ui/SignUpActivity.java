@@ -149,27 +149,27 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	{
 		try {
 			if(validate()){
-//				String strFullName = fullName.getText().toString().trim();
-//				String strzName = zName.getText().toString().trim();
-//				String strzNumber = zNumber.getText().toString().trim();
-//				
-//				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//				String device_id = mTelephonyMgr.getDeviceId();
-//				String device_IMSI = mTelephonyMgr.getSubscriberId();
-//				String device_name = getDeviceName();
-//				String myVersion = android.os.Build.VERSION.RELEASE;
-//				
-//				if(isNetworkAvailable()){
-//					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
+				String strFullName = fullName.getText().toString().trim();
+				String strzName = zName.getText().toString().trim();
+				String strzNumber = zNumber.getText().toString().trim();
+				
+				TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String device_id = mTelephonyMgr.getDeviceId();
+				String device_IMSI = mTelephonyMgr.getSubscriberId();
+				String device_name = getDeviceName();
+				String myVersion = android.os.Build.VERSION.RELEASE;
+				
+				if(isNetworkAvailable()){
+					new RegistrationTask(this).execute(strFullName,strzName,strzNumber, strZnameDp ,device_id,device_IMSI,device_name,myVersion);
 //					if(!TextUtils.isEmpty(strZnameDp))
 //						new RegistrationUploadTask().execute();
-//				
-				Zname.getPreferences().setUserName("DEFAULT");
-				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
-				startActivity(i);
-				finish();
 				
-//				}
+//				Zname.getPreferences().setUserName("DEFAULT");
+//				Intent i = new Intent(SignUpActivity.this, MotherActivity.class);
+//				startActivity(i);
+//				finish();
+				
+				}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, e.toString());

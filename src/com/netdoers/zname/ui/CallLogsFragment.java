@@ -11,6 +11,8 @@
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     09/06/2014                       SUPPRESSED MENU : DATE
+ * ZM003      VIKALP PATEL     16/06/2014                       SUPPRESSED MENU ON SCROLL
+ * ZM004      VIKALP PATEL     16/06/2014                       CHANGED LIST LAYOUT WITH CALL AND MESSAGE BUTTON
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.ui;
@@ -160,35 +162,35 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
 			}
 		});
 		
-		callLogsListView.setOnScrollListener(new OnScrollListener() {
-			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// TODO Auto-generated method stub
-				final ListView lw = callLogsListView;
-
-			    if (view.getId() == lw.getId()) {
-			        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
-
-			        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-			            mIsScrollingUp = false;
-			            callLogsMenu.setVisibility(View.GONE);
-//			            getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-			        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-			            mIsScrollingUp = true;
-			            callLogsMenu.setVisibility(View.VISIBLE);
-//			            getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-			        }
-			        mLastFirstVisibleItem = currentFirstVisibleItem;
-			    } 
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
-			}
-		});
+//		 SC ZM003
+//		callLogsListView.setOnScrollListener(new OnScrollListener() {
+//			
+//			@Override
+//			public void onScrollStateChanged(AbsListView view, int scrollState) {
+//				// TODO Auto-generated method stub
+//				final ListView lw = callLogsListView;
+//
+//			    if (view.getId() == lw.getId()) {
+//			        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
+//
+//			        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+//			            mIsScrollingUp = false;
+//			            callLogsMenu.setVisibility(View.GONE);
+//			        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+//			            mIsScrollingUp = true;
+//			            callLogsMenu.setVisibility(View.VISIBLE);
+//			        }
+//			        mLastFirstVisibleItem = currentFirstVisibleItem;
+//			    } 
+//			}
+//			
+//			@Override
+//			public void onScroll(AbsListView view, int firstVisibleItem,
+//					int visibleItemCount, int totalItemCount) {
+//				// TODO Auto-generated method stub
+//			}
+//		});
+//		 EC ZM003
 		
 		callLogsAll.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -617,28 +619,35 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = convertView;
 
 			LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = vi.inflate(R.layout.list_item_call_log, null);
+//			view = vi.inflate(R.layout.depreceated_list_item_call_log, null); // SA ZM004
+			view = vi.inflate(R.layout.list_item_call_log, null); //EA ZM004
 			
 			TextView t1 = (TextView)view.findViewById(R.id.list_item_call_log_name);
-			TextView t2 = (TextView)view.findViewById(R.id.list_item_call_log_number);
+//			TextView t2 = (TextView)view.findViewById(R.id.list_item_call_log_number); COMMENTED ZM004
 			TextView t3 = (TextView)view.findViewById(R.id.list_item_call_log_date);
 			TextView t4 = (TextView)view.findViewById(R.id.list_item_call_log_header_separator);
 			ImageView imgLogType = (ImageView)view.findViewById(R.id.list_item_call_log_type);
+			ImageView imgCall = (ImageView)view.findViewById(R.id.list_item_call_log_call); // SA ZM004
+			ImageView imgMsg = (ImageView)view.findViewById(R.id.list_item_call_log_message);//EA ZM004
 //			ImageView img = (ImageView)view.findViewById(R.id.grid_item_display_picture);
 			
 			String _name = arrayListCallLog.get(position).getCallLogName()!=null ? arrayListCallLog.get(position).getCallLogName(): "Unknown";
+		
+			if(_name.equalsIgnoreCase("Unknown")){ //SA ZM004
+				_name = arrayListCallLog.get(position).getCallLogNumber();
+			}// EA ZM004
 			
 			t1.setText(_name);
-			t2.setText(arrayListCallLog.get(position).getCallLogNumber());
+//			t2.setText(arrayListCallLog.get(position).getCallLogNumber()); COMMENTED ZM004
 			t3.setText(arrayListCallLog.get(position).getCallLogTime());
 			
 			t1.setTypeface(styleFont);
-			t2.setTypeface(styleFont);
+//			t2.setTypeface(styleFont); //COMMENTED ZM004
 			t3.setTypeface(styleFont);
 			t4.setTypeface(styleFont);
 			
@@ -688,7 +697,26 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
 			view.setTag(R.id.TAG_CALL_LOG_POSITION, position);
 			view.setTag(R.id.TAG_CONTACT_NUMBER, arrayListCallLog.get(position).getCallLogNumber());
 			view.setTag(R.id.TAG_CONTACT_NAME, _name);
+//			SA ZM004
+			imgCall.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent callIntent = new Intent(Intent.ACTION_DIAL);
+		            callIntent.setData(Uri.parse("tel:"+Uri.encode(arrayListCallLog.get(position).getCallLogNumber())));
+		            startActivity(callIntent);
+				}
+			});
 			
+			imgMsg.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(arrayListCallLog.get(position).getCallLogNumber())));
+		            startActivity(smsIntent);
+				}
+			});
+//			EA ZM004
 			return view;
 		}
 	}
