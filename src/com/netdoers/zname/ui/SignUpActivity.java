@@ -475,6 +475,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 				Zname.getPreferences().setUserName(result.getZname());
 				Zname.getPreferences().setApiKey(res.getApikey());
 				Zname.getPreferences().setUserNumber(zNumber.getText().toString());
+				Zname.getPreferences().setFullName(fullName.getText().toString());
 				if(!TextUtils.isEmpty(strZnameDp)){
 					new RegistrationUploadTask(SignUpActivity.this).execute();
 				}

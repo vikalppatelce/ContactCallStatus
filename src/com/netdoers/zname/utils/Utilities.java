@@ -4,7 +4,11 @@ import java.text.Normalizer;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
@@ -49,4 +53,39 @@ public class Utilities {
 	        return highlighted;
 	    }
 	}
+	
+    public static String getDeviceName() {
+    	  try
+    	  {
+    		  String manufacturer = Build.MANUFACTURER;
+        	  String model = Build.MODEL;
+        	  if (model.startsWith(manufacturer)) {
+        	    return capitalize(model);
+        	  } else {
+        	    return capitalize(manufacturer) + " " + model;
+        	  }
+    	  }
+    	  catch(Exception e)
+    	  {
+    		  return "Device Unidentified";
+    	  }
+    	}
+    
+  	public static String capitalize(String s) {
+  		try {
+  			if (s == null || s.length() == 0) {
+  				return "";
+  			}
+  			char first = s.charAt(0);
+  			if (Character.isUpperCase(first)) {
+  				return s;
+  			} else {
+  				return Character.toUpperCase(first) + s.substring(1);
+  			}
+
+  		} catch (Exception e) {
+  			e.printStackTrace();
+  				return "";
+  		}
+  	}
 }

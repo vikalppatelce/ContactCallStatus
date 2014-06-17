@@ -52,15 +52,16 @@
     <string name="str_profile_status_read">Read</string>
     <string name="str_profile_status_place">Place</string>
     <string name="str_profile_status_random">Random</string>
-    <string name="str_profile_status_work_hint">I\'m watchin...</string>
-    <string name="str_profile_status_read_hint">I\'m reading...</string>
+    <string name="str_profile_status_work_hint">I\'m watchin</string>
+    <string name="str_profile_status_read_hint">I\'m reading</string>
     <string name="str_profile_status_place_hint">I\'m @</string>
-    <string name="str_profile_status_random_hint">Random thought...</string>
-	<string name="str_profile_status_grid_head">SELECT YOUR STATUS</string>
-	<string name="str_profile_status">STATUS</string>
-	<string name="str_profile_contact">CONTACT</string>
-	<string name="str_profile_status_update">Update</string>
-    
+    <string name="str_profile_status_random_hint">Random thought </string>
+    <string name="str_profile_status_grid_head">SELECT YOUR STATUS</string>
+    <string name="str_profile_status">STATUS</string>
+    <string name="str_profile_contact">CONTACT</string>
+    <string name="str_profile_name">NAME</string>
+    <string name="str_profile_status_update">Update</string>
+
     <!-- Settings -->
     <string name="about">About</string>
     <string name="about_summary">About Zname</string>
@@ -69,4 +70,12 @@
 
     <!-- Contact Picker -->
     <string name="search_hint">Search</string>
+
+    <!-- Profile Update Dialog-->
+    <string name="str_profile_update_ok">OK</string>
+    <string name="str_profile_update_cancel">CANCEL</string>
+    <string name="str_profile_update_name">Update Name</string>
+    <string name="str_profile_update_contact">Update Contact</string>
+    <string name="str_profile_update_status">Update Status</string>
+
 </resources>

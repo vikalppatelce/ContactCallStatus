@@ -35,6 +35,7 @@ public class AppConstants {
 //		http://myzname.netdoers.com/api/v1/znames/{40 chars api key}/profilepic
 		//API V2
 		public static final String BASE_URL =  "http://myzname.netdoers.com/api/v1/znames";
+		public static final String UPDATE_URL =  "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String AVAILABLE_URL = "http://myzname.netdoers.com/api/v1/znames/username/";
 		public static final String MEDIA_BASE_URL =  "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String SPONSOR_URL =  "http://netdoers.com/projects/smarthumanoid1/images/appsponser/"; 
