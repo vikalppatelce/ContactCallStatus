@@ -38,6 +38,8 @@ public class AppConstants {
 		public static final String UPDATE_URL =  "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String AVAILABLE_URL = "http://myzname.netdoers.com/api/v1/znames/username/";
 		public static final String MEDIA_BASE_URL =  "http://myzname.netdoers.com/api/v1/znames/";
+//		public static final String CALL_URL = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/callstatus/1"; //1 : BUSY , 0 : AVAILABLE
+		public static final String CALL_URL = "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String SPONSOR_URL =  "http://netdoers.com/projects/smarthumanoid1/images/appsponser/"; 
 		public static final String SOCIAL_URL =  "http://netdoers.com/projects/smarthumanoid1/sharing/cases.php?user_id=";
 

@@ -12,10 +12,9 @@
             android:id="@+id/call_logs_list_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="1dp"
-            android:divider="#ffca00"
+			android:fadingEdge="none"
             android:dividerHeight="1dp"
+            android:divider="@drawable/list_divider_inset"
             android:drawSelectorOnTop="true"
             android:listSelector="@drawable/zname_list_selector_holo_light" >
         </ListView>
