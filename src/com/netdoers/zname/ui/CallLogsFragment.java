@@ -72,7 +72,7 @@ import com.netdoers.zname.sqlite.DBConstant;
  *
  */
 @SuppressLint({ "SimpleDateFormat", "ValidFragment" })
-public class CallLogsFragment extends SherlockFragment implements OnRefreshListener{
+public class CallLogsFragment extends SherlockFragment /*implements OnRefreshListener*/{
 
 	//DECLARE VIEW
 	ListView callLogsListView;
@@ -117,7 +117,7 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
 		callLogsIncoming = (ImageView)view.findViewById(R.id.call_logs_menu_incoming);
 		callLogsOutGoing = (ImageView)view.findViewById(R.id.call_logs_menu_outgoing);
 		callLogsMissed = (ImageView)view.findViewById(R.id.call_logs_menu_missed);
-		mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.call_pull_to_refresh);
+//		mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.call_pull_to_refresh);
 //		callLogsDate = (ImageView)view.findViewById(R.id.call_logs_menu_date); COMMENTED ZM002
 		return view;
 	}
@@ -141,10 +141,10 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
 		callLogContentObserver = new CallLogContentObserver();
 		
 // VIEW LISTENERS
-		ActionBarPullToRefresh.from(getActivity())
-        .allChildrenArePullable()
-        .listener(this)
-        .setup(mPullToRefreshLayout);
+//		ActionBarPullToRefresh.from(getActivity())
+//        .allChildrenArePullable()
+//        .listener(this)
+//        .setup(mPullToRefreshLayout);
 		
 		callLogsListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -552,43 +552,43 @@ public class CallLogsFragment extends SherlockFragment implements OnRefreshListe
             new AsyncObserverCallLog(0, "ALL");
         }
     }
-	@Override
-	public void onRefreshStarted(View view) {
-		// TODO Auto-generated method stub
-        /**
-         * Simulate Refresh with 4 seconds sleep
-         */
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                	if(arrayListCallLog == null){
-            			arrayListCallLog = new ArrayList<CallLog>();
-            			getCallLogs(0,"ALL");
-            		}
-                	else{
-                		getCallLogs(0,"ALL");
-                	}
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                // Notify PullToRefreshLayout that the refresh has finished
-                mPullToRefreshLayout.setRefreshComplete();
-                if (arrayListCallLog != null) {
-    				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
-    				callLogsListView.setAdapter(callLogsAdapter);
-    			}
-            }
-        }.execute();
-	}
+//	@Override
+//	public void onRefreshStarted(View view) {
+//		// TODO Auto-generated method stub
+//        /**
+//         * Simulate Refresh with 4 seconds sleep
+//         */
+//        new AsyncTask<Void, Void, Void>() {
+//
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                try {
+//                	if(arrayListCallLog == null){
+//            			arrayListCallLog = new ArrayList<CallLog>();
+//            			getCallLogs(0,"ALL");
+//            		}
+//                	else{
+//                		getCallLogs(0,"ALL");
+//                	}
+//                    Thread.sleep(3000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void result) {
+//                super.onPostExecute(result);
+//                // Notify PullToRefreshLayout that the refresh has finished
+//                mPullToRefreshLayout.setRefreshComplete();
+//                if (arrayListCallLog != null) {
+//    				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
+//    				callLogsListView.setAdapter(callLogsAdapter);
+//    			}
+//            }
+//        }.execute();
+//	}
 	
 	//ADAPTER CALL LOG
 	@SuppressLint("SimpleDateFormat")

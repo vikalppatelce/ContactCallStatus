@@ -1,7 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/splash_bg"
     android:fillViewport="true" >
 
     <FrameLayout
@@ -45,7 +44,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Z:name"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/darker_gray"
             android:textSize="22sp" />
 
         <TextView
@@ -65,6 +64,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:background="@color/background_action_bar_orange"
             android:orientation="horizontal" >
 

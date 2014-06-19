@@ -3,10 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout
-        android:id="@+id/call_pull_to_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+<!--     <uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout -->
+<!--         android:id="@+id/call_pull_to_refresh" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="match_parent" > -->
 
         <ListView
             android:id="@+id/call_logs_list_view"
@@ -43,14 +43,14 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/btn_ic_call_selector" />
+                android:src="@drawable/btn_ic_call" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:background="@android:color/white" />
+                android:background="@android:color/darker_gray" />
 
             <ImageView
                 android:id="@+id/call_logs_menu_missed"
@@ -59,14 +59,14 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/btn_ic_missed_selector" />
+                android:src="@drawable/btn_ic_missed" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:background="@android:color/white" />
+                android:background="@android:color/darker_gray" />
 
             <ImageView
                 android:id="@+id/call_logs_menu_incoming"
@@ -75,14 +75,14 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/btn_ic_incoming_selector" />
+                android:src="@drawable/btn_ic_incoming" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:background="@android:color/white" />
+                android:background="@android:color/darker_gray" />
 
             <ImageView
                 android:id="@+id/call_logs_menu_outgoing"
@@ -91,7 +91,7 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/btn_ic_outgoing_selector" />
+                android:src="@drawable/btn_ic_outgoing" />
 
             <!-- <View -->
             <!-- android:layout_width="match_parent" -->
@@ -110,6 +110,6 @@
             <!-- android:scaleType="fitCenter" -->
             <!-- android:src="@drawable/ic_menu_calendar" /> -->
         </LinearLayout>
-    </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout>
+<!--     </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout> -->
 
 </FrameLayout>
