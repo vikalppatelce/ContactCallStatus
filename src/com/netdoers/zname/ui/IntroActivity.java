@@ -203,12 +203,24 @@ public class IntroActivity extends FragmentActivity {
                     return;
                 }
                 startPressed = true;
-                Intent intent2 = new Intent(IntroActivity.this, SignUpActivity.class);
-                startActivity(intent2);
+                Intent signUpIntent = new Intent(IntroActivity.this, SignUpActivity.class);
+                startActivity(signUpIntent);
                 finish();
             }
         });
 
+        txtSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (startPressed) {
+                    return;
+                }
+                startPressed = true;
+                Intent signInIntent = new Intent(IntroActivity.this, SignInActivity.class);
+                startActivity(signInIntent);
+                finish();
+            }
+        });
         justCreated = true;
 
 //        getSupportActionBar().hide();

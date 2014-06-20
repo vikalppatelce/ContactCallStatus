@@ -316,7 +316,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		  private final String[] values;
 
 		  public MySimpleArrayAdapter(Context context, String[] values) {
-		    super(context, R.layout.drawer_list_item, values);
+		    super(context, R.layout.item_list_drawer, values);
 		    this.context = context;
 		    this.values = values;
 		  }
@@ -325,7 +325,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		  public View getView(int position, View convertView, ViewGroup parent) {
 		    LayoutInflater inflater = (LayoutInflater) context
 		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		    View rowView = inflater.inflate(R.layout.drawer_list_item, parent, false);
+		    View rowView = inflater.inflate(R.layout.item_list_drawer, parent, false);
 		    TextView textView = (TextView) rowView.findViewById(R.id.text1);
 		    ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
 		    textView.setText(values[position]);
@@ -420,7 +420,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.friends_contacts_menu, menu);
+		inflater.inflate(R.menu.menu_friends_contacts, menu);
 		return true;
 	}
 	

@@ -13,6 +13,7 @@
  * ZM003      VIKALP PATEL     30/05/2014                       SUPPRESSED FRAGMENT WISE ACTION BAR MENU
  * ZM004      VIKALP PATEL     03/06/2014                       MOVE SEARCH INTO SEARCH ACTIVTIY
  * ZM005      VIKALP PATEL     09/06/2014                       MIGRATION : GRIDVIEW INTO LISTVIEW
+ * ZM006      VIKALP PATEL     20/06/2014                       HIDE ADD TO GROUP ON SCROLL
  * --------------------------------------------------------------------------------------------------------------------
  */
 package com.netdoers.zname.ui;
@@ -41,7 +42,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
@@ -83,7 +87,8 @@ public class FamilyContactsFragment extends SherlockFragment {
 	//REFERENCES VARIABLE - HELPER
 	private ArrayList<Contact> contacts = null;
 	private LinkedHashMap<String, Contact> allContacts = new LinkedHashMap<String, Contact>();
-	
+	private int mLastFirstVisibleItem; //SA ZM006
+	private boolean mIsScrollingUp;	 //EA ZM006
 	
 	//INDEXING FOR THE LIST
 	HashMap<String, Integer> alphaIndexer;
@@ -175,6 +180,26 @@ public class FamilyContactsFragment extends SherlockFragment {
 			return false;
 		}
 	});
+
+	contactsListView.setOnItemClickListener(new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view,
+				int position, long id) {
+			// TODO Auto-generated method stub
+			String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
+			String viewTagName = view.getTag(R.id.TAG_CONTACT_NAME).toString();
+			String viewTagPhoto	= view.getTag(R.id.TAG_CONTACT_PHOTO_ID).toString();
+			String viewTagNumber	= view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
+			Intent profileIntent = new Intent(getActivity(), ProfileNotZnameActivity.class);
+			profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID, viewTagId);
+			profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, viewTagName);
+			profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO, viewTagPhoto);
+			profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NUMBER, viewTagNumber);
+			profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(profileIntent);
+		}
+	});
 	
 	addContact.setOnClickListener(new View.OnClickListener() {
 		@Override
@@ -183,6 +208,34 @@ public class FamilyContactsFragment extends SherlockFragment {
 			openAddContactsLayout();
 		}
 	});
+	
+//	 SA ZM006
+	contactsListView.setOnScrollListener(new OnScrollListener() {
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// TODO Auto-generated method stub
+			final ListView lw = contactsListView;
+		    if (view.getId() == lw.getId()) {
+		        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
+		        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+		            mIsScrollingUp = false;
+		            addContact.setVisibility(View.GONE);
+		        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+		            mIsScrollingUp = true;
+		            addContact.setVisibility(View.VISIBLE);
+		        }
+		        mLastFirstVisibleItem = currentFirstVisibleItem;
+		    } 
+		}
+		
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			// TODO Auto-generated method stub
+		}
+	});
+//	 EA ZM006
+
 	
 	contacts = new ArrayList<Contact>();
 	}
@@ -243,7 +296,7 @@ public class FamilyContactsFragment extends SherlockFragment {
 		} catch (Exception e) {
 			Log.e("inputDialog", e.toString());
 		}
-		dialog.setContentView(R.layout.grid_view_alert_dialog);
+		dialog.setContentView(R.layout.dialog_alert);
 		
 		TextView gridAlertName = (TextView)dialog.findViewById(R.id.grid_alert_display_name);
 		TextView gridAlertCall = (TextView)dialog.findViewById(R.id.grid_alert_call);
@@ -447,7 +500,7 @@ public class FamilyContactsFragment extends SherlockFragment {
 			if (view == null) {
 				LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //				view = vi.inflate(R.layout.grd_item_contact, null); SU ZM005
-				view = vi.inflate(R.layout.list_item_contact, null); //EU ZM005
+				view = vi.inflate(R.layout.item_list_contact, null); //EU ZM005
 			}
 			final Contact contact = contactList.get(position);
 			if (contact != null) {
@@ -483,6 +536,8 @@ public class FamilyContactsFragment extends SherlockFragment {
 				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber());
 				view.setTag(R.id.TAG_CONTACT_DP, contact.getContactPhotoUri());
 				view.setTag(R.id.TAG_CONTACT_NAME, contact.getContactName());
+				view.setTag(R.id.TAG_CONTACT_ID, contact.getContactId());
+				view.setTag(R.id.TAG_CONTACT_PHOTO_ID, contact.getContactPhotoUri());
 				
 				imgCall.setOnClickListener(new View.OnClickListener() {
 					@Override

@@ -27,8 +27,6 @@ import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -97,6 +95,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 	private int mLastFirstVisibleItem;
 	private boolean mIsScrollingUp;
 	private String strLogDate;
+	private int saveLogType;
 
 	//CONTENT OBSERVER;
 	CallLogContentObserver callLogContentObserver;
@@ -163,33 +162,33 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 		});
 		
 //		 SC ZM003
-//		callLogsListView.setOnScrollListener(new OnScrollListener() {
-//			
-//			@Override
-//			public void onScrollStateChanged(AbsListView view, int scrollState) {
-//				// TODO Auto-generated method stub
-//				final ListView lw = callLogsListView;
-//
-//			    if (view.getId() == lw.getId()) {
-//			        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
-//
-//			        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-//			            mIsScrollingUp = false;
-//			            callLogsMenu.setVisibility(View.GONE);
-//			        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-//			            mIsScrollingUp = true;
-//			            callLogsMenu.setVisibility(View.VISIBLE);
-//			        }
-//			        mLastFirstVisibleItem = currentFirstVisibleItem;
-//			    } 
-//			}
-//			
-//			@Override
-//			public void onScroll(AbsListView view, int firstVisibleItem,
-//					int visibleItemCount, int totalItemCount) {
-//				// TODO Auto-generated method stub
-//			}
-//		});
+		callLogsListView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+				final ListView lw = callLogsListView;
+
+			    if (view.getId() == lw.getId()) {
+			        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
+
+			        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+			            mIsScrollingUp = false;
+			            callLogsMenu.setVisibility(View.GONE);
+			        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+			            mIsScrollingUp = true;
+			            callLogsMenu.setVisibility(View.VISIBLE);
+			        }
+			        mLastFirstVisibleItem = currentFirstVisibleItem;
+			    } 
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+			}
+		});
 //		 EC ZM003
 		
 		callLogsAll.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +256,26 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 		else{
 			if(callLogsAdapter!=null){
 				callLogsProgress.setVisibility(View.GONE);
-				callLogsListView.setAdapter(callLogsAdapter);	
+				callLogsListView.setAdapter(callLogsAdapter);
+				
+				if(!TextUtils.isEmpty(String.valueOf(saveLogType))){
+					switch(saveLogType){
+					case 0:
+						callLogsAll.setImageResource(R.drawable.btn_ic_call_selected);
+						break;
+					case 1:
+						callLogsIncoming.setImageResource(R.drawable.btn_ic_incoming_selected);
+						break;
+					case 2:
+						callLogsOutGoing.setImageResource(R.drawable.btn_ic_outgoing_selected);
+						break;
+					case 3:
+						callLogsMissed.setImageResource(R.drawable.btn_ic_missed_selected);
+						break;
+					default:
+							break;
+					}
+				}
 			}
 		}
 	}
@@ -279,6 +297,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 		public AsyncLoadCallLogs(int logType, String strLog){
 			this.logType = logType;
 			this.strLog = strLog;
+			saveLogType = logType;
 		}
 		@Override
 		protected void onPreExecute() {
@@ -299,9 +318,31 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 			
 			// set the progress to GONE
 			callLogsProgress.setVisibility(View.GONE);
+			callLogsAll.setImageResource(R.drawable.btn_ic_call);
+			callLogsIncoming.setImageResource(R.drawable.btn_ic_incoming);
+			callLogsOutGoing.setImageResource(R.drawable.btn_ic_outgoing);
+			callLogsMissed.setImageResource(R.drawable.btn_ic_missed);
+			
 			if (arrayListCallLog != null) {
 				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
 				callLogsListView.setAdapter(callLogsAdapter);
+			}
+			
+			switch(logType){
+			case 0:
+				callLogsAll.setImageResource(R.drawable.btn_ic_call_selected);
+				break;
+			case 1:
+				callLogsIncoming.setImageResource(R.drawable.btn_ic_incoming_selected);
+				break;
+			case 2:
+				callLogsOutGoing.setImageResource(R.drawable.btn_ic_outgoing_selected);
+				break;
+			case 3:
+				callLogsMissed.setImageResource(R.drawable.btn_ic_missed_selected);
+				break;
+			default:
+					break;
 			}
 		}
 	}
@@ -625,7 +666,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 
 			LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //			view = vi.inflate(R.layout.depreceated_list_item_call_log, null); // SA ZM004
-			view = vi.inflate(R.layout.list_item_call_log, null); //EA ZM004
+			view = vi.inflate(R.layout.item_list_call_log, null); //EA ZM004
 			
 			TextView t1 = (TextView)view.findViewById(R.id.list_item_call_log_name);
 //			TextView t2 = (TextView)view.findViewById(R.id.list_item_call_log_number); COMMENTED ZM004
