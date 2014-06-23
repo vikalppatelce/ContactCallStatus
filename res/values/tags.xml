@@ -3,6 +3,7 @@
     <item name="TAG_CONTACT_NUMBER" type="id"/>
     <item name="TAG_CONTACT_DP" type="id"/>
     <item name="TAG_CONTACT_NAME" type="id"/>
+    <item name="TAG_CONTACT_ZNAME" type="id"/>
     <item name="TAG_CONTACT_ID" type="id"/>
     <item name="TAG_CONTACT_PHOTO_ID" type="id"/>
     <item name="TAG_PDT_ID" type="id"/>

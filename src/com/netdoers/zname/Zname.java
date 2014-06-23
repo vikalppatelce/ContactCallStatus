@@ -27,11 +27,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class Zname extends Application{
 
-	static Zname zname;
-	static DataController dataController;
-	static SharedPreferences sharedPreferences;
-	static Preferences preferences;
-	static ImageLoaderConfiguration imageLoaderConfiguration;
+	public static Zname zname;
+	public static DataController dataController;
+	public static SharedPreferences sharedPreferences;
+	public static Preferences preferences;
+	public static ImageLoaderConfiguration imageLoaderConfiguration;
 
 	@Override
 	public void onCreate() {

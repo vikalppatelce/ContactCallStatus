@@ -82,6 +82,9 @@
             android:name="com.netdoers.zname.ui.ProfileUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.netdoers.zname.ui.ProfileZnameActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.netdoers.zname.ui.SignInActivity"
             android:screenOrientation="portrait" />
 
