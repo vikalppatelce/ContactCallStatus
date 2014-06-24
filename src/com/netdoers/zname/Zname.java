@@ -8,6 +8,7 @@
 * INDEX 	DEVELOPER 		DATE 		FUNCTION		DESCRIPTION
 * --------------------------------------------------------------------------------------------------------------------
 * ZM001    VIKALP PATEL    16/05/2014                   CREATED
+* ZM002    VIKALP PATEL    24/06/2014                   ADDED VOLLEY FOR NETWORK OPTIMIZATION
 * --------------------------------------------------------------------------------------------------------------------	
 */
 package com.netdoers.zname;
@@ -32,6 +33,7 @@ public class Zname extends Application{
 	public static SharedPreferences sharedPreferences;
 	public static Preferences preferences;
 	public static ImageLoaderConfiguration imageLoaderConfiguration;
+	
 
 	@Override
 	public void onCreate() {

@@ -99,7 +99,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 
 	//CONTENT OBSERVER;
 	CallLogContentObserver callLogContentObserver;
-		
+	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -437,7 +437,6 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 //			int callLogDuration = cursor.getColumnIndex(android.provider.CallLog.Calls.DURATION);
 			
 			arrayListCallLog.clear();
-			
 			while(cursor.moveToNext()){
 				if (StringUtils.isAlphanumeric(cursor.getString(callLogNumber))){
 					continue;
@@ -446,10 +445,12 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 						continue;	
 				}
 				calllog = new CallLog();
+				String _callLogDate = getCallLogDate(Long.valueOf(cursor.getString(callLogDate)));
 				calllog.setCallLogName(cursor.getString(callLogName));
 				calllog.setCallLogNumber(cursor.getString(callLogNumber));
 				calllog.setCallLogType(cursor.getString(callLogType));
-				calllog.setCallLogDate(getCallLogDate(Long.valueOf(cursor.getString(callLogDate))));
+				calllog.setCallLogDate(_callLogDate);
+//				calllog.setCallLogDate(getCallLogDate(Long.valueOf(cursor.getString(callLogDate))));
 				calllog.setCallLogTime(getCallLogTime(Long.valueOf(cursor.getString(callLogDate))));
 //				try {
 //					String photoFromNumber=null;
