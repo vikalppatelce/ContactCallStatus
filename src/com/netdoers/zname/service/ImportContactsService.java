@@ -199,9 +199,20 @@ public class ImportContactsService extends Service {
 						// set phone number
 //						SU ZM002
 //						contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D+",""));
+						String s = cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "");
 						if (contact.getContactNumber().toString().length() == 0) {
-							contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", ""));
+							if(s.length() > 10){
+								contact.setContactNumber("\""+s.substring(s.length()-10,s.length())+"\"");	
+							}else{
+								contact.setContactNumber("\"" + s + "\"");
+							}
+//							contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", ""));
 						} else {
+							if(s.length() > 10){
+								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s.substring(s.length()-10, s.length())).concat("\""));//One can add possible contacts "(-/,"
+							}else{
+								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s).concat("\""));
+							}
 							contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "")));//One can add possible contacts "(-/,"
 						}
 //						EU ZM002
@@ -235,7 +246,7 @@ public class ImportContactsService extends Service {
 						_contact.getContactNumber());
 				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME,
 						_contact.getContactName());
-				values.put(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS,
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_SMALL,
 						_contact.getContactPhotoUri().toString());
 				Zname.getApplication()
 						.getContentResolver()
@@ -297,10 +308,21 @@ public class ImportContactsService extends Service {
 					
 					if (cursorPhone.moveToFirst()) {
 						do {
+							String s = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", "");
 							if (contact.getContactNumber().toString().length() == 0) {
-								contact.setContactNumber(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", ""));
+								if(s.length() > 10){
+									contact.setContactNumber("\""+s.substring(s.length()-10, s.length())+"\"");
+								}else{
+									contact.setContactNumber("\""+s+"\"");	
+								}
+//								contact.setContactNumber(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", ""));
 							} else {
-								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", "")));
+								if(s.length() > 10){
+									contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s.substring(s.length()-10, s.length())).concat("\""));
+								}else{
+									contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s).concat("\""));
+								}
+//								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", "")));
 							}	
 						} while (cursorPhone.moveToNext());
 					}
@@ -345,7 +367,7 @@ public class ImportContactsService extends Service {
 						_contact.getContactNumber());
 				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME,
 						_contact.getContactName());
-				values.put(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS,
+				values.put(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_SMALL,
 						_contact.getContactPhotoUri().toString());
 				Zname.getApplication()
 						.getContentResolver()

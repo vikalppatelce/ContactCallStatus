@@ -32,9 +32,11 @@ public class AppConstants {
 		public static final String MEDIA_BASE_URL 	= "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String CALL_URL 		= "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String SEARCH_URL 		= "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String SYNC_URL 		= "http://myzname.netdoers.com/api/v1/znames/";
 //		public static final String MEDIA_BASE_URL 	= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/profilepic";
 //		public static final String CALL_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/callstatus/1"; //1 : BUSY , 0 : AVAILABLE		
 //		public static final String SEARCH_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/users/abc";
+//		public static final String SYNC_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/contactlist";
 	}
 
 	/////////////////////////////////////

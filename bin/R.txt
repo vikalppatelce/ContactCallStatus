@@ -634,6 +634,7 @@ int id action_add 0x7f0600ca
 int id action_edit 0x7f0600cc
 int id action_feedback 0x7f0600ce
 int id action_more 0x7f0600cb
+int id action_refresh 0x7f0600cf
 int id action_search 0x7f0600c9
 int id action_settings 0x7f0600cd
 int id bottom_pages 0x7f0600ae

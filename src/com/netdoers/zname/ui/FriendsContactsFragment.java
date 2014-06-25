@@ -60,6 +60,9 @@ import com.netdoers.zname.beans.Contact;
 import com.netdoers.zname.beans.ContactPicker;
 import com.netdoers.zname.contactpicker.ContactPickerManager;
 import com.netdoers.zname.sqlite.DBConstant;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 /**
  * @author Vikalp Patel(vikalppatelce@yahoo.com)
@@ -75,7 +78,8 @@ public class FriendsContactsFragment extends SherlockFragment {
 //	ImageView searchClose; SU ZM003
 //	LinearLayout searchContactLayout;
 //	EditText searchField;  EU ZM003
-
+	ImageLoader imageLoader;
+	DisplayImageOptions options;
 	//TYPEFACE
 	static Typeface styleFont;
 	
@@ -134,6 +138,18 @@ public class FriendsContactsFragment extends SherlockFragment {
 		
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
+		imageLoader = ImageLoader.getInstance();
+        // Initialize ImageLoader with configuration. Do it once.
+        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+        
+        options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.def_contact) // resource or drawable
+        .showImageForEmptyUri(R.drawable.def_contact) // resource or drawable
+        .showImageOnFail(R.drawable.def_contact) //this is the image that will be displayed if download fails
+        .cacheInMemory()
+        .cacheOnDisc()
+        .build();
+        
 	// View Listeners
 //		SU ZM003
 //	searchClose.setOnClickListener(new OnClickListener() {
@@ -364,8 +380,10 @@ public class FriendsContactsFragment extends SherlockFragment {
 			
 			int intColumnId = cr.getColumnIndex(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID);
 			int intColumnContactNumber = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER);
-			int intColumnZname = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
-			int intColumnZnameDp = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS);
+			int intColumnDisplayName = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
+			int intColumnZname = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME);
+			int intColumnZnumber = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_NUMBER);
+			int intColumnZnameDp = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_SMALL);
 			if(crAll!=null){
 				crAll.close();	
 			}
@@ -382,8 +400,12 @@ public class FriendsContactsFragment extends SherlockFragment {
 				{
 					cursor.moveToFirst();
 					
-					c.setContactNumber(cursor.getString(intColumnContactNumber));
-					c.setContactName(cursor.getString(intColumnZname));
+					c.setContactNumber(
+							TextUtils.isEmpty(cursor.getString(intColumnZnumber))
+							?cursor.getString(intColumnContactNumber)
+							:cursor.getString(intColumnZnumber));
+					c.setContactZname(cursor.getString(intColumnZname));
+					c.setContactName(cursor.getString(intColumnDisplayName));
 					c.setContactPhotoUri(Uri.parse(cursor.getString(intColumnZnameDp)));
 					contacts.add(c);
 				}
@@ -445,13 +467,14 @@ public class FriendsContactsFragment extends SherlockFragment {
 		private ArrayList<Contact> contactList;
 		private ArrayList<Contact> originalList;
 		private ContactFilter filter;
+		private Context context;
 
 		public ContactAdapter(Context context, int textViewResourceId, ArrayList<Contact> items) {
 			super(context, textViewResourceId, items);
 
 			this.contactList = new ArrayList<Contact>();
 			this.originalList = new ArrayList<Contact>();
-
+			this.context = context;
 			this.contactList.addAll(items);
 			this.originalList.addAll(items);
 
@@ -511,27 +534,39 @@ public class FriendsContactsFragment extends SherlockFragment {
 //				ImageView imgMsg = (ImageView) view.findViewById(R.id.grid_item_message);
 
 				TextView displayName = (TextView) view.findViewById(R.id.list_item_display_name);
-				ImageView displayPicture = (ImageView) view.findViewById(R.id.list_item_display_picture);
+				final ImageView displayPicture = (ImageView) view.findViewById(R.id.list_item_display_picture);
 				TextView displayZname = (TextView) view.findViewById(R.id.list_item_zname);
 				ImageView imgCall = (ImageView) view.findViewById(R.id.list_item_call);
 				ImageView imgMsg = (ImageView) view.findViewById(R.id.list_item_message);
 //				 EU ZM004
-				displayPicture.setImageURI(contact.getContactPhotoUri());
+				if(contact.getContactPhotoUri().toString().contains("http")){
+					((Activity) context).runOnUiThread(new Runnable() {
 
-				if (displayPicture.getDrawable() == null)
-					displayPicture.setImageResource(R.drawable.def_contact);
+			            @Override
+			            public void run() {
+			                // TODO Auto-generated method stub
+			                imageLoader.displayImage(contact.getContactPhotoUri().toString(), displayPicture, options);
+			            }
+			        });
+				}else{
+					displayPicture.setImageURI(contact.getContactPhotoUri());
+					if (displayPicture.getDrawable() == null)
+						displayPicture.setImageResource(R.drawable.def_contact);
+				}
 
 				displayName.setText(contact.getContactName());
 				displayZname.setText(
-							contact.getContactNumber().contains(",")
-							?contact.getContactNumber().toString().substring(0, contact.getContactNumber().toString().indexOf(","))
-						    :contact.getContactNumber()
+						TextUtils.isEmpty(contact.getContactZname())
+						?contact.getContactNumber().contains(",")
+								?contact.getContactNumber().toString().substring(0, contact.getContactNumber().toString().indexOf(",")).replace("\"", "")
+										:contact.getContactNumber().replace("\"", "")
+						:contact.getContactZname()
 							);
 				
 				displayName.setTypeface(styleFont);
 				displayZname.setTypeface(styleFont);
 				
-				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber());
+				view.setTag(R.id.TAG_CONTACT_NUMBER, contact.getContactNumber().replace("\"", ""));
 				view.setTag(R.id.TAG_CONTACT_DP, contact.getContactPhotoUri());
 				view.setTag(R.id.TAG_CONTACT_NAME, contact.getContactName());
 				view.setTag(R.id.TAG_CONTACT_ID, contact.getContactId());
@@ -542,7 +577,7 @@ public class FriendsContactsFragment extends SherlockFragment {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						Intent callIntent = new Intent(Intent.ACTION_DIAL);
-				          callIntent.setData(Uri.parse("tel:"+Uri.encode(contact.getContactNumber())));
+				          callIntent.setData(Uri.parse("tel:"+Uri.encode(contact.getContactNumber().replace("\"", ""))));
 				          startActivity(callIntent);
 					}
 				});
@@ -551,7 +586,7 @@ public class FriendsContactsFragment extends SherlockFragment {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contact.getContactNumber())));
+						Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"+Uri.encode(contact.getContactNumber().replace("\"", ""))));
 			            startActivity(smsIntent);
 					}
 				});
