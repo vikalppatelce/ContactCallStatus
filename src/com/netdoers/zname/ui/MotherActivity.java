@@ -15,7 +15,6 @@
 
 package com.netdoers.zname.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -45,8 +44,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
-import com.netdoers.zname.Zname;
-import com.netdoers.zname.service.ImportContactsService;
 import com.netdoers.zname.utils.PagerSlidingTabStrip;
 
 
@@ -480,10 +477,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 		case R.id.action_settings:
 			Intent settingIntent = new Intent(this, SettingsActivity.class);
 			startActivity(settingIntent);
-			return true;
-		case R.id.action_refresh:
-			Zname.getPreferences().setFirstTime(false);
-			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

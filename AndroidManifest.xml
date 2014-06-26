@@ -87,6 +87,9 @@
         <activity
             android:name="com.netdoers.zname.ui.SignInActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.netdoers.zname.ui.VerificationActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="com.netdoers.zname.sqlite.ZnameDB"
