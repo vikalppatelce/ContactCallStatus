@@ -241,7 +241,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 		super.onResume();
 		
 		getActivity().getContentResolver().registerContentObserver(
-				android.provider.CallLog.CONTENT_URI, false,
+				android.provider.CallLog.CONTENT_URI, true,
 				callLogContentObserver);
 		
 		if(Zname.getPreferences().getRefreshCallLogs()){

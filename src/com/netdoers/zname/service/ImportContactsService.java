@@ -2,7 +2,7 @@
  * CATEGORY			 :- SERVICE
  * DEVELOPER		 :- VIKALP PATEL
  * AIM      		 :- IMPORT CONTACT SERVICE + CONTENT OBSERVER ON CONTACTS.CONTACTSCONTRACTS.DATA
- * DESCRIPTION       :- SERVICE START ONCE REGISTRATION IS DONE. CALLED WHENEVER CONTACTS DATA CHANGES IN CONTACT.CONTACTSCONTRACTS.DATA
+ * DESCRIPTION       :- SERVICE START ONCE REGISTRATION IS DONE. CALLED ONCE TO IMPORT CONTACTS.
  * 
  * 
  * S - START E- END  C- COMMENTED  U -EDITED A -ADDED
@@ -48,7 +48,7 @@ public class ImportContactsService extends Service {
 	Intent broadCastIntent;
 	
 	//CONTENT OBSERVER;
-	ContactsContentObserver contactsContentObserver;
+//	ContactsContentObserver contactsContentObserver;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -74,7 +74,7 @@ public class ImportContactsService extends Service {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Zname.getApplication().getContentResolver().unregisterContentObserver(contactsContentObserver);
+//		Zname.getApplication().getContentResolver().unregisterContentObserver(contactsContentObserver);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class ImportContactsService extends Service {
 		super.onCreate();
 		onStartService();
 		
-		contactsContentObserver = new ContactsContentObserver();
-		Zname.getApplication().getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
+//		contactsContentObserver = new ContactsContentObserver();
+//		Zname.getApplication().getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, String.valueOf(System.currentTimeMillis()));
 		}
@@ -94,19 +94,19 @@ public class ImportContactsService extends Service {
 		new ImportContactsTask(false).execute();
 	}
 	
-	private class ContactsContentObserver extends ContentObserver {
-
-        public ContactsContentObserver() {
-            super(null);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            Zname.getPreferences().setRefreshContact(true);
-            new ImportContactsTask(true).execute();
-        }
-    }
+//	private class ContactsContentObserver extends ContentObserver {
+//
+//        public ContactsContentObserver() {
+//            super(null);
+//        }
+//
+//        @Override
+//        public void onChange(boolean selfChange) {
+//            super.onChange(selfChange);
+//            Zname.getPreferences().setRefreshContact(true);
+//            new ImportContactsTask(true).execute();
+//        }
+//    }
 
 	private void DisplayLoggingInfo(String message) {
     	Log.d(TAG, "entered DisplayLoggingInfo");

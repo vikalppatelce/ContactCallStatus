@@ -478,6 +478,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 			Intent settingIntent = new Intent(this, SettingsActivity.class);
 			startActivity(settingIntent);
 			return true;
+		case R.id.action_notification:
+			Intent notificationIntent = new Intent(this, NotificationActivity.class);
+			startActivity(notificationIntent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

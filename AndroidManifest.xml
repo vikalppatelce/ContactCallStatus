@@ -79,16 +79,23 @@
             android:name="com.netdoers.zname.ui.AddZnameActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.netdoers.zname.ui.ProfileUpdateActivity"
+            android:name="com.netdoers.zname.ui.DepreceatedProfileUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.ProfileZnameActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.netdoers.zname.ui.ProfileAddZnameActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
             android:name="com.netdoers.zname.ui.SignInActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.VerificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.netdoers.zname.ui.NotificationActivity"
             android:screenOrientation="portrait" />
 
         <provider
@@ -96,7 +103,7 @@
             android:authorities="com.netdoers.zname.SQLite.ZnameDB" />
 
         <service android:name="com.netdoers.zname.service.ImportContactsService" />
-        <service android:name="com.netdoers.zname.service.PushPullContactsService" />
+        <service android:name="com.netdoers.zname.service.SyncContactsService" />
         <service android:name="com.netdoers.zname.service.IncomingOutgoingPushService" />
 
         <receiver android:name="com.netdoers.zname.receiver.ReceiverInComingCall" >

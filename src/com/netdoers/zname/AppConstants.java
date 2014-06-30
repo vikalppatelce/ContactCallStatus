@@ -34,11 +34,18 @@ public class AppConstants {
 		public static final String SEARCH_URL 		= "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String SYNC_URL 		= "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String SIGN_IN_URL      = "http://myzname.netdoers.com/api/v1/znames/activation";
-		public static final String VERIFY_URL       = "http://myzname.netdoers.com/api/v1/znames/verification"; 
+		public static final String VERIFY_URL       = "http://myzname.netdoers.com/api/v1/znames/verification";
+		public static final String PENDING_URL      = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String REQUEST_URL      = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/"; 
+		
 //		public static final String MEDIA_BASE_URL 	= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/profilepic";
 //		public static final String CALL_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/callstatus/1"; //1 : BUSY , 0 : AVAILABLE		
 //		public static final String SEARCH_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/users/abc";
 //		public static final String SYNC_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/contactlist";
+//		public static final String PENDING_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/pendingrequests";
+//		public static final String REQUEST_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/addrequest";
+//		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/approverequests";
 	}
 
 	/////////////////////////////////////
@@ -51,6 +58,11 @@ public class AppConstants {
 			public static final String TAG_PHOTO ="photo";
 			public static final String TAG_NUMBER ="number";
 		}
+	}
+	
+	public interface HEADERS{
+		public static final String USER 	= "netdoersadmin";
+		public static final String PASSWORD = "538f25fc32727";
 	}
 	
 	public interface RESPONSES{
