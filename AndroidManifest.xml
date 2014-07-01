@@ -103,6 +103,7 @@
             android:authorities="com.netdoers.zname.SQLite.ZnameDB" />
 
         <service android:name="com.netdoers.zname.service.ImportContactsService" />
+        <service android:name="com.netdoers.zname.service.SyncPhoneBookService"/>
         <service android:name="com.netdoers.zname.service.SyncContactsService" />
         <service android:name="com.netdoers.zname.service.IncomingOutgoingPushService" />
 

@@ -10,6 +10,7 @@
  * --------------------------------------------------------------------------------------------------------------------
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     03/06/2014                       SUPPRESSED DRAWER OVER OVERFLOW MENU
+ * ZM003      VIKALP PATEL     01/07/2014                       ADDED SYNCPHONEBOOK SERVICE
  * --------------------------------------------------------------------------------------------------------------------
  */
 
@@ -44,6 +45,9 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
+import com.netdoers.zname.Zname;
+import com.netdoers.zname.service.ImportContactsService;
+import com.netdoers.zname.service.SyncPhoneBookService;
 import com.netdoers.zname.utils.PagerSlidingTabStrip;
 
 
@@ -181,6 +185,12 @@ public class MotherActivity extends SherlockFragmentActivity {
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
+		
+//		SA ZM003
+		Intent syncPhoneBookIntent =  new Intent(Zname.getApplication().getApplicationContext(), SyncPhoneBookService.class);
+		startService(syncPhoneBookIntent);
+//		EA ZM003
+		
 // 		SU ZM002
 //		mTitle = mDrawerTitle = getTitle();
 //		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
