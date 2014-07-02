@@ -187,6 +187,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
 		
 //		SA ZM003
+		Zname.getPreferences().setLastSyncPhoneBook(String.valueOf(System.currentTimeMillis()));
 		Intent syncPhoneBookIntent =  new Intent(Zname.getApplication().getApplicationContext(), SyncPhoneBookService.class);
 		startService(syncPhoneBookIntent);
 //		EA ZM003
