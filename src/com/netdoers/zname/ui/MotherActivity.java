@@ -432,6 +432,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 		// TODO Auto-generated method stub
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.menu_friends_contacts, menu);
+//		MenuItem overFlowMenu = menu.findItem(R.id.action_more);
+//		MenuItem notificationMenu = menu.findItem(R.id.action_notification);
 		return true;
 	}
 	

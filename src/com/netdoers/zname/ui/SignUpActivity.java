@@ -257,6 +257,18 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			return false;
 		}
 		
+		if(TextUtils.isEmpty(zNumber.getText().toString()) && zNumber.getText().toString().trim().matches("[0-9]+")){
+			zNumber.setError("Please enter valid number");
+			zNumber.setFocusable(true);
+			return false;
+		}
+		
+		if(zNumber.getText().toString().length() != 10){
+			zNumber.setError("Please enter valid 10 digit contact number");
+			zNumber.setFocusable(true);
+			return false;
+		}
+		
 		if(TextUtils.isEmpty(fullName.getText().toString())){
 			fullName.setError("Please enter name");
 			fullName.setFocusable(true);
