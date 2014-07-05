@@ -1,13 +1,15 @@
 package com.netdoers.zname.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.util.Locale;
 
+import com.netdoers.zname.Zname;
+
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -87,5 +89,22 @@ public class Utilities {
   			e.printStackTrace();
   				return "";
   		}
+  	}
+  	
+  	public static String parseJSONFromFile(String s){
+  		BufferedReader r;
+  		StringBuilder str = new StringBuilder();
+		try {
+			r = new BufferedReader(new InputStreamReader(Zname.getApplication().getApplicationContext().getAssets().open(s)));
+			String line;
+			while ((line = r.readLine()) != null) {
+			    str.append(line);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return str.toString();
   	}
 }

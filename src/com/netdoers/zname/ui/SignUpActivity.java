@@ -219,7 +219,6 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	} 
 	public void onDisplayPicture(View v)
 	{
-		
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);

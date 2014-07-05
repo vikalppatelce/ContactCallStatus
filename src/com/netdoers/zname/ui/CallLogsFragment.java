@@ -323,7 +323,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 			callLogsOutGoing.setImageResource(R.drawable.btn_ic_outgoing);
 			callLogsMissed.setImageResource(R.drawable.btn_ic_missed);
 			
-			if (arrayListCallLog != null) {
+			if (arrayListCallLog != null && arrayListCallLog.size() > 0) {
 				callLogsAdapter = new CallLogAdapter(arrayListCallLog);
 				callLogsListView.setAdapter(callLogsAdapter);
 			}
@@ -678,6 +678,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 			ImageView imgMsg = (ImageView)view.findViewById(R.id.list_item_call_log_message);//EA ZM004
 //			ImageView img = (ImageView)view.findViewById(R.id.grid_item_display_picture);
 			
+
 			String _name = arrayListCallLog.get(position).getCallLogName()!=null ? arrayListCallLog.get(position).getCallLogName(): "Unknown";
 		
 			if(_name.equalsIgnoreCase("Unknown")){ //SA ZM004
