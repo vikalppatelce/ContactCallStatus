@@ -46,6 +46,8 @@ public class ZnameDB extends ContentProvider{
 	private static final int WORKCONTACTS = 4;
 	private static final int RANDOMCONTACTS = 5;
 	private static final int USERSTATUS = 6;
+	private static final int GROUPS = 7;
+	private static final int GROUPCONTACTS = 8;
 	
 	private static HashMap<String, String> allContactsProjectionMap;
 	private static HashMap<String, String> friendsContactsProjectionMap;
@@ -53,6 +55,8 @@ public class ZnameDB extends ContentProvider{
 	private static HashMap<String, String> workContactsProjectionMap;
 	private static HashMap<String, String> randomContactsProjectionMap;
 	private static HashMap<String, String> userStatusProjectionMap;
+	private static HashMap<String, String> groupsProjectionMap;
+	private static HashMap<String, String> groupContactsProjectionMap;
 	
 	private static class OpenHelper extends SQLiteOpenHelper {
 
@@ -160,6 +164,36 @@ public class ZnameDB extends ContentProvider{
 			if (BuildConfig.DEBUG) {
 				Log.i(TAG, strBuilder.toString());
 			}
+			
+			//groups
+			strBuilder = new StringBuilder();
+			strBuilder.append("CREATE TABLE ");
+			strBuilder.append(DBConstant.TABLE_GROUPS);
+			strBuilder.append('(');
+			strBuilder.append(DBConstant.Groups_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
+			strBuilder.append(DBConstant.Groups_Columns.COLUMN_GROUP_ID +" TEXT NOT NULL," );
+			strBuilder.append(DBConstant.Groups_Columns.COLUMN_GROUP_NAME +" TEXT NOT NULL," );
+			strBuilder.append(DBConstant.Groups_Columns.COLUMN_GROUP_DP +" TEXT" );
+			strBuilder.append(')');
+			db.execSQL(strBuilder.toString());
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, strBuilder.toString());
+			}
+			
+			//groupContacts
+			strBuilder = new StringBuilder();
+			strBuilder.append("CREATE TABLE ");
+			strBuilder.append(DBConstant.TABLE_GROUP_CONTACTS);
+			strBuilder.append('(');
+			strBuilder.append(DBConstant.Groups_Contacts_Columns.COLUMN_ID +" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," ); 
+			strBuilder.append(DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +" TEXT NOT NULL," );
+			strBuilder.append(DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID +" TEXT NOT NULL," );
+			strBuilder.append(DBConstant.Groups_Contacts_Columns.COLUMN_NAME +" TEXT" );
+			strBuilder.append(')');
+			db.execSQL(strBuilder.toString());
+			if (BuildConfig.DEBUG) {
+				Log.i(TAG, strBuilder.toString());
+			}
 		}
 
 		
@@ -171,6 +205,8 @@ public class ZnameDB extends ContentProvider{
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_WORK_CONTACTS);
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_RANDOM_CONTACTS);
 			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_STATUS);
+			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_GROUPS);
+			db.execSQL("DROP TABLE IF EXISTS " + DBConstant.TABLE_GROUP_CONTACTS);
 			
 			onCreate(db);
 		}
@@ -210,6 +246,12 @@ public class ZnameDB extends ContentProvider{
 		case USERSTATUS:
 			count = db.delete(DBConstant.TABLE_STATUS, where, whereArgs);
 			break;
+		case GROUPS:
+			count = db.delete(DBConstant.TABLE_GROUPS, where, whereArgs);
+			break;
+		case GROUPCONTACTS:
+			count = db.delete(DBConstant.TABLE_GROUP_CONTACTS, where, whereArgs);
+			break;
 		
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -235,6 +277,10 @@ public class ZnameDB extends ContentProvider{
 			return DBConstant.Random_Contacts_Columns.CONTENT_TYPE;
 		case USERSTATUS:
 			return DBConstant.User_Status_Columns.CONTENT_TYPE;
+		case GROUPS:
+			return DBConstant.Groups_Columns.CONTENT_TYPE;
+		case GROUPCONTACTS:
+			return DBConstant.Groups_Contacts_Columns.CONTENT_TYPE;
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -246,6 +292,7 @@ public class ZnameDB extends ContentProvider{
 		// TODO Auto-generated method stub
 		if (sUriMatcher.match(uri) != ALLCONTACTS && sUriMatcher.match(uri) != FRIENDSCONTACTS
 					&& sUriMatcher.match(uri) != FAMILYCONTACTS && sUriMatcher.match(uri) != USERSTATUS
+					&& sUriMatcher.match(uri) != GROUPS && sUriMatcher.match(uri) != GROUPCONTACTS
 			&& sUriMatcher.match(uri) != WORKCONTACTS && sUriMatcher.match(uri) != RANDOMCONTACTS) 
 		{ 
 			throw new IllegalArgumentException("Unknown URI " + uri); 
@@ -318,6 +365,24 @@ public class ZnameDB extends ContentProvider{
 					return noteUri;
 				}
 				break;
+			case GROUPS:
+				 rowId = db.insertWithOnConflict(DBConstant.TABLE_GROUPS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+				if (rowId > 0) 
+				{
+					Uri noteUri = ContentUris.withAppendedId(DBConstant.Groups_Columns.CONTENT_URI, rowId);
+					getContext().getContentResolver().notifyChange(noteUri, null);
+					return noteUri;
+				}
+				break;
+			case GROUPCONTACTS:
+				 rowId = db.insertWithOnConflict(DBConstant.TABLE_GROUP_CONTACTS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+				if (rowId > 0) 
+				{
+					Uri noteUri = ContentUris.withAppendedId(DBConstant.Groups_Contacts_Columns.CONTENT_URI, rowId);
+					getContext().getContentResolver().notifyChange(noteUri, null);
+					return noteUri;
+				}
+				break;
 				
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
@@ -364,6 +429,14 @@ public class ZnameDB extends ContentProvider{
 			qb.setTables(DBConstant.TABLE_STATUS);
 			qb.setProjectionMap(userStatusProjectionMap);
 			break;
+		case GROUPS:
+			qb.setTables(DBConstant.TABLE_GROUPS);
+			qb.setProjectionMap(groupsProjectionMap);
+			break;
+		case GROUPCONTACTS:
+			qb.setTables(DBConstant.TABLE_GROUP_CONTACTS);
+			qb.setProjectionMap(groupContactsProjectionMap);
+			break;
 		
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -400,6 +473,12 @@ public class ZnameDB extends ContentProvider{
 		case USERSTATUS:
 			count = db.update(DBConstant.TABLE_STATUS, values, where, whereArgs);
 			break;
+		case GROUPS:
+			count = db.update(DBConstant.TABLE_GROUPS, values, where, whereArgs);
+			break;
+		case GROUPCONTACTS:
+			count = db.update(DBConstant.TABLE_GROUP_CONTACTS, values, where, whereArgs);
+			break;
 
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -419,6 +498,9 @@ public class ZnameDB extends ContentProvider{
 		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_RANDOM_CONTACTS, RANDOMCONTACTS);
 		
 		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_STATUS, USERSTATUS);
+		
+		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_GROUPS, GROUPS);
+		sUriMatcher.addURI(AUTHORITY, DBConstant.TABLE_GROUP_CONTACTS, GROUPCONTACTS);
 
 		allContactsProjectionMap = new HashMap<String, String>();
 		allContactsProjectionMap.put(DBConstant.All_Contacts_Columns.COLUMN_ID, DBConstant.All_Contacts_Columns.COLUMN_ID);
@@ -463,6 +545,18 @@ public class ZnameDB extends ContentProvider{
 		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_ZNAME_ID, DBConstant.User_Status_Columns.COLUMN_ZNAME_ID);
 		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_STATUS, DBConstant.User_Status_Columns.COLUMN_STATUS);
 		userStatusProjectionMap.put(DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE, DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE);
+
+		groupsProjectionMap = new HashMap<String, String>();
+		groupsProjectionMap.put(DBConstant.Groups_Columns.COLUMN_ID, DBConstant.Groups_Columns.COLUMN_ID);
+		groupsProjectionMap.put(DBConstant.Groups_Columns.COLUMN_GROUP_ID, DBConstant.Groups_Columns.COLUMN_GROUP_ID);
+		groupsProjectionMap.put(DBConstant.Groups_Columns.COLUMN_GROUP_NAME, DBConstant.Groups_Columns.COLUMN_GROUP_NAME);
+		groupsProjectionMap.put(DBConstant.Groups_Columns.COLUMN_GROUP_DP, DBConstant.Groups_Columns.COLUMN_GROUP_DP);
+
+		groupContactsProjectionMap = new HashMap<String, String>();
+		groupContactsProjectionMap.put(DBConstant.Groups_Contacts_Columns.COLUMN_ID, DBConstant.Groups_Contacts_Columns.COLUMN_ID);
+		groupContactsProjectionMap.put(DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID);
+		groupContactsProjectionMap.put(DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID, DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID);
+		groupContactsProjectionMap.put(DBConstant.Groups_Contacts_Columns.COLUMN_NAME, DBConstant.Groups_Contacts_Columns.COLUMN_NAME);
 
 		}	
 }

@@ -12,7 +12,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 	// Declare the number of ViewPager pages
-	final int PAGE_COUNT = 5;
+//	final int PAGE_COUNT = 5;
+	final int PAGE_COUNT = 3;
 	
 	/**
 	 * @param fm
@@ -34,6 +35,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 			return homeFragment;
 			// Open PlaceOrderFragment.java
 		case 1:
+			GroupsFragment groupsFragment = new GroupsFragment();
+			return groupsFragment;
+		case 2:
+			CallLogsFragment callLogsFragment = new CallLogsFragment();
+			return callLogsFragment;
+		/*case 1:
 			FriendsContactsFragment placeOrderFragment = new FriendsContactsFragment();
 			return placeOrderFragment;
 
@@ -47,7 +54,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 		case 4:
 			CallLogsFragment callLogsFragment = new CallLogsFragment();
 			return callLogsFragment;
-		}
+*/		}
 		return null;
 	}
 
@@ -61,3 +68,4 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	}
 
 }
+

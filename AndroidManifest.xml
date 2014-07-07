@@ -76,6 +76,10 @@
         <activity
             android:name="com.netdoers.zname.ui.CallLogsDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity 
+            android:name="com.netdoers.zname.ui.GroupContactsActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name="com.netdoers.zname.ui.AddZnameActivity"
             android:screenOrientation="portrait" />

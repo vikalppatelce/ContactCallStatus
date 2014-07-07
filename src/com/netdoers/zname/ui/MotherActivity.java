@@ -114,6 +114,12 @@ public class MotherActivity extends SherlockFragmentActivity {
 					setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment));
 					break;
 				case 1:
+					setMotherActionBarTitle(getString(R.string.str_group_contacts_fragment));
+					break;
+				case 2:
+					setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
+					break;
+				/*case 1:
 					setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
 					break;
 				case 2:
@@ -124,7 +130,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 					break;
 				case 4:
 					setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
-					break;
+					break;*/
 				}
 			}
 		};
@@ -164,8 +170,14 @@ public class MotherActivity extends SherlockFragmentActivity {
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment));
-		
+
 		// Create second Tab
+//		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
+		mActionBar.addTab(tab);
+		setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
+		
+		/*// Create second Tab
 //		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
@@ -180,7 +192,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 //		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_work_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
-		setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));
+		setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));*/
 		
 //		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);

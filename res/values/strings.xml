@@ -46,6 +46,7 @@
     <string name="str_family_contacts_fragment">Family</string>
     <string name="str_work_contacts_fragment">Work</string>
     <string name="str_call_logs_fragment">Call Logs</string>
+    <string name="str_group_contacts_fragment">Groups</string>
 
 
     <!-- Sign In -->
