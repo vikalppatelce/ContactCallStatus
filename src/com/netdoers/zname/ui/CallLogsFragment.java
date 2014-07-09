@@ -89,7 +89,7 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 	private CallLogAdapter callLogsAdapter = null;
 
 	//CONSTANTS
-	public static final String TAG = "CallLogsFragment";
+	public static final String TAG = CallLogsFragment.class.getSimpleName();
 
 	//DECLARE VARIABLES
 	private int mLastFirstVisibleItem;

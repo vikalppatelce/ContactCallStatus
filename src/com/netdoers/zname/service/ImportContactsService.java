@@ -44,7 +44,7 @@ import com.netdoers.zname.sqlite.DBConstant;
 public class ImportContactsService extends Service {
 
 	private static final String TAG = "ImportContactsService";
-	public static final String BROADCAST_ACTION = "com.netdoers.zname.AllContactsFragment";
+	public static final String BROADCAST_ACTION = "com.netdoers.zname.ImportContactsService";
 	Intent broadCastIntent;
 	
 	//CONTENT OBSERVER;

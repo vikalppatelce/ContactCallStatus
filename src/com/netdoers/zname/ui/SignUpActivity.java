@@ -59,7 +59,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	static Typeface styleFont;
 	//CONSTANT
 	public static final int IMPORT_PICTURE 					= 10001;
-	public static final String TAG 							= "SignUpActivity";
+	public static final String TAG 							= SignUpActivity.class.getSimpleName();
 	//VARIABLES
 	String picturePath = null;
 	String strPicturePath = null;

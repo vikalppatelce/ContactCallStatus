@@ -37,7 +37,9 @@ public class AppConstants {
 		public static final String VERIFY_URL       = "http://myzname.netdoers.com/api/v1/znames/verification";
 		public static final String PENDING_URL      = "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String REQUEST_URL      = "http://myzname.netdoers.com/api/v1/znames/";
-		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/"; 
+		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String GCM_URL          = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String CALL_SYNC_URL    = "http://myzname.netdoers.com/api/v1/znames/";
 		
 //		public static final String MEDIA_BASE_URL 	= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/profilepic";
 //		public static final String CALL_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/callstatus/1"; //1 : BUSY , 0 : AVAILABLE		
@@ -46,6 +48,8 @@ public class AppConstants {
 //		public static final String PENDING_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/pendingrequests";
 //		public static final String REQUEST_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/addrequest";
 //		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/approverequests";
+//		public static final String GCM_URL          = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/appregistraion";
+//		public static final String CALL_SYNC_URL    = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/users/callstatus";
 	}
 
 	/////////////////////////////////////
@@ -79,6 +83,7 @@ public class AppConstants {
 	public static final String IMAGE_DIRECTORY_PATH_DATA = Zname.getApplication().getApplicationContext().getFilesDir().getAbsolutePath();
 	public static final String EXTENSION = ".jpg";
 	public static final String VIDEO_EXTENSION = ".mp4";
+	public static final String GCM_SENDER_ID = "133307685455";
 	
 	//////////////////////////////////////////
 	// APPLICATION FONT STYLE
