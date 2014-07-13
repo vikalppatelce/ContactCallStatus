@@ -2,13 +2,9 @@
 
     <string-array name="planets_array">
         <item>Zname</item>
-        <item>Edit Profile</item>
+        <item>Notifications</item>
         <item>Settings</item>
-        <!-- <item>Gallery</item> -->
-        <!-- <item>Temple</item> -->
-        <!-- <item>History</item> -->
-        <!-- <item>Management</item> -->
-        <!-- <item>Contact Us</item> -->
+        <item>Feedback</item>
     </string-array>
     <string-array name="call_logs_array">
         <item>All</item>

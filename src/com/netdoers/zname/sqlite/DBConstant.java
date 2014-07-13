@@ -22,22 +22,17 @@ public class DBConstant {
 
 	public static final String DB_NAME = "ZnameDB";
 	
-	public static final String TABLE_ALL_CONTACTS 			    = "allContacts";
-	public static final String TABLE_FRIENDS_CONTACTS 		    = "friendsContacts";
-	public static final String TABLE_FAMILY_CONTACTS	 	    = "familyContacts";
-	public static final String TABLE_WORK_CONTACTS   		    = "workContacts";
-	public static final String TABLE_RANDOM_CONTACTS 			= "randomContacts";
-	public static final String TABLE_CALL_LOG 					= "callLog";
-	public static final String TABLE_STATUS 					= "user_status";
+	public static final String TABLE_ALL_CONTACTS 			    = "contacts";
 	public static final String TABLE_GROUPS 					= "groups";
 	public static final String TABLE_GROUP_CONTACTS				= "groupContacts";
-
+	public static final String TABLE_STATUS 					= "user_status";
 	
-//	public static final Uri DISTINCT_CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/allContacts");
+	
+//	public static final Uri DISTINCT_CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/contacts");
 	public static class All_Contacts_Columns implements BaseColumns
 	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/allContacts");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/allContacts";
+		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/contacts");
+		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/contacts";
 		
 		public static final String COLUMN_ID 							= "_id";
 		public static final String COLUMN_ZNAME_ID 					    = "_zname_id";
@@ -51,61 +46,6 @@ public class DBConstant {
 		public static final String COLUMN_CALL_STATUS 					= "_call_status";
 		public static final String COLUMN_LAST_SPOKE 				    = "_last_spoke";
 		public static final String COLUMN_SYNC_STATUS 					= "_status";
-	}
-
-	public static class Friends_Contacts_Columns implements BaseColumns
-	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/friendsContacts");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/friendsContacts";
-
-		public static final String COLUMN_ID 							= "_id";
-		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
-		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
-		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
-	}
-	
-	public static class Family_Contacts_Columns implements BaseColumns
-	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/familyContacts");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/familyContacts";
-
-		public static final String COLUMN_ID 							= "_id";
-		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
-		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
-		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
-	}
-	
-	public static class Work_Contacts_Columns implements BaseColumns
-	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/workContacts");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/workContacts";
-
-		public static final String COLUMN_ID 							= "_id";
-		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
-		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
-		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
-	}
-	
-	public static class Random_Contacts_Columns implements BaseColumns
-	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/randomContacts");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/randomContacts";
-
-		public static final String COLUMN_ID 							= "_id";
-		public static final String COLUMN_CONTACT_ID 					= "_contact_id";
-		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
-		public static final String COLUMN_DISPLAY_NAME					= "_display_name";
-	}
-	
-	public static class User_Status_Columns implements BaseColumns
-	{
-		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/user_status");
-		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/user_status";
-
-		public static final String COLUMN_ID 							= "_id";
-		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
-		public static final String COLUMN_STATUS			     		= "_status";
-		public static final String COLUMN_STATUS_TYPE    	     		= "status_type";
 	}
 	
 	public static class Groups_Columns implements BaseColumns
@@ -127,5 +67,16 @@ public class DBConstant {
 		public static final String COLUMN_GROUP_ID 	 					= "_group_id";
 		public static final String COLUMN_CONTACT_ID					= "_contact_id";
 		public static final String COLUMN_NAME							= "_name";
+	}
+	
+	public static class User_Status_Columns implements BaseColumns
+	{
+		public static final Uri CONTENT_URI = Uri.parse("content://"+ ZnameDB.AUTHORITY + "/user_status");
+		public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/user_status";
+
+		public static final String COLUMN_ID 							= "_id";
+		public static final String COLUMN_ZNAME_ID 						= "_zname_id";
+		public static final String COLUMN_STATUS			     		= "_status";
+		public static final String COLUMN_STATUS_TYPE    	     		= "status_type";
 	}
 }
