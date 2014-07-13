@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.util.Locale;
 
+import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
 
 import android.annotation.SuppressLint;
@@ -14,6 +15,8 @@ import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
+import android.util.Log;
+import android.widget.TextView;
 
 @SuppressLint("DefaultLocale")
 public class Utilities {

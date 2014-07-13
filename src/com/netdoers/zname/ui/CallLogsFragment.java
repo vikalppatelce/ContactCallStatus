@@ -38,6 +38,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.app.DialogFragment;
@@ -239,7 +240,6 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
 		getActivity().getContentResolver().registerContentObserver(
 				android.provider.CallLog.CONTENT_URI, true,
 				callLogContentObserver);
@@ -286,7 +286,6 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 		super.onPause();
 		getActivity().getContentResolver().unregisterContentObserver(callLogContentObserver);
 	}
-	
 	//ASYNCTASK -> LOAD CALL LOGS
 	
 	private class AsyncLoadCallLogs extends AsyncTask<Void, Void, Void>

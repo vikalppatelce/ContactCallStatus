@@ -80,7 +80,7 @@ public class ZnameDB extends ContentProvider{
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_BIG +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_SMALL +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER +" TEXT UNIQUE ," );
-			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_NUMBER +" TEXT UNIQUE ," );
+			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_NUMBER +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_CALL_STATUS +" NUMBER DEFAULT 2 ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_LAST_SPOKE +" TEXT ," );
 			strBuilder.append(DBConstant.All_Contacts_Columns.COLUMN_SYNC_STATUS +" NUMBER" );

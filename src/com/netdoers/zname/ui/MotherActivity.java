@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.JSONObject;
 
+import android.R.color;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,10 +34,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,7 +48,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +71,9 @@ import com.netdoers.zname.Zname;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.RestClient;
 import com.netdoers.zname.service.SyncPhoneBookService;
+import com.netdoers.zname.utils.CircleImageView;
 import com.netdoers.zname.utils.PagerSlidingTabStrip;
+import com.netdoers.zname.utils.SlidingTabLayout;
 
 
 /**
@@ -77,10 +83,11 @@ import com.netdoers.zname.utils.PagerSlidingTabStrip;
 public class MotherActivity extends SherlockFragmentActivity {
 
 	// Declare Variables
-	ActionBar mActionBar;
-	ViewPager mPager;
-	PagerSlidingTabStrip pagerSlidingTabStrp; 
-	Tab tab;
+	private ActionBar mActionBar;
+	private ViewPager mPager;
+	private PagerSlidingTabStrip pagerSlidingTabStrp; 
+	private Tab tab;
+	private SlidingTabLayout mSlidingTabLayout; //SLIDINGTABLAYOUT
 	
 	//TYPEFACE
 	Typeface styleFont;
@@ -104,14 +111,14 @@ public class MotherActivity extends SherlockFragmentActivity {
     String regid;
 	//EA GCM
 	
-//	SU ZM002
-//	private DrawerLayout mDrawerLayout;
-//	private ListView mDrawerList;
-//	private ActionBarDrawerToggle mDrawerToggle;
-//
-//	private CharSequence mDrawerTitle;
-//	private CharSequence mTitle;
-//	private String[] mPlanetTitles;
+//	SU ZM002 //DRAWER LAYOUT
+	private DrawerLayout mDrawerLayout;
+	private ListView mDrawerList;
+	private ActionBarDrawerToggle mDrawerToggle;
+
+	private CharSequence mDrawerTitle;
+	private CharSequence mTitle;
+	private String[] mPlanetTitles;
 //	EU ZM002
 
 	/* (non-Javadoc)
@@ -127,21 +134,23 @@ public class MotherActivity extends SherlockFragmentActivity {
 		
 		// Activate Navigation Mode Tabs
 		mActionBar = getSupportActionBar();
-		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		/**
+		 * ACTIONBAR TABS
+		 */
+//		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); 
 		
 		// Locate ViewPager in activity_main.xml
 		mPager = (ViewPager) findViewById(R.id.pager);
-		
-		// Activate Fragment Manager
-		FragmentManager fm = getSupportFragmentManager();
-
-		// Capture ViewPager page swipes
 		ViewPager.SimpleOnPageChangeListener ViewPagerListener = new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
 				// Find the ViewPager Position
-				mActionBar.setSelectedNavigationItem(position);
+				/**
+				 * ACTIONBAR TABS
+				 */
+//				mActionBar.setSelectedNavigationItem(position); 
 				switch(position)
 				{
 				case 0:
@@ -153,85 +162,80 @@ public class MotherActivity extends SherlockFragmentActivity {
 				case 2:
 					setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
 					break;
-				/*case 1:
-					setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
-					break;
-				case 2:
-					setMotherActionBarTitle(getString(R.string.str_family_contacts_fragment));
-					break;
-				case 3:
-					setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));
-					break;
-				case 4:
-					setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
-					break;*/
 				}
 			}
 		};
 
-		mPager.setOnPageChangeListener(ViewPagerListener);
+		/**
+		 * ACTIONBAR TAB
+		 */
+//		mPager.setOnPageChangeListener(ViewPagerListener);
+		
 		// Locate the adapter class called ViewPagerAdapter.java
-		ViewPagerAdapter viewpageradapter = new ViewPagerAdapter(fm);
+		ViewPagerAdapter viewpageradapter = new ViewPagerAdapter(getSupportFragmentManager());
 		// Set the View Pager Adapter into ViewPager
 		mPager.setAdapter(viewpageradapter);
-		//PAGER SLIDING TAB STRIP
-//		pagerSlidingTabStrp = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding_tab_strip);
-//		pagerSlidingTabStrp.setViewPager(mPager);
-//		pagerSlidingTabStrp.setOnPageChangeListener(ViewPagerListener);
 		
-		// Capture tab button clicks
-		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+		/**
+		 * SLIDINGTABSLAYOUT
+		 */
+		/*mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+		mSlidingTabLayout.setViewPager(mPager);*/
+		
+		/**
+		 * PAGER SLIDING TAB STRIP
+		 */
+		pagerSlidingTabStrp = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding_tab_strip);
+		pagerSlidingTabStrp.setShouldExpand(true);
+		pagerSlidingTabStrp.setViewPager(mPager);
+		pagerSlidingTabStrp.setOnPageChangeListener(ViewPagerListener);
 
-			@Override
-			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// Pass the position on tab click to ViewPager
-				mPager.setCurrentItem(tab.getPosition());
-			}
-
-			@Override
-			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-			}
-		};
-
-		// Create first Tab
-//		tab = mActionBar.newTab().setText("Tab1").setTabListener(tabListener);
+		/**
+		 * ACTIONBAR TABS
+		 */
+		
+		/*
+		// CREATE CONTACTS TAB
+		tab = mActionBar.newTab().setText("Tab1").setTabListener(tabListener); //PAGER SLIDING TAB STRIP
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_contact_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment));
 
-		// Create second Tab
+		// CREATE GROUPS TAB
+		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener); //PAGER SLIDING TAB STRIP
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
+		mActionBar.addTab(tab);
+		setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
+
+		// CREATE CALL LOG TAB
+		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
+		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener); //PAGER SLIDING TAB STRIP
+		mActionBar.addTab(tab);
+		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));*/
+
+		/**
+		 * DEPRECEATED AS FIXED GROUPING HAS BEEN REMOVED
+		 */ 
+
+		/*
+		// CREATE FRIENDS GROUP TAB
 //		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
 		
-		/*// Create second Tab
-//		tab = mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector).setTabListener(tabListener);
-		mActionBar.addTab(tab);
-		setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment));
-		
-		// Create third Tab
+		// CREATE FAMILY GROUP TAB
 //		tab = mActionBar.newTab().setText("Tab3").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_family_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_family_contacts_fragment));
 		
+		// CREATE WORK GROUP TAB		
 //		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
 		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_work_selector).setTabListener(tabListener);
 		mActionBar.addTab(tab);
 		setMotherActionBarTitle(getString(R.string.str_work_contacts_fragment));*/
 		
-//		tab = mActionBar.newTab().setText("Tab4").setTabListener(tabListener);
-		tab = mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector).setTabListener(tabListener);
-		mActionBar.addTab(tab);
-		setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
 		
 //		SA ZM003
 		Zname.getPreferences().setLastSyncPhoneBook(String.valueOf(System.currentTimeMillis()));
@@ -270,18 +274,19 @@ public class MotherActivity extends SherlockFragmentActivity {
 		}
 		// EA GCM
 		
-// 		SU ZM002
-//		mTitle = mDrawerTitle = getTitle();
-//		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-//		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-//
-//		// set a custom shadow that overlays the main content when the drawer
-//		// opens
-//		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
-//		// set up the drawer's list view with items and click listener
-//		MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, mPlanetTitles);
-//		mDrawerList.setAdapter(adapter);
+// 		SU ZM002  //DRAWER LAYOUT
+		
+		mTitle = mDrawerTitle = getTitle();
+		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+		// set a custom shadow that overlays the main content when the drawer
+		// opens
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,GravityCompat.START);
+		// set up the drawer's list view with items and click listener
+		MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, mPlanetTitles);
+		mDrawerList.setAdapter(adapter);
 ////		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
 ////				R.layout.drawer_list_item, mPlanetTitles));
 //		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -289,43 +294,41 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 //		 enable ActionBar app icon to behave as action to toggle nav drawer
 
-//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the sliding drawer and the action bar app icon
-//		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-//		mDrawerLayout, /* DrawerLayout object */
-//		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-//		R.string.drawer_open, /* "open drawer" description for accessibility */
-//		R.string.drawer_close /* "close drawer" description for accessibility */
-//		) {
-//			@Override
-//			public void onDrawerClosed(View view) {
-//				getSupportActionBar().setTitle(mTitle);
-//				supportInvalidateOptionsMenu();
-//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//				// invalidateOptionsMenu(); // creates call to
-//				// onPrepareOptionsMenu()
-//			}
-//
-//			@Override
-//			public void onDrawerOpened(View drawerView) {
-//				getSupportActionBar().setTitle(mDrawerTitle);
-//				supportInvalidateOptionsMenu();
-//				getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//				// invalidateOptionsMenu(); // creates call to
-//				// onPrepareOptionsMenu()
-//			}
-//		};
-//		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerToggle = new ActionBarDrawerToggle(this,  //host Activity 
+		mDrawerLayout,  //DrawerLayout object 
+		R.drawable.ic_drawer,  //nav drawer image to replace 'Up' caret 
+		R.string.drawer_open,  //"open drawer" description for accessibility 
+		R.string.drawer_close  //"close drawer" description for accessibility 
+		) {
+			@Override
+			public void onDrawerClosed(View view) {
+				getSupportActionBar().setTitle(mTitle);
+				supportInvalidateOptionsMenu();
+				// invalidateOptionsMenu(); // creates call to
+				// onPrepareOptionsMenu()
+			}
+
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				getSupportActionBar().setTitle(mDrawerTitle);
+				supportInvalidateOptionsMenu();
+				// invalidateOptionsMenu(); // creates call to
+				// onPrepareOptionsMenu()
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
 //		EU ZM002
 		
-//		ContactsContentObserver contactsContentObserver = new ContactsContentObserver();
-//		getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
-//		
-//		CallLogsContentObserver callLogsContentObserver = new CallLogsContentObserver();
-//		getContentResolver().registerContentObserver(CallLog.CONTENT_URI, false, callLogsContentObserver);
+		/*ContactsContentObserver contactsContentObserver = new ContactsContentObserver();
+		getContentResolver().registerContentObserver(android.provider.ContactsContract.Data.CONTENT_URI, false, contactsContentObserver);
+		
+		CallLogsContentObserver callLogsContentObserver = new CallLogsContentObserver();
+		getContentResolver().registerContentObserver(CallLog.CONTENT_URI, false, callLogsContentObserver);*/
 	}
 	
 //	SA GCM
@@ -639,19 +642,39 @@ public class MotherActivity extends SherlockFragmentActivity {
 		    LayoutInflater inflater = (LayoutInflater) context
 		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		    View rowView = inflater.inflate(R.layout.item_list_drawer, parent, false);
+		    
+		    FrameLayout frameProfileLayout = (FrameLayout) rowView.findViewById(R.id.drawer_layout_profile);
+		    LinearLayout frameMenuLayout = (LinearLayout) rowView.findViewById(R.id.drawer_layout_menu);
+		    
+		    CircleImageView imageProfileView = (CircleImageView) rowView.findViewById(R.id.drawer_profile_image);
+		    
+		    TextView textFullNameView = (TextView) rowView.findViewById(R.id.drawer_profile_full_name);
+		    TextView textZnameView = (TextView) rowView.findViewById(R.id.drawer_profile_zname);
 		    TextView textView = (TextView) rowView.findViewById(R.id.text1);
 		    ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-		    textView.setText(values[position]);
 		    
 		    textView.setTypeface(styleFont);
+		    textFullNameView.setTypeface(styleFont);
+		    textZnameView.setTypeface(styleFont);
 		    // Change the icon for Windows and iPhone
-		    String s = values[position];
+//		    String s = values[position];
 			switch (position) {
 			case 0:
-				imageView.setImageResource(R.drawable.ic_drawer_edit);
+				frameMenuLayout.setVisibility(View.GONE);
+				textFullNameView.setText(Zname.getPreferences().getFullName());
+				textZnameView.setText(Zname.getPreferences().getUserName());
 				break;
 			case 1:
+				frameProfileLayout.setVisibility(View.GONE);
+				frameMenuLayout.setVisibility(View.VISIBLE);
+				imageView.setImageResource(R.drawable.ic_drawer_edit);
+				textView.setText(values[position]);
+				break;
+			case 2:
+				frameProfileLayout.setVisibility(View.GONE);
+				frameMenuLayout.setVisibility(View.VISIBLE);
 				imageView.setImageResource(R.drawable.ic_drawer_gear);
+				textView.setText(values[position]);
 				break;
 			default:
 				break;
@@ -733,7 +756,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.menu_friends_contacts, menu);
+		inflater.inflate(R.menu.menu_activity_mother, menu);
 //		MenuItem overFlowMenu = menu.findItem(R.id.action_more);
 //		MenuItem notificationMenu = menu.findItem(R.id.action_notification);
 		return true;
@@ -768,25 +791,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 			return true;
 		case R.id.action_search:
 			Intent searchIntent = new Intent(this,SearchActivity.class);
-			String _title = getActionBarTitle(); 
-			
-			searchIntent.putExtra(SearchActivity.SEARCH_TYPE, _title);
-			String value = "5";
-			
-			if(_title.equalsIgnoreCase(getString(R.string.str_all_contacts_fragment)) || _title.equalsIgnoreCase(getString(R.string.app_name))){
-			}else{
-				if(_title.equalsIgnoreCase(getString(R.string.str_friends_contacts_fragment))){
-					value = "0";
-			    }else {
-			    	if(_title.equalsIgnoreCase(getString(R.string.str_family_contacts_fragment))){
-			    		  value = "1";
-			        }else{
-				    value = "2";
-			        }
-			    }
-			}
-			
-			searchIntent.putExtra(SearchActivity.GROUP_TYPE, value);
 			startActivity(searchIntent);
 			return true;
 		case R.id.action_settings:
@@ -828,14 +832,14 @@ public class MotherActivity extends SherlockFragmentActivity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-//		mDrawerToggle.syncState();   COMMENTED ZM002
+		mDrawerToggle.syncState();  
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggls
-//		mDrawerToggle.onConfigurationChanged(newConfig); COMMENTED ZM002
+		mDrawerToggle.onConfigurationChanged(newConfig); 
 	}
 	
 }

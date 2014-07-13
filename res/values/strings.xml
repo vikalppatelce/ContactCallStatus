@@ -1,6 +1,7 @@
 <resources>
 
     <string-array name="planets_array">
+        <item>Zname</item>
         <item>Edit Profile</item>
         <item>Settings</item>
         <!-- <item>Gallery</item> -->
@@ -48,14 +49,13 @@
     <string name="str_call_logs_fragment">Call Logs</string>
     <string name="str_group_contacts_fragment">Groups</string>
 
-
     <!-- Sign In -->
     <string name="str_sign_head">Please enter your valid z:name</string>
     <string name="str_sign_verify">Verification code will be sent to associated z:number with these z:name</string>
-    
+
     <!-- Group -->
     <string name="str_add_member">Add members</string>
-    
+
     <!-- Profile User -->
     <string name="str_profile_status_work">Watch</string>
     <string name="str_profile_status_read">Read</string>
@@ -80,7 +80,7 @@
     <!-- Contact Picker -->
     <string name="search_hint">Search</string>
 
-    <!-- Profile Update Dialog-->
+    <!-- Profile Update Dialog -->
     <string name="str_profile_update_ok">OK</string>
     <string name="str_profile_update_cancel">CANCEL</string>
     <string name="str_profile_update_name">Update Name</string>
