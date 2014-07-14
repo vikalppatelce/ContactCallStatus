@@ -73,7 +73,7 @@
             android:label="Search"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.netdoers.zname.ui.ProfileNotZnameActivity"
+            android:name="com.netdoers.zname.ui.ProfileContactActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.ProfileActivity"
@@ -96,13 +96,13 @@
             android:name="com.netdoers.zname.ui.DepreceatedProfileUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.netdoers.zname.ui.ProfileZnameActivity"
+            android:name="com.netdoers.zname.ui.ProfileUserActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.ProfileAddZnameActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.netdoers.zname.ui.ProfileApproveZnameActivity"
+            android:name="com.netdoers.zname.ui.ProfileApproveUserActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.SignInActivity"

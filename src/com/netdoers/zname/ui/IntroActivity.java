@@ -276,9 +276,9 @@ public class IntroActivity extends FragmentActivity {
                 View child = bottomPages.getChildAt(a);
                 if (a == position) {
 //                    child.setBackgroundColor(0xff2ca5e0);
-                    child.setBackgroundColor(0xffffca00);
+                    child.setBackgroundColor(0xffffde00);
                 } else {
-                    child.setBackgroundColor(0xffbbbbbb);
+                    child.setBackgroundColor(0xffffffff);
                 }
             }
         }

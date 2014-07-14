@@ -1,10 +1,18 @@
 <resources>
 
-    <string-array name="planets_array">
+    <string-array name="drawer_menu_array">
         <item>Zname</item>
         <item>Notifications</item>
-        <item>Settings</item>
-        <item>Feedback</item>
+        <item>App Settings</item>
+        <item>Share Zname</item>
+        <item>Contact Zname</item>
+    </string-array>
+    <string-array name="drawer_menu_detail_array">
+        <item>Zname</item>
+        <item>Pending request</item>
+        <item>Notifcation, account, and other settings</item>
+        <item>Sharing is caring</item>
+        <item>We want to hear it all</item>
     </string-array>
     <string-array name="call_logs_array">
         <item>All</item>

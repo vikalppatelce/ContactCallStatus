@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/background_action_bar_orange"
     android:fillViewport="true" >
 
     <FrameLayout
@@ -44,7 +45,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Z:name"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/white"
             android:textSize="22sp" />
 
         <TextView
@@ -62,42 +63,42 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="@color/background_action_bar_orange"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp" >
 
             <TextView
                 android:id="@+id/intro_txtview_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btn_white"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="Sign Up"
-                android:textColor="#ffffff"
+                android:textColor="@color/background_action_bar_orange"
                 android:textSize="22sp" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="7dp"
-                android:layout_marginTop="7dp"
-                android:background="@android:color/white" />
 
             <TextView
                 android:id="@+id/intro_txtview_signin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btn_white"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="Sign In"
-                android:textColor="#ffffff"
+                android:textColor="@color/background_action_bar_orange"
                 android:textSize="22sp" />
         </LinearLayout>
 
@@ -112,31 +113,31 @@
             <FrameLayout
                 android:layout_width="5dp"
                 android:layout_height="5dp"
-                android:background="#bbbbbb" />
+                android:background="@android:color/white" />
 
             <FrameLayout
                 android:layout_width="5dp"
                 android:layout_height="5dp"
                 android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
+                android:background="@android:color/white" />
 
             <FrameLayout
                 android:layout_width="5dp"
                 android:layout_height="5dp"
                 android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
+                android:background="@android:color/white" />
 
             <FrameLayout
                 android:layout_width="5dp"
                 android:layout_height="5dp"
                 android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
+                android:background="@android:color/white" />
 
             <FrameLayout
                 android:layout_width="5dp"
                 android:layout_height="5dp"
                 android:layout_marginLeft="7dp"
-                android:background="#bbbbbb" />
+                android:background="@android:color/white" />
         </LinearLayout>
     </FrameLayout>
 

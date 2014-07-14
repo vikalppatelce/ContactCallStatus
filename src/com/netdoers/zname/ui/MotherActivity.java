@@ -129,7 +129,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private String[] mPlanetTitles;
+	private String[] mDrawerTitles;
+	private String[] mDrawerDetailTitles;
 
 	// EU ZM002
 
@@ -154,7 +155,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.def_contact) // resource or
-															// drawable
+																// drawable
 				.showImageForEmptyUri(R.drawable.def_contact) // resource or
 																// drawable
 				.showImageOnFail(R.drawable.def_contact) // this is the image
@@ -313,23 +314,22 @@ public class MotherActivity extends SherlockFragmentActivity {
 				if (TextUtils.isEmpty(regid)) {
 					registerInBackground();
 					// CA.getPreferences().setFirstTime(false);
-					Toast.makeText(
-							Zname.getApplication().getApplicationContext(),
-							"Not yet registered to GCM", Toast.LENGTH_SHORT)
-							.show();
-				} else {
-					Toast.makeText(
-							Zname.getApplication().getApplicationContext(),
-							"Registered to GCM", Toast.LENGTH_SHORT).show();
-					if (!Zname.getSharedPreferences().getBoolean(
-							"isRegisteredToServer", false)) {
-						sendRegistrationIdToBackend();
-						Toast.makeText(
-								Zname.getApplication().getApplicationContext(),
-								"Not yet registered to Server",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
+					/*
+					 * Toast.makeText(
+					 * Zname.getApplication().getApplicationContext(),
+					 * "Not yet registered to GCM", Toast.LENGTH_SHORT) .show();
+					 */
+				} /*
+				 * else { Toast.makeText(
+				 * Zname.getApplication().getApplicationContext(),
+				 * "Registered to GCM", Toast.LENGTH_SHORT).show(); if
+				 * (!Zname.getSharedPreferences().getBoolean(
+				 * "isRegisteredToServer", false)) {
+				 * sendRegistrationIdToBackend(); Toast.makeText(
+				 * Zname.getApplication().getApplicationContext(),
+				 * "Not yet registered to Server", Toast.LENGTH_SHORT).show(); }
+				 * }
+				 */
 			} else {
 				Log.i(TAG, "No valid Google Play Services APK found.");
 			}
@@ -339,7 +339,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 		// SU ZM002 //DRAWER LAYOUT
 
 		mTitle = mDrawerTitle = getTitle();
-		mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+		mDrawerTitles = getResources()
+				.getStringArray(R.array.drawer_menu_array);
+		mDrawerDetailTitles = getResources().getStringArray(
+				R.array.drawer_menu_detail_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -348,8 +351,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		mDrawerAdapter = new MySimpleArrayAdapter(this, mPlanetTitles,
-				imageLoader, options);
+		mDrawerAdapter = new MySimpleArrayAdapter(this, mDrawerTitles,
+				mDrawerDetailTitles, imageLoader, options);
 		mDrawerList.setAdapter(mDrawerAdapter);
 		// // mDrawerList.setAdapter(new ArrayAdapter<String>(this,
 		// // R.layout.drawer_list_item, mPlanetTitles));
@@ -387,6 +390,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		// EU ZM002
 		getProfileImageVolley();
 	}
@@ -696,14 +700,17 @@ public class MotherActivity extends SherlockFragmentActivity {
 	public class MySimpleArrayAdapter extends ArrayAdapter<String> {
 		private final Context context;
 		private final String[] values;
+		private final String[] values2;
 		private ImageLoader imageLoader;
 		private DisplayImageOptions options;
 
 		public MySimpleArrayAdapter(Context context, String[] values,
-				ImageLoader imageLoader, DisplayImageOptions options) {
+				String[] values2, ImageLoader imageLoader,
+				DisplayImageOptions options) {
 			super(context, R.layout.item_list_drawer, values);
 			this.context = context;
 			this.values = values;
+			this.values2 = values2;
 			this.imageLoader = imageLoader;
 			this.options = options;
 		}
@@ -715,32 +722,38 @@ public class MotherActivity extends SherlockFragmentActivity {
 			View rowView = inflater.inflate(R.layout.item_list_drawer, parent,
 					false);
 
-			FrameLayout frameProfileLayout = (FrameLayout) rowView
+			FrameLayout mDrawerProfileLayout = (FrameLayout) rowView
 					.findViewById(R.id.drawer_layout_profile);
-			LinearLayout frameMenuLayout = (LinearLayout) rowView
+			LinearLayout mDrawerMenuLayout = (LinearLayout) rowView
 					.findViewById(R.id.drawer_layout_menu);
 
-			final CircleImageView imageProfileView = (CircleImageView) rowView
+			final CircleImageView mDrawerProfileImageView = (CircleImageView) rowView
 					.findViewById(R.id.drawer_profile_image);
 
-			TextView textFullNameView = (TextView) rowView
+			TextView mDrawerProfileFullNameView = (TextView) rowView
 					.findViewById(R.id.drawer_profile_full_name);
-			TextView textZnameView = (TextView) rowView
+			TextView mDrawerProfileZnameView = (TextView) rowView
 					.findViewById(R.id.drawer_profile_zname);
-			TextView textView = (TextView) rowView.findViewById(R.id.text1);
-			ImageView imageView = (ImageView) rowView
-					.findViewById(R.id.imageView1);
+			TextView mDrawerTitleView = (TextView) rowView
+					.findViewById(R.id.drawer_layout_menu_title);
+			TextView mDrawerTitleSubView = (TextView) rowView
+					.findViewById(R.id.drawer_layout_menu_subtitle);
+			ImageView mDrawerIconView = (ImageView) rowView
+					.findViewById(R.id.drawer_layout_menu_icon);
 
-			textView.setTypeface(styleFont);
-			textFullNameView.setTypeface(styleFont);
-			textZnameView.setTypeface(styleFont);
+			mDrawerTitleView.setTypeface(styleFont);
+			mDrawerTitleSubView.setTypeface(styleFont);
+			mDrawerProfileFullNameView.setTypeface(styleFont);
+			mDrawerProfileZnameView.setTypeface(styleFont);
 			// Change the icon for Windows and iPhone
 			// String s = values[position];
 			switch (position) {
 			case 0:
-				frameMenuLayout.setVisibility(View.GONE);
-				textFullNameView.setText(Zname.getPreferences().getFullName());
-				textZnameView.setText(Zname.getPreferences().getUserName());
+				mDrawerMenuLayout.setVisibility(View.GONE);
+				mDrawerProfileFullNameView.setText(Zname.getPreferences()
+						.getFullName());
+				mDrawerProfileZnameView.setText(Zname.getPreferences()
+						.getUserName());
 
 				if (!TextUtils.isEmpty(Zname.getPreferences()
 						.getProfilePicPath())) {
@@ -749,30 +762,44 @@ public class MotherActivity extends SherlockFragmentActivity {
 						public void run() {
 							// TODO Auto-generated method stub
 							imageLoader.displayImage(Zname.getPreferences()
-									.getProfilePicPath(), imageProfileView,
-									options);
+									.getProfilePicPath(),
+									mDrawerProfileImageView, options);
 						}
 					});
 				}
 
 				break;
 			case 1:
-				frameProfileLayout.setVisibility(View.GONE);
-				frameMenuLayout.setVisibility(View.VISIBLE);
-				imageView.setImageResource(R.drawable.ic_notifications);
-				textView.setText(values[position]);
+				mDrawerProfileLayout.setVisibility(View.GONE);
+				mDrawerMenuLayout.setVisibility(View.VISIBLE);
+				mDrawerIconView
+						.setImageResource(R.drawable.btn_nav_discovery_normal);
+				mDrawerTitleView.setText(values[position]);
+				mDrawerTitleSubView.setText(values2[position]);
 				break;
 			case 2:
-				frameProfileLayout.setVisibility(View.GONE);
-				frameMenuLayout.setVisibility(View.VISIBLE);
-				imageView.setImageResource(R.drawable.ic_drawer_gear);
-				textView.setText(values[position]);
+				mDrawerProfileLayout.setVisibility(View.GONE);
+				mDrawerMenuLayout.setVisibility(View.VISIBLE);
+				mDrawerIconView
+						.setImageResource(R.drawable.btn_nav_settings_normal);
+				mDrawerTitleView.setText(values[position]);
+				mDrawerTitleSubView.setText(values2[position]);
 				break;
 			case 3:
-				frameProfileLayout.setVisibility(View.GONE);
-				frameMenuLayout.setVisibility(View.VISIBLE);
-				imageView.setImageResource(R.drawable.ic_drawer_feedback);
-				textView.setText(values[position]);
+				mDrawerProfileLayout.setVisibility(View.GONE);
+				mDrawerMenuLayout.setVisibility(View.VISIBLE);
+				mDrawerIconView
+						.setImageResource(R.drawable.btn_nav_invite_normal);
+				mDrawerTitleView.setText(values[position]);
+				mDrawerTitleSubView.setText(values2[position]);
+				break;
+			case 4:
+				mDrawerProfileLayout.setVisibility(View.GONE);
+				mDrawerMenuLayout.setVisibility(View.VISIBLE);
+				mDrawerIconView
+						.setImageResource(R.drawable.btn_nav_messages_normal);
+				mDrawerTitleView.setText(values[position]);
+				mDrawerTitleSubView.setText(values2[position]);
 				break;
 			default:
 				break;
@@ -815,7 +842,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		default:
 			break;
 		}
-		
+
 		// // update selected item and title, then close the drawer
 		// mDrawerList.setItemChecked(position, true);
 		// setTitle(mPlanetTitles[position]);
@@ -847,37 +874,20 @@ public class MotherActivity extends SherlockFragmentActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// SU ZM002
-			// try {
-			// if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-			// mDrawerLayout.closeDrawer(mDrawerList);
-			// } else {
-			// mDrawerLayout.openDrawer(mDrawerList);
-			// }
-			// } catch (Exception e) {
-			// Log.e(TAG, e.toString());
-			// }
+			try {
+				if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+					mDrawerLayout.closeDrawer(mDrawerList);
+				} else {
+					mDrawerLayout.openDrawer(mDrawerList);
+				}
+			} catch (Exception e) {
+				Log.e(TAG, e.toString());
+			}
 			// EU ZM002
 			return true;
 		case R.id.action_add:
 			Intent addZnameIntent = new Intent(this, AddZnameActivity.class);
 			startActivity(addZnameIntent);
-			return true;
-		case R.id.action_edit:
-			Intent profileIntent = new Intent(this, ProfileActivity.class);
-			startActivity(profileIntent);
-			return true;
-		case R.id.action_search:
-			Intent searchIntent = new Intent(this, SearchActivity.class);
-			startActivity(searchIntent);
-			return true;
-		case R.id.action_settings:
-			Intent settingIntent = new Intent(this, SettingsActivity.class);
-			startActivity(settingIntent);
-			return true;
-		case R.id.action_notification:
-			Intent notificationIntent = new Intent(this,
-					NotificationActivity.class);
-			startActivity(notificationIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

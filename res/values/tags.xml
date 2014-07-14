@@ -6,6 +6,7 @@
     <item name="TAG_CONTACT_ZNAME" type="id"/>
     <item name="TAG_CONTACT_ID" type="id"/>
     <item name="TAG_CONTACT_PHOTO_ID" type="id"/>
+    <item name="TAG_CONTACT_CALL_STATUS" type="id"/>
     <item name="TAG_GROUP_ID" type="id"/>
     <item name="TAG_GROUP_NAME" type="id"/>
     <item name="TAG_GROUP_DP" type="id"/>

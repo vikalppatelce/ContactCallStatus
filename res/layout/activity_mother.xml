@@ -68,10 +68,10 @@
             android:layout_width="270dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/background_action_bar_orange"
+            android:background="@android:color/white"
             android:choiceMode="singleChoice"
-            android:divider="#FFFFFF"
-            android:dividerHeight="1dp" />
+            android:drawSelectorOnTop="true"
+            android:listSelector="@drawable/zname_list_selector_holo_light" />
     </android.support.v4.widget.DrawerLayout>
 
 </RelativeLayout>

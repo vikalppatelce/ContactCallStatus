@@ -61,6 +61,8 @@ public class AppConstants {
 			public static final String TAG_ID ="_id";
 			public static final String TAG_PHOTO ="photo";
 			public static final String TAG_NUMBER ="number";
+			public static final String TAG_ZNAME ="zname";
+			public static final String TAG_CALL_STATUS ="call_status";
 		}
 	}
 	
