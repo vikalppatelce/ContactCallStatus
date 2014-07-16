@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="57dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/listview_groups"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/list_divider_group_inset"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="true"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="true"
+            android:listSelector="@drawable/zname_list_selector_holo_light"
+            android:scrollbarStyle="outsideInset" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/fragment_groups_add"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom|center"
+        android:drawableLeft="@drawable/ic_add_person_white_20"
+        android:paddingLeft="55dp"
+        android:paddingRight="55dp"
+        android:background="@drawable/zname_btn_default_holo_light"
+        android:textColor="@android:color/white"
+        android:text="Create New group" />
+
+</FrameLayout>

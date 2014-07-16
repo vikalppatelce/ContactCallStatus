@@ -1,0 +1,19 @@
+{
+  "pending_requests": [
+    {
+      "zname": "VIkalp",
+      "profile_pic": "http://myzname.netdoers.com/api/v1/znames/uploads/20140606131207.jpg",
+      "full_name": "VIkalp Patel"
+    },
+    {
+      "zname": "vaibx",
+      "profile_pic": "http://myzname.netdoers.com/api/v1/znames/uploads/20140606173037.jpg",
+      "full_name": "vijalp"
+    },
+    {
+      "zname": "naitik432",
+      "profile_pic": "http://myzname.netdoers.com/api/v1/znames/uploads/20140215151601.jpg",
+      "full_name": "Vikalp Patel"
+    }
+  ]
+}

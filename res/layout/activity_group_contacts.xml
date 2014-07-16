@@ -1,0 +1,127 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/group_contacts_actionbar"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ab_solid_zname"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/group_contacts_actionbar_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:onClick="onSearchBack1"
+                android:scaleType="centerInside"
+                android:src="@drawable/abs__ic_ab_back_holo_light" />
+
+            <TextView
+                android:id="@+id/group_contacts_actionbar_title"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="6"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="Zname"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/group_contacts_actionbar_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:onClick="onSearchClick"
+                android:scaleType="centerInside"
+                android:src="@drawable/zname_ic_menu_add" />
+
+            <ImageView
+                android:id="@+id/group_contacts_actionbar_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:onClick="openAddContactsLayout"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_add_person_white_20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_contacts_searchlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/ab_solid_zname"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/group_contacts_searchlayout_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:onClick="onSearchBack2"
+                android:scaleType="centerInside"
+                android:src="@drawable/abs__ic_ab_back_holo_light" />
+
+            <EditText
+                android:id="@+id/group_contacts_searchlayout_txt"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="8"
+                android:background="@drawable/search_edit_text_holo_light"
+                android:cursorVisible="true"
+                android:drawableLeft="@drawable/zname_ic_menu_add"
+                android:gravity="left|center_vertical"
+                android:hint="Search"
+                android:inputType="textNoSuggestions"
+                android:singleLine="true"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/group_contacts_searchlayout_clear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:onClick="onSearchClear"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_clear" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listview_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:divider="@drawable/list_divider_inset"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="true"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="true"
+            android:listSelector="@drawable/zname_list_selector_holo_light"
+            android:scrollbarStyle="outsideInset" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/friends_btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/zname_btn_group_add_default_holo_light"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -29,7 +29,7 @@
                 android:id="@+id/pager_sliding_tab_strip"
                 android:layout_width="fill_parent"
                 android:layout_height="45dip"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 app:pstsDividerColor="#FFFFA500"
                 app:pstsIndicatorColor="#FFFFA500"
                 app:pstsTabPaddingLeftRight="14dip"
@@ -68,7 +68,7 @@
             android:layout_width="270dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@android:color/white"
+            android:background="@color/white"
             android:choiceMode="singleChoice"
             android:drawSelectorOnTop="true"
             android:listSelector="@drawable/zname_list_selector_holo_light" />

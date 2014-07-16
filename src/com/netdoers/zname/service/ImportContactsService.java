@@ -201,19 +201,19 @@ public class ImportContactsService extends Service {
 //						contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D+",""));
 						String s = cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "");
 						if (contact.getContactNumber().toString().length() == 0) {
-							if(s.length() > 10){
+							if(s.length() == 12 || s.length() == 11){
 								contact.setContactNumber("\""+s.substring(s.length()-10,s.length())+"\"");	
 							}else{
 								contact.setContactNumber("\"" + s + "\"");
 							}
 //							contact.setContactNumber(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", ""));
 						} else {
-							if(s.length() > 10){
+							if(s.length() == 12 || s.length() == 11){
 								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s.substring(s.length()-10, s.length())).concat("\""));//One can add possible contacts "(-/,"
 							}else{
 								contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s).concat("\""));
 							}
-							contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "")));//One can add possible contacts "(-/,"
+//							contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat(cur.getString(cur.getColumnIndex(Phone.NUMBER)).replaceAll("\\D", "")));//One can add possible contacts "(-/,"
 						}
 //						EU ZM002
 					}
@@ -310,14 +310,14 @@ public class ImportContactsService extends Service {
 						do {
 							String s = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", "");
 							if (contact.getContactNumber().toString().length() == 0) {
-								if(s.length() > 10){
+								if(s.length() == 12 || s.length() == 11){
 									contact.setContactNumber("\""+s.substring(s.length()-10, s.length())+"\"");
 								}else{
 									contact.setContactNumber("\""+s+"\"");	
 								}
 //								contact.setContactNumber(cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\D", ""));
 							} else {
-								if(s.length() > 10){
+								if(s.length() == 12 || s.length() == 11){
 									contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s.substring(s.length()-10, s.length())).concat("\""));
 								}else{
 									contact.setContactNumber(contact.getContactNumber().toString().concat(", ").concat("\"").concat(s).concat("\""));

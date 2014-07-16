@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/ab_solid_zname" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/ab_solid_zname"
+            android:drawableLeft="@drawable/ic_menu_clear"
+            android:onClick="onCancel"
+            android:layout_gravity="center_vertical"
+            android:text="Cancel"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_margin="7dp"
+            android:background="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/ab_solid_zname"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@drawable/abs__ic_cab_done_holo_dark"
+            android:onClick="onDone"
+            android:text="Done"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

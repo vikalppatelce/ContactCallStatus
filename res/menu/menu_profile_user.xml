@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:id="@+id/action_share_user"
+        android:icon="@drawable/abs__ic_menu_share_holo_light"
+        android:title="SHARE"
+        android:showAsAction="always|withText"
+        />
+</menu>

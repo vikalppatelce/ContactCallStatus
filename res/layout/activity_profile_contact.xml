@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_swarm"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_action_bar_orange"
+                android:orientation="vertical" >
+
+                <com.netdoers.zname.utils.CircleImageView
+                    android:id="@+id/activity_profile_contact_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/def_contact"
+                    circle:border_color="@android:color/white"
+                    circle:border_width="2dp" />
+
+                <TextView
+                    android:id="@+id/activity_profile_contact_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:text="Vikalp Patel"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/activity_profile_contact_listview_head"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:text="CONTACT"
+                android:textColor="@color/background_action_bar_orange" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/background_action_bar_orange" />
+
+            <com.netdoers.zname.utils.ScrollableListView
+                android:id="@+id/activity_profile_contact_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:divider="@drawable/list_divider_group_inset"
+                android:dividerHeight="1dp"
+                android:drawSelectorOnTop="true"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="true"
+                android:listSelector="@drawable/zname_list_selector_holo_light"
+                android:scrollbarStyle="outsideInset" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

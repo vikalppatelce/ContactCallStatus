@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto/com.netdoers.zname"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="58dp"
+    android:orientation="horizontal"
+    android:padding="1dp"
+    android:weightSum="5"
+    tools:ignore="ResAuto" >
+
+    <com.netdoers.zname.utils.SquareImageView
+        android:id="@+id/list_item_display_picture"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="4"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/def_contact" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="46dp"
+            android:layout_gravity="center"
+            android:layout_weight="9"
+            android:orientation="vertical" >
+
+            <!-- <com.netdoers.zname.utils.AutoScaleTextView -->
+
+            <TextView
+                android:id="@+id/list_item_display_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="2dp"
+                android:singleLine="true"
+                android:text="Zname"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp" />
+            <!-- app:minTextSize="12sp" /> -->
+
+
+            <!-- <com.netdoers.zname.utils.AutoScaleTextView -->
+
+            <TextView
+                android:id="@+id/list_item_zname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|top"
+                android:layout_weight="1"
+                android:paddingBottom="2dp"
+                android:paddingLeft="15dp"
+                android:singleLine="true"
+                android:textColor="@color/background_action_bar_orange"
+                android:textSize="14sp"
+                android:visibility="gone"
+                 />
+            <!-- app:minTextSize="10sp" /> -->
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/list_item_call"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.01"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:src="@drawable/zname_ic_call_selected" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="17dp"
+            android:layout_marginTop="17dp"
+            android:background="@color/lighter_gray" />
+
+        <ImageView
+            android:id="@+id/list_item_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.01"
+            android:paddingLeft="6dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/zname_ic_msg" />
+    </LinearLayout>
+
+</LinearLayout>

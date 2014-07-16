@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- Header  Starts -->
+
+    <LinearLayout
+        android:id="@+id/search_txt_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/search_txt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="9"
+            android:background="@drawable/zname_edit_text_holo_light"
+            android:cursorVisible="true"
+            android:drawableLeft="@drawable/zname_ic_menu_add_selected"
+            android:hint="@string/search_hint"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true" />
+
+        <ImageView
+            android:id="@+id/clear_srch_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:onClick="onClear"
+            android:scaleType="fitCenter"
+            android:src="@drawable/abs__ic_clear_search_api_holo_light" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/contactList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_txt_layout"
+        android:divider="@drawable/list_divider_inset"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="true"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="true"
+        android:listSelector="@drawable/zname_list_selector_holo_light" />
+
+    <include layout="@layout/dialog_progress_custom" />
+
+</RelativeLayout>

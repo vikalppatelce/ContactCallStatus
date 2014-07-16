@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+* /res/xml/settings.xml
+*
+* Author: VIKALP PATEL
+* Purpose: Preference Screen
+* S - START E- END C- COMMENTED U -EDITED A -ADDED
+* **********************************************************************************************************************
+* INDEX 	DEVELOPER 		DATE 		DESCRIPTION
+* **********************************************************************************************************************
+* 10001 	VIKALP PATEL 10/01/2014 	CREATED PREFERENCE SCREEN
+**
+*/
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/about" >
+        <Preference
+            android:key="prefAbout"
+            android:title="@string/about_summary" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Developer" >
+        <Preference
+            android:enabled="true"
+            android:key="prefDev"
+            android:title="Developer Options" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Release Note" >
+        <Preference
+            android:enabled="true"
+            android:key="prefRelease"
+            android:title="Change Log" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/feedback" >
+        <Preference
+            android:key="prefFeedback"
+            android:title="@string/feedback_summary" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
