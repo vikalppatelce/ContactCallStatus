@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_share_user"
-        android:icon="@drawable/abs__ic_menu_share_holo_light"
+        android:icon="@drawable/ic_share"
         android:title="SHARE"
         android:showAsAction="always|withText"
         />

@@ -63,14 +63,14 @@ import com.netdoers.zname.sqlite.DBConstant;
 public class GroupsFragment extends SherlockFragment {
 
 	// DECLARE VARIABLES
-	ListView groupsListView; // EU ZM004
-	Button addGroup;
+	private ListView mListView; 
+	private Button mAddGroup;
 
 	// TYPEFACE
 	static Typeface styleFont;
 
 	// ADAPTER
-	private GroupListAdapter groupAdapter = null;
+	private GroupListAdapter mAdapter = null;
 
 	// REFERENCES VARIABLE - HELPER
 	private ArrayList<GroupDTO> arrListGroups = null;
@@ -96,9 +96,9 @@ public class GroupsFragment extends SherlockFragment {
 		// Get the view from fragmenttab2.xml
 		View view = inflater
 				.inflate(R.layout.fragment_groups, container, false);
-		groupsListView = (ListView) view.findViewById(R.id.listview_groups); // EU
+		mListView = (ListView) view.findViewById(R.id.listview_groups); // EU
 																				// ZM004
-		addGroup = (Button) view.findViewById(R.id.fragment_groups_add);
+		mAddGroup = (Button) view.findViewById(R.id.fragment_groups_add);
 		return view;
 	}
 
@@ -119,77 +119,12 @@ public class GroupsFragment extends SherlockFragment {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 
-		styleFont = Typeface.createFromAsset(getActivity().getAssets(),
-				AppConstants.fontStyle);
-
-		/*groupsListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View view, int position, long id) {
-						// TODO Auto-generated method stub
-
-						// vibration for 100 milliseconds
-						((Vibrator) getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE))
-								.vibrate(50);
-
-						final String viewTagId = view.getTag(R.id.TAG_GROUP_ID).toString();
-						String viewTagName = view.getTag(R.id.TAG_GROUP_NAME).toString();
-						String viewTagDp = view.getTag(R.id.TAG_GROUP_DP).toString();
-
-						new AlertDialog.Builder(getActivity())
-					    .setTitle("Delete entry")
-					    .setMessage("Do want to modify group "+ viewTagName +"?")
-					    .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-					        public void onClick(DialogInterface dialog, int which) { 
-					            // continue with delete
-					        	dialog.cancel();
-					        }
-					     })
-					    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-					        public void onClick(DialogInterface dialog, int which) { 
-					            // do nothing
-					        	getActivity().getContentResolver().delete(DBConstant.Groups_Columns.CONTENT_URI, DBConstant.Groups_Columns.COLUMN_GROUP_ID +"=?", new String[]{viewTagId});
-					        	getActivity().getContentResolver().delete(DBConstant.Groups_Contacts_Columns.CONTENT_URI, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?" , new String[]{viewTagId});
-					        	groupAdapter.notifyDataSetChanged();
-					        	refreshGroupsData();
-					        	dialog.cancel();
-					        }
-					     })
-					    .setIcon(android.R.drawable.ic_dialog_alert)
-					     .show();
-						
-						return false;
-					}
-				});*/
-
-		groupsListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				String viewTagId = view.getTag(R.id.TAG_GROUP_ID).toString();
-				String viewTagName = view.getTag(R.id.TAG_GROUP_NAME).toString();
-				String viewTagPhoto = view.getTag(R.id.TAG_GROUP_DP).toString();
-				Intent groupIntent = new Intent(getActivity(),GroupContactsActivity.class);
-				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID,viewTagId);
-				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME,viewTagName);
-				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO,viewTagPhoto);
-				startActivity(groupIntent);
-			}
-		});
-
-		addGroup.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				openAddGroupsLayout();
-			}
-		});
-
+		setFontStyle();
+        setEventListeners();
+        
 		arrListGroups = new ArrayList<GroupDTO>();
 		
-		registerForContextMenu(groupsListView);
+		registerForContextMenu(mListView);
 	}
 
 	@Override
@@ -220,6 +155,37 @@ public class GroupsFragment extends SherlockFragment {
 	    }
 	}
 	
+	private void setEventListeners(){
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				String viewTagId = view.getTag(R.id.TAG_GROUP_ID).toString();
+				String viewTagName = view.getTag(R.id.TAG_GROUP_NAME).toString();
+				String viewTagPhoto = view.getTag(R.id.TAG_GROUP_DP).toString();
+				Intent groupIntent = new Intent(getActivity(),GroupContactsActivity.class);
+				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID,viewTagId);
+				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME,viewTagName);
+				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO,viewTagPhoto);
+				startActivity(groupIntent);
+			}
+		});
+
+		mAddGroup.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				openAddGroupsLayout();
+			}
+		});
+	}
+	
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getActivity().getAssets(),AppConstants.fontStyle);
+	}
+	
 	public void openAddGroupsLayout() {
 		showInputDialog();
 	}
@@ -241,7 +207,7 @@ public class GroupsFragment extends SherlockFragment {
 	        	getActivity().getContentResolver().delete(DBConstant.Groups_Columns.CONTENT_URI, DBConstant.Groups_Columns.COLUMN_GROUP_ID +"=?", new String[]{viewTagId});
 	        	getActivity().getContentResolver().delete(DBConstant.Groups_Contacts_Columns.CONTENT_URI, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?" , new String[]{viewTagId});
 	        	refreshGroupsData();
-	        	groupAdapter.notifyDataSetChanged();
+	        	mAdapter.notifyDataSetChanged();
 	        	dialog.cancel();
 	        }
 	     })
@@ -284,7 +250,7 @@ public class GroupsFragment extends SherlockFragment {
 					int c = getActivity().getContentResolver().update(DBConstant.Groups_Columns.CONTENT_URI, values, DBConstant.Groups_Columns.COLUMN_GROUP_ID+"=?", new String[]{viewTagId});
 
 					refreshGroupsData();
-		        	groupAdapter.notifyDataSetChanged();
+		        	mAdapter.notifyDataSetChanged();
 		        	dialog.dismiss();
 		        	
 		        	if(BuildConfig.DEBUG)
@@ -395,8 +361,8 @@ public class GroupsFragment extends SherlockFragment {
 		}
 
 		if (arrListGroups.size() > 0) {
-			groupAdapter = new GroupListAdapter(arrListGroups);
-			groupsListView.setAdapter(groupAdapter); // EU ZM004
+			mAdapter = new GroupListAdapter(arrListGroups);
+			mListView.setAdapter(mAdapter); // EU ZM004
 		}
 	}
 

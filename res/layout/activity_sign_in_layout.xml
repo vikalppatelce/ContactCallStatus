@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/signup_light_orange"
     android:orientation="vertical" >
 
     <ScrollView
@@ -11,10 +12,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_image_border_gray"
-            android:orientation="vertical"
             android:layout_gravity="top|center"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
             android:padding="10dp" >
 
             <TextView
@@ -22,15 +22,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center|left"
-                android:text="@string/str_sign_head"
-                android:textColor="@android:color/darker_gray"
+                android:text=""
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:background="@color/signup_dark_orange"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -43,12 +44,14 @@
                 <EditText
                     android:id="@+id/sign_in_txt_zname"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/zname_edit_text_holo_light"
+                    android:background="@color/signup_medium_orange"
                     android:gravity="left|center"
                     android:hint="Z:name"
                     android:inputType="text"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
                     android:paddingLeft="15dp" />
             </LinearLayout>
 
@@ -60,18 +63,18 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center|left"
                 android:text="@string/str_sign_verify"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <Button
                 android:id="@+id/sign_in_btn"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:background="@drawable/zname_btn_default_holo_light"
+                android:layout_marginTop="20dp"
+                android:background="@color/signup_random_orange"
                 android:text="Sign In"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />

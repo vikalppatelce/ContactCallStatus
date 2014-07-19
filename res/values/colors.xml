@@ -6,4 +6,11 @@
     <color name="lighter_gray">#DBDAD8</color>
     <color name="white">#ffffffff</color>
     <color name="background_swarm">#F6F6F6</color>
+<!--     <color name="signup_light_orange">#fea633</color> -->
+<!--     <color name="signup_medium_orange">#e4952d</color> -->
+<!--     <color name="signup_dark_orange">#cb8428</color> -->
+	<color name="signup_light_orange">#FCC513</color>
+    <color name="signup_medium_orange">#F49600</color>
+    <color name="signup_dark_orange">#E9510E</color>
+    <color name="signup_random_orange">#FF4E50</color>
 </resources>

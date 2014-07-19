@@ -72,6 +72,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private Paint rectPaint;
 	private Paint dividerPaint;
+	
+	private int currentPageSelected = 0; //Fix : ICON SELECTOR
 
 	private int indicatorColor = 0xFF666666;
 	private int underlineColor = 0x1A000000;
@@ -81,7 +83,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private boolean textAllCaps = true;
 
 	private int scrollOffset = 52;
-	private int indicatorHeight = 8;
+//	private int indicatorHeight = 8;
+	private int indicatorHeight = 6;
 	private int underlineHeight = 2;
 	private int dividerPadding = 12;
 	private int tabPadding = 24;
@@ -218,6 +221,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 				}
 
 				currentPosition = pager.getCurrentItem();
+				tabsContainer.getChildAt(currentPosition).setSelected(true);//Fix : ICON SELECTOR
 				scrollToChild(currentPosition, 0);
 			}
 		});
@@ -380,6 +384,16 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		@Override
 		public void onPageSelected(int position) {
+			/**
+			 * Fix : ICON SELECTOR
+			 */
+			tabsContainer.getChildAt(currentPageSelected).setSelected(false);
+		    currentPageSelected = position;
+		    tabsContainer.getChildAt(position).setSelected(true);
+		    /**
+		     * Fix : ICON SELECTOR
+		     */
+		    
 			if (delegatePageListener != null) {
 				delegatePageListener.onPageSelected(position);
 			}

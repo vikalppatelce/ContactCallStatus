@@ -2,6 +2,7 @@ package com.netdoers.zname.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -33,7 +37,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ import com.netdoers.zname.beans.RegistrationDTO;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.ResponseParser;
 import com.netdoers.zname.service.RestClient;
+import com.netdoers.zname.utils.CircleImageView;
 import com.netdoers.zname.utils.ImageCompression;
 
 public class SignUpActivity extends SherlockFragmentActivity {
@@ -53,7 +57,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 	//DECLARE VIEW
 	private EditText fullName, zName, zNumber;
 	private TextView signUp,agreeTerms;
-	private ImageView zNameDisplayPicture;
+	private CircleImageView zNameDisplayPicture;
 	private ActionBar mActionBar;
 	//TYPEFACE
 	static Typeface styleFont;
@@ -71,29 +75,54 @@ public class SignUpActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_up_layout);
 		
-		//GET VIEW FROM LAYOUT
-		fullName = (EditText)findViewById(R.id.sign_up_name);
-		zName = (EditText)findViewById(R.id.sign_up_zname);
-		zNumber = (EditText)findViewById(R.id.sign_up_zname_znumber);
-		signUp = (TextView)findViewById(R.id.sign_up_button);
-		agreeTerms = (TextView)findViewById(R.id.sign_up_txt_agree);
-		zNameDisplayPicture = (ImageView)findViewById(R.id.sign_up_display_picture);
+		initUi();
 		
 		agreeTerms.setText(Html.fromHtml(getString(R.string.SignUpAgree)));
-		
+
+		setFontStyle();
+		setActionBar();
+		setEventListeners();
+	}
+
+	private void initUi(){
+		//GET VIEW FROM LAYOUT
+			fullName = (EditText)findViewById(R.id.sign_up_name);
+			zName = (EditText)findViewById(R.id.sign_up_zname);
+			zNumber = (EditText)findViewById(R.id.sign_up_zname_znumber);
+			signUp = (TextView)findViewById(R.id.sign_up_button);
+			agreeTerms = (TextView)findViewById(R.id.sign_up_txt_agree);
+			zNameDisplayPicture = (CircleImageView)findViewById(R.id.sign_up_display_picture);
+	}
+	
+	public Bitmap getBitmapFromUri(Uri uri) throws FileNotFoundException,
+			IOException {
+		InputStream input = getContentResolver().openInputStream(uri);
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		bitmapOptions.inDither = true;// optional
+		bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;// optional
+		input = this.getContentResolver().openInputStream(uri);
+		Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+		input.close();
+		return bitmap;
+	}
+	
+	private void setActionBar(){
+		//GET ACTION BAR
+		mActionBar = getSupportActionBar();
+		mActionBar.setTitle("Sign Up");
+		fontActionBar("Sign Up");
+	}
+	
+	private void setFontStyle(){
 		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-		
 		fullName.setTypeface(styleFont);
 		zName.setTypeface(styleFont);
 		zNumber.setTypeface(styleFont);
 		signUp.setTypeface(styleFont);
 		agreeTerms.setTypeface(styleFont);
-		
-		//GET ACTION BAR
-		mActionBar = getSupportActionBar();
-		mActionBar.setTitle("Sign Up");
-		fontActionBar("Sign Up");
-		
+	}
+	
+	private void setEventListeners(){
 		//LISTENERS
 		signUp.setOnClickListener(new View.OnClickListener() {
 			
@@ -128,7 +157,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			}
 		});
 	}
-
+	
 	public void fontActionBar(String str)
 	{
 		try {
@@ -289,7 +318,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 			return false;
 		}
 		
-		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+")){
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+[a-zA-Z0-9-.&]*")){
 			zName.setError("Must start with alphabets or number");
 			zName.setFocusable(true);
 			return false;
@@ -369,14 +398,13 @@ public class SignUpActivity extends SherlockFragmentActivity {
 					picturePath = cursor.getString(columnIndex);
 					cursor.close();
 					
-					zNameDisplayPicture.setImageURI(Uri.parse(picturePath));
-					
 					getImagePath();
 					try {
 						copy(new File(picturePath), new File(currentFileUri.getPath()));
 						strZnameDp = picturePath.toString().substring(picturePath.toString().lastIndexOf("/") + 1);
 						strPicturePath = ImageCompression.compressImage(picturePath);;
 						galleryAddPic();
+						zNameDisplayPicture.setImageBitmap(getBitmapFromUri(Uri.parse("file:///"+picturePath)));
 						} 
 					catch (IOException e) 
 					{
@@ -385,7 +413,7 @@ public class SignUpActivity extends SherlockFragmentActivity {
 				}
 			}
 		}
-
+	
 	public class ZnameAvailableTask extends AsyncTask<Void, Void, Void>{
 		String verifyZname;
 		boolean successvalue = false;

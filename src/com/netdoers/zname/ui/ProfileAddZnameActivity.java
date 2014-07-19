@@ -66,6 +66,9 @@ public class ProfileAddZnameActivity extends SherlockFragmentActivity{
 		setUniversalImageLoader();
 		setFontStyle();
 		setActionBar("Profile");
+		
+		mName.setText(intentName);
+		mUserName.setText(intentZname);
 
 		runOnUiThread(new Runnable() {
             @Override

@@ -38,6 +38,10 @@
         <item name="android:actionBarWidgetTheme">@style/Overflow.Text.Color</item>
     </style>
 
+    <style name="Theme.Zname.Drawer" parent="@style/Theme.Zname">
+        <item name="android:homeAsUpIndicator">@drawable/ic_drawer</item>
+    </style>
+    
     <style name="ActionBar.Solid.Zname" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_zname</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_zname</item>

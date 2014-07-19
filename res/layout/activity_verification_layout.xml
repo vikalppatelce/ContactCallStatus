@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/signup_light_orange"
     android:orientation="vertical" >
 
     <ScrollView
@@ -13,13 +14,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_image_border_gray"
             android:orientation="vertical"
             android:padding="10dp" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:background="@color/signup_dark_orange"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -27,17 +28,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center"
                     android:layout_marginLeft="7dp"
-                    android:background="@drawable/accounts_glyph_name_default" />
+                    android:background="@drawable/accounts_glyph_code" android:contentDescription="@string/app_name"/>
 
                 <TextView
                     android:id="@+id/verification_txt_zname"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/zname_edit_text_holo_light"
+                    android:background="@color/signup_medium_orange"
                     android:gravity="center"
-                    android:textSize="20sp"
-                    android:paddingLeft="15dp" />
+                    android:maxLength="5"
+                    android:paddingLeft="15dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <TextView
@@ -48,18 +51,18 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center|left"
                 android:text="@string/str_sign_verify"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <Button
                 android:id="@+id/verification_btn"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/zname_btn_default_holo_light"
+                android:background="@color/signup_random_orange"
                 android:text="Proceed"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />

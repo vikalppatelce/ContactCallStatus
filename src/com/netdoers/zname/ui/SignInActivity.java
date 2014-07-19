@@ -51,30 +51,24 @@ public class SignInActivity extends SherlockFragmentActivity {
 	public static final String TAG 							= SignInActivity.class.getSimpleName();
 	public static final String CODE                         = "code";
 	
-	public void onCreate(Bundle savedInstanceState)
-	{
+	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_in_layout);
 		
-		//GET VIEW FROM LAYOUT
-		zName = (EditText)findViewById(R.id.sign_in_txt_zname);
-		signTxtHead = (TextView)findViewById(R.id.sign_in_txt_head);
-		signTxtVerify = (TextView)findViewById(R.id.sign_in_txt_verify);
-		signIn = (Button)findViewById(R.id.sign_in_btn);
-		
-		
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-		
-		zName.setTypeface(styleFont);
-		signTxtHead.setTypeface(styleFont);
-		signTxtVerify.setTypeface(styleFont);
-		signIn.setTypeface(styleFont);
-		
+		initUi();
+        setFontStyle(); 		
+        setActionBar();
+        setEventListeners();
+	}
+
+	private void setActionBar(){
 		//GET ACTION BAR
 		mActionBar = getSupportActionBar();
 		mActionBar.setTitle("Sign In");
 		fontActionBar("Sign In");
-		
+	}
+	
+	private void setEventListeners(){
 		//LISTENERS
 		signIn.setOnClickListener(new View.OnClickListener() {
 			
@@ -84,8 +78,26 @@ public class SignInActivity extends SherlockFragmentActivity {
 				onSignUp(v);
 			}
 		});
+
+	}
+	
+	private void initUi(){
+		//GET VIEW FROM LAYOUT
+			zName = (EditText)findViewById(R.id.sign_in_txt_zname);
+			signTxtHead = (TextView)findViewById(R.id.sign_in_txt_head);
+			signTxtVerify = (TextView)findViewById(R.id.sign_in_txt_verify);
+			signIn = (Button)findViewById(R.id.sign_in_btn);
 	}
 
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		
+		zName.setTypeface(styleFont);
+		signTxtHead.setTypeface(styleFont);
+		signTxtVerify.setTypeface(styleFont);
+		signIn.setTypeface(styleFont);
+	}
+	
 	public void fontActionBar(String str)
 	{
 		try {
@@ -171,7 +183,7 @@ public class SignInActivity extends SherlockFragmentActivity {
 			return false;
 		}
 		
-		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+")){
+		if(!TextUtils.isEmpty(zName.getText().toString()) && !zName.getText().toString().trim().matches("^[a-zA-Z0-9]+[a-zA-Z0-9-.&]*")){
 			zName.setError("Must start with alphabets or number");
 			zName.setFocusable(true);
 			return false;

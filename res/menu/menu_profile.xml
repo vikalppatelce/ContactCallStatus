@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:id="@+id/action_profile_edit"
+        android:icon="@drawable/ic_drawer_edit"
+        android:title="Edit Profile"
+        android:showAsAction="always"
+        />
+    <item
+        android:id="@+id/action_profile_view"
+        android:icon="@drawable/ic_fullscreen"
+        android:title="View picture"
+        android:showAsAction="always"
+        />
+</menu>

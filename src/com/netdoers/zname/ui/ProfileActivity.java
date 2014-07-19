@@ -44,6 +44,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
@@ -65,15 +67,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ProfileActivity extends SherlockFragmentActivity{
 	
 	//DECLARE VIEWS
-	CircleImageView circleImgProfile;
-	ActionBar mActionBar;
-	SegmentedButton statusSegmentedButton;
-	ScrollableGridView statusSelectGrid;
-	TextView statusEdit;
-	TextView  zNumberTxt, statusHeadTxt, statusSelectHead, nameTxt;
-	ImageView statusUpdate,  imageUpdate;
-	ImageLoader imageLoader;
-	DisplayImageOptions options;
+	private CircleImageView mCircleImgProfile;
+	private ActionBar mActionBar;
+	private SegmentedButton statusSegmentedButton;
+	private ScrollableGridView statusSelectGrid;
+	private TextView statusEdit;
+	private TextView  zNumberTxt, statusHeadTxt, statusSelectHead, nameTxt;
+	private ImageView statusUpdate,  imageUpdate;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
 	
 	
 	//DECLARE STYLE TYPEFACE
@@ -97,31 +99,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 
-		circleImgProfile = (CircleImageView)findViewById(R.id.fragment_profile_img_zname);
-		statusSegmentedButton = (SegmentedButton)findViewById(R.id.segmented);
-		statusEdit = (TextView)findViewById(R.id.fragment_profile_zname_edit_status);
-		zNumberTxt = (TextView)findViewById(R.id.fragment_profile_txt_call_1);
-		nameTxt = (TextView)findViewById(R.id.fragment_profile_txt_name);
-		statusUpdate = (ImageView)findViewById(R.id.fragment_profile_zname_status_update);
-		imageUpdate = (ImageView)findViewById(R.id.fragment_profile_img_change);
-		statusHeadTxt = (TextView)findViewById(R.id.fragment_profile_txt_zname_status_head);
-		statusSelectHead = (TextView)findViewById(R.id.fragment_profile_zname_update_gridview_head);
-		statusSelectGrid = (ScrollableGridView)findViewById(R.id.fragment_profile_zname_update_gridview);
-		statusSelectGrid.setExpanded(true);
-				
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-
-		imageLoader = ImageLoader.getInstance();
-        // Initialize ImageLoader with configuration. Do it once.
-        imageLoader.init(Zname.getImageLoaderConfiguration());
-        
-        options = new DisplayImageOptions.Builder()
-        .showImageOnLoading(R.drawable.def_contact) // resource or drawable
-        .showImageForEmptyUri(R.drawable.def_contact) // resource or drawable
-        .showImageOnFail(R.drawable.def_contact) //this is the image that will be displayed if download fails
-        .cacheInMemory()
-        .cacheOnDisc()
-        .build();
+		initUi();
 		
 		try {
 			zNumberTxt.setText(Zname.getPreferences().getUserNumber());
@@ -137,6 +115,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		
 		intentName = Zname.getPreferences().getUserName();
 
+		setUniversalImageLoader();
 		setFontStyle();
 		setActionBar("Profile");
 
@@ -172,7 +151,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				imageLoader.displayImage(Zname.getPreferences().getProfilePicPath(), circleImgProfile, options);
+				imageLoader.displayImage(Zname.getPreferences().getProfilePicPath(), mCircleImgProfile, options);
 			}
 		});
 
@@ -190,6 +169,14 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				onContactUpdate(v);
+			}
+		});
+		
+		imageUpdate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onProfilePicUpdate(v);
 			}
 		});
 		
@@ -270,6 +257,16 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		// TODO Auto-generated method stub
 		super.onResume();
 		onStatusAdapter(0);
+		zNumberTxt.setText(Zname.getPreferences().getUserNumber());
+		nameTxt.setText(Zname.getPreferences().getFullName());
+	}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.menu_profile, menu);
+		// MenuItem overFlowMenu = menu.findItem(R.id.action_more);
+		// MenuItem notificationMenu = menu.findItem(R.id.action_notification);
+		return true;
 	}
 	public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -278,12 +275,37 @@ public class ProfileActivity extends SherlockFragmentActivity{
         case android.R.id.home:
             finish();
             return true;
+        case R.id.action_profile_edit:
+        	Intent profileEditIntent = new Intent(ProfileActivity.this, ProfileEditActivity.class);
+        	startActivity(profileEditIntent);
+        	return true;
+        case R.id.action_profile_view:
+        	Intent photoViewIntent = new Intent(ProfileActivity.this, PhotoViewActivity.class);
+        	photoViewIntent.putExtra(PhotoViewActivity.mIntentPhoto, Zname.getPreferences().getProfilePicPath());
+        	startActivity(photoViewIntent);
+        	return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
 
+	public void initUi(){
+		mCircleImgProfile = (CircleImageView)findViewById(R.id.fragment_profile_img_zname);
+		statusSegmentedButton = (SegmentedButton)findViewById(R.id.segmented);
+		statusEdit = (TextView)findViewById(R.id.fragment_profile_zname_edit_status);
+		zNumberTxt = (TextView)findViewById(R.id.fragment_profile_txt_call_1);
+		nameTxt = (TextView)findViewById(R.id.fragment_profile_txt_name);
+		statusUpdate = (ImageView)findViewById(R.id.fragment_profile_zname_status_update);
+		imageUpdate = (ImageView)findViewById(R.id.fragment_profile_img_change);
+		statusHeadTxt = (TextView)findViewById(R.id.fragment_profile_txt_zname_status_head);
+		statusSelectHead = (TextView)findViewById(R.id.fragment_profile_zname_update_gridview_head);
+		statusSelectGrid = (ScrollableGridView)findViewById(R.id.fragment_profile_zname_update_gridview);
+		statusSelectGrid.setExpanded(true);
+	}
+	
 	public void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		
 		statusEdit.setTypeface(styleFont);
 		zNumberTxt.setTypeface(styleFont);
 		nameTxt.setTypeface(styleFont);
@@ -298,6 +320,20 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		mActionBar.setTitle(str);
 		
 		fontActionBar(mActionBar.getTitle().toString());
+	}
+	
+	public void setUniversalImageLoader(){
+		imageLoader = ImageLoader.getInstance();
+        // Initialize ImageLoader with configuration. Do it once.
+        imageLoader.init(Zname.getImageLoaderConfiguration());
+        
+        options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.def_contact) // resource or drawable
+        .showImageForEmptyUri(R.drawable.def_contact) // resource or drawable
+        .showImageOnFail(R.drawable.def_contact) //this is the image that will be displayed if download fails
+        .cacheInMemory()
+        .cacheOnDisc()
+        .build();
 	}
 	
 	public void onUpdateStatusSegment(String s){
@@ -330,17 +366,10 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		default:
 			break;
 		}
-		
-//		Intent updateIntent = new Intent(ProfileActivity.this, ProfileUpdateActivity.class);
-//		updateIntent.putExtra(ProfileUpdateActivity.UPDATE_TYPE, String.valueOf(statusSegmentedButton.getSelectedButtonIndex()));
-//		startActivity(updateIntent);
 	}
 	
 	public void onContactUpdate(View v){
 		showUpdateDialog(getString(R.string.str_profile_update_contact),Zname.getPreferences().getUserNumber(),getResources().getDrawable(R.drawable.accounts_glyph_phone_default),4);
-//		Intent updateIntent = new Intent(ProfileActivity.this, ProfileUpdateActivity.class);
-//		updateIntent.putExtra(ProfileUpdateActivity.UPDATE_TYPE, "Contact");
-//		startActivity(updateIntent);
 	}
 	
 	public void onNameUpdate(View v){
@@ -650,7 +679,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			if(progressDialog!=null)
 				progressDialog.dismiss();
 			
-			circleImgProfile.setImageURI(Uri.parse(picturePath));
+			mCircleImgProfile.setImageURI(Uri.parse("file:///"+picturePath));
 		}
 	}
 	public class UpdateProfileTask extends AsyncTask<String, Void, RegistrationDTO>
@@ -778,7 +807,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			super.onPostExecute(result);
 			if(!TextUtils.isEmpty(imageUrlPath)){
 				if(!Zname.getPreferences().getProfilePicPath().equalsIgnoreCase(imageUrlPath)){
-					imageLoader.displayImage(intentPhoto, circleImgProfile, options);
+					imageLoader.displayImage(intentPhoto, mCircleImgProfile, options);
 				}
 			}
 		}

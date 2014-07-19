@@ -2,6 +2,7 @@ package com.netdoers.zname.ui;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,16 +49,7 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_user);
 
-		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_user_img);
-		mContactName = (TextView) findViewById(R.id.activity_profile_user_name);
-		mUserName = (TextView) findViewById(R.id.activity_profile_user_zname);
-		mBtnCall = (TextView) findViewById(R.id.activity_profile_user_call_txt);
-		mBtnMsg = (TextView) findViewById(R.id.activity_profile_user_msg_txt);
-		mCall = (RelativeLayout)findViewById(R.id.activity_profile_user_call);
-		mMsg = (RelativeLayout)findViewById(R.id.activity_profile_user_msg);
-
-		styleFont = Typeface.createFromAsset(getAssets(),
-				AppConstants.fontStyle);
+		initUi();
 
 		setUniversalImageLoader();
 
@@ -72,9 +64,9 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 				AppConstants.TAGS.INTENT.TAG_ZNAME);
 		intentCallStatus = getIntent().getStringExtra(
 				AppConstants.TAGS.INTENT.TAG_CALL_STATUS);
-
-		setActionBar("Profile");
+		
 		setFontStyle();
+		setActionBar("Profile");
 		setListeners();
 
 		mContactName.setText(intentName);
@@ -120,6 +112,16 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	private void initUi(){
+		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_user_img);
+		mContactName = (TextView) findViewById(R.id.activity_profile_user_name);
+		mUserName = (TextView) findViewById(R.id.activity_profile_user_zname);
+		mBtnCall = (TextView) findViewById(R.id.activity_profile_user_call_txt);
+		mBtnMsg = (TextView) findViewById(R.id.activity_profile_user_msg_txt);
+		mCall = (RelativeLayout)findViewById(R.id.activity_profile_user_call);
+		mMsg = (RelativeLayout)findViewById(R.id.activity_profile_user_msg);
+	}
+	
 	public void setActionBar(String str) {
 		mActionBar = getSupportActionBar();
 		mActionBar.setHomeButtonEnabled(true);
@@ -129,6 +131,7 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 	}
 
 	public void setFontStyle() {
+		styleFont = Typeface.createFromAsset(getAssets(),AppConstants.fontStyle);
 		mContactName.setTypeface(styleFont);
 		mUserName.setTypeface(styleFont);
 		mBtnCall.setTypeface(styleFont);
@@ -158,7 +161,9 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				Intent callIntent = new Intent(Intent.ACTION_DIAL);
+				callIntent.setData(Uri.parse("tel:"+Uri.encode(intentNumber.replace("\"", ""))));
+				startActivity(callIntent);	
 			}
 		});
 		
@@ -166,9 +171,25 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				Intent callIntent = new Intent(Intent.ACTION_DIAL);
+		        callIntent.setData(Uri.parse("tel:"+Uri.encode(intentNumber.replace("\"", ""))));
+		        startActivity(callIntent);
 			}
 		});
+		
+		mCircleImgProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onPhotoView();
+			}
+		});
+	}
+	
+	private void onPhotoView(){
+		Intent photoViewIntent = new Intent(ProfileUserActivity.this, PhotoViewActivity.class);
+    	photoViewIntent.putExtra(PhotoViewActivity.mIntentPhoto, intentPhoto);
+    	startActivity(photoViewIntent);
 	}
 	
 	public void shareUser(){

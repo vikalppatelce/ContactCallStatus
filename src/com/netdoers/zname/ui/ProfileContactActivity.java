@@ -29,6 +29,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.R;
+import com.netdoers.zname.Zname;
 import com.netdoers.zname.utils.CircleImageView;
 import com.netdoers.zname.utils.ScrollableListView;
 
@@ -57,14 +58,8 @@ public class ProfileContactActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_contact);
 
-		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_contact_image);
-		mContactName = (TextView) findViewById(R.id.activity_profile_contact_name);
-		mListViewHead = (TextView) findViewById(R.id.activity_profile_contact_listview_head);
-		mListView = (ScrollableListView) findViewById(R.id.activity_profile_contact_listview);
-
-		styleFont = Typeface.createFromAsset(getAssets(),
-				AppConstants.fontStyle);
-
+        initUi();
+        
 		intentID = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_ID);
 		intentName = getIntent().getStringExtra(
 				AppConstants.TAGS.INTENT.TAG_NAME);
@@ -80,8 +75,8 @@ public class ProfileContactActivity extends SherlockFragmentActivity {
 			arrayNumber[0] = intentNumber;
 		}
 
-		setActionBar("Profile");
 		setFontStyle();
+		setActionBar("Profile");
 
 		mContactName.setText(intentName);
 		// mCircleImgProfile.setImageURI(Uri.parse(intentPhoto));
@@ -101,6 +96,13 @@ public class ProfileContactActivity extends SherlockFragmentActivity {
 				R.id.activity_profile_contact_listview, arrayNumber);
 		mListView.setAdapter(mListAdapter);
 
+		mCircleImgProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onPhotoView();
+			}
+		});
 	}
 
 	@Override
@@ -134,6 +136,18 @@ public class ProfileContactActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	private void initUi(){
+		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_contact_image);
+		mContactName = (TextView) findViewById(R.id.activity_profile_contact_name);
+		mListViewHead = (TextView) findViewById(R.id.activity_profile_contact_listview_head);
+		mListView = (ScrollableListView) findViewById(R.id.activity_profile_contact_listview);
+	}
+	
+	private void onPhotoView(){
+		Intent photoViewIntent = new Intent(ProfileContactActivity.this, PhotoViewActivity.class);
+    	photoViewIntent.putExtra(PhotoViewActivity.mIntentPhoto, intentPhoto);
+    	startActivity(photoViewIntent);
+	}
 	public Bitmap getBitmapFromUri(Uri uri) throws FileNotFoundException,
 			IOException {
 		InputStream input = getContentResolver().openInputStream(uri);
@@ -155,6 +169,7 @@ public class ProfileContactActivity extends SherlockFragmentActivity {
 	}
 
 	public void setFontStyle() {
+		styleFont = Typeface.createFromAsset(getAssets(),AppConstants.fontStyle);
 		mContactName.setTypeface(styleFont);
 		mListViewHead.setTypeface(styleFont);
 	}

@@ -118,7 +118,7 @@ public class RequestBuilder {
 
 	public static JSONObject getProfileUpdateData(String device_id,
 			String device_imsi, String device_name, String myVersion,
-			String value, String type)// EDITED
+			String name, String number)// EDITED
 	// X0001
 	{
 		JSONObject stringBuffer = new JSONObject();
@@ -127,20 +127,8 @@ public class RequestBuilder {
 			stringBuffer.put("os_version", myVersion);
 			stringBuffer.put("device_id", device_id);
 			stringBuffer.put("device_imsi", device_imsi);
-
-			switch (Integer.parseInt(type)) {
-			case 4:
-				stringBuffer.put("contact_number", value);
-				stringBuffer.put("full_name", Zname.getPreferences()
-						.getFullName());
-				break;
-			case 5:
-				stringBuffer.put("contact_number", Zname.getPreferences()
-						.getUserNumber());
-				stringBuffer.put("full_name", value);
-				break;
-			}
-
+			stringBuffer.put("contact_number", number);
+			stringBuffer.put("full_name", name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

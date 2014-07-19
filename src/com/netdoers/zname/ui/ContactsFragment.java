@@ -26,6 +26,7 @@ import java.util.Set;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -39,6 +40,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
@@ -47,6 +49,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -71,6 +76,7 @@ import com.netdoers.zname.service.ImportContactsService;
 import com.netdoers.zname.service.SyncCallStatusService;
 import com.netdoers.zname.service.SyncContactsService;
 import com.netdoers.zname.sqlite.DBConstant;
+import com.netdoers.zname.utils.QuickReturnListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -82,21 +88,18 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 
 	//View reference variable
 
-	ListView contactsListView;
-	ImageView searchClose;
-	ProgressDialog progressDialog;
-//	LinearLayout searchContactLayout; SU ZM003
-//	EditText searchField; EU ZM003
-//	GridView contactsGridView; COMMENTED ZM004 
-	PullToRefreshLayout mPullToRefreshLayout;
-	ImageLoader imageLoader;
-	DisplayImageOptions options;
+	private ListView mListView;
+	private ImageView mSearchClose;
+	private ProgressDialog mProgressDialog;
+	private PullToRefreshLayout mPullToRefreshLayout;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
 	
 	//TYPEFACE
 	static Typeface styleFont;
 
 	//Android helping reference variable
-	private ContactAdapter contactAdapter = null;
+	private ContactAdapter mAdapter = null;
 	
 	//Helping reference variable
 	private ArrayList<Contact> contacts = null;
@@ -108,7 +111,7 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 	
 	//CONSTANTS
 	public static final String TAG = ContactsFragment.class.getSimpleName();
-	
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true); //COMMENTED ZM002
@@ -125,11 +128,8 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 		// Get the view from fragment_all_contacts.xml
 		View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 		mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.ptr_layout);
-//		contactsGridView = (GridView)view.findViewById(R.id.gridview_all_contacts); SU ZM004
-		contactsListView = (ListView)view.findViewById(R.id.listview_all_contacts); //EU ZM004
-		searchClose = (ImageView)view.findViewById(R.id.clear_srch_button);
-//		searchField = (EditText) view.findViewById(R.id.search_txt); SU ZM003
-//		searchContactLayout = (LinearLayout)view.findViewById(R.id.search_txt_layout); EU ZM003
+		mListView = (ListView)view.findViewById(R.id.listview_all_contacts); //EU ZM004
+		mSearchClose = (ImageView)view.findViewById(R.id.clear_srch_button);
 		return view;
 	}
 
@@ -141,32 +141,22 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
          .allChildrenArePullable()
          .listener(this)
          .setup(mPullToRefreshLayout);
+		 
 		styleFont = Typeface.createFromAsset(getActivity().getAssets(), AppConstants.fontStyle);
 		
         // View Listeners
-		imageLoader = ImageLoader.getInstance();
-        // Initialize ImageLoader with configuration. Do it once.
-//        imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-        imageLoader.init(Zname.getImageLoaderConfiguration());
-        
-        options = new DisplayImageOptions.Builder()
-        .showImageOnLoading(R.drawable.def_contact) // resource or drawable
-        .showImageForEmptyUri(R.drawable.def_contact) // resource or drawable
-        .showImageOnFail(R.drawable.def_contact) //this is the image that will be displayed if download fails
-        .cacheInMemory()
-        .cacheOnDisc()
-        .build();
-        
+
+		setUniversalImageLoader();
 		contacts = new ArrayList<Contact>();
 		
 		/*
 		 * ImportContactsTask AyncTask execute when Zname is first time launched
 		 */
 		if(!Zname.getPreferences().getFirstTime()){
-			progressDialog  = new ProgressDialog(getActivity());
-			progressDialog.setMessage("Importing Contacts");
-			progressDialog.setCancelable(false);
-			progressDialog.show();
+			mProgressDialog  = new ProgressDialog(getActivity());
+			mProgressDialog.setMessage("Importing Contacts");
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.show();
 			Intent i =  new Intent(Zname.getApplication().getApplicationContext(), ImportContactsService.class);
 			getActivity().startService(i);
 		}else if(Zname.getPreferences().getRefreshContact()){
@@ -179,57 +169,7 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 			getActivity().startService(syncCallStatusService);
 		}
 		
-//		contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() { SU ZM004
-		contactsListView.setOnItemLongClickListener(new OnItemLongClickListener() { //EU ZM004
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-			
-				// vibration for 100 milliseconds
-				((Vibrator)getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE)).vibrate(50);
-				
-				String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
-				String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
-				String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
-				
-				showInputDialog(viewTagName,viewTagNumber,viewTagDp);
-				return false;
-			}
-		});
-		
-//		contactsGridView.setOnItemClickListener(new OnItemClickListener() { SU ZM004
-		contactsListView.setOnItemClickListener(new OnItemClickListener() { //EU ZM004
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-				String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
-				String viewTagName = view.getTag(R.id.TAG_CONTACT_NAME).toString();
-				String viewTagPhoto	= view.getTag(R.id.TAG_CONTACT_PHOTO_ID).toString();
-				String viewTagNumber	= view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
-				String viewTagZname = view.getTag(R.id.TAG_CONTACT_ZNAME).toString(); 
-				
-				Intent profileIntent;
-				if(viewTagZname.equalsIgnoreCase("Zname")){
-					profileIntent = new Intent(getActivity(), ProfileContactActivity.class);	
-				}else{
-					profileIntent = new Intent(getActivity(), ProfileUserActivity.class);
-					profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_CALL_STATUS, view.getTag(R.id.TAG_CONTACT_CALL_STATUS).toString());
-					profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ZNAME, view.getTag(R.id.TAG_CONTACT_ZNAME).toString());
-				}
-				
-				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID, viewTagId);
-				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, viewTagName);
-				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO, viewTagPhoto);
-				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NUMBER, viewTagNumber);
-				profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				
-				startActivity(profileIntent);
-			}
-		});
+		setEventListeners();
 	}
 
 	/* (non-Javadoc)
@@ -282,6 +222,74 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 	}
 //	EC ZM002
 
+	private void setUniversalImageLoader(){
+		imageLoader = ImageLoader.getInstance();
+        // Initialize ImageLoader with configuration. Do it once.
+        imageLoader.init(Zname.getImageLoaderConfiguration());
+        
+        options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.def_contact) // resource or drawable
+        .showImageForEmptyUri(R.drawable.def_contact) // resource or drawable
+        .showImageOnFail(R.drawable.def_contact) //this is the image that will be displayed if download fails
+        .cacheInMemory()
+        .cacheOnDisc()
+        .build();
+	}
+	
+	private void setEventListeners(){
+//		contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() { SU ZM004
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() { //EU ZM004
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+			
+				// vibration for 100 milliseconds
+				((Vibrator)getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE)).vibrate(50);
+				
+				String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
+				String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
+				String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				
+				showInputDialog(viewTagName,viewTagNumber,viewTagDp);
+				return false;
+			}
+		});
+		
+//		contactsGridView.setOnItemClickListener(new OnItemClickListener() { SU ZM004
+		mListView.setOnItemClickListener(new OnItemClickListener() { //EU ZM004
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
+				String viewTagName = view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				String viewTagPhoto	= view.getTag(R.id.TAG_CONTACT_PHOTO_ID).toString();
+				String viewTagNumber	= view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
+				String viewTagZname = view.getTag(R.id.TAG_CONTACT_ZNAME).toString(); 
+				
+				Intent profileIntent;
+				if(viewTagZname.equalsIgnoreCase("Zname")){
+					profileIntent = new Intent(getActivity(), ProfileContactActivity.class);	
+				}else{
+					profileIntent = new Intent(getActivity(), ProfileUserActivity.class);
+					profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_CALL_STATUS, view.getTag(R.id.TAG_CONTACT_CALL_STATUS).toString());
+					profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ZNAME, view.getTag(R.id.TAG_CONTACT_ZNAME).toString());
+				}
+				
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_ID, viewTagId);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME, viewTagName);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO, viewTagPhoto);
+				profileIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NUMBER, viewTagNumber);
+				profileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				
+				startActivity(profileIntent);
+			}
+		});
+	}
+	
 	private BroadcastReceiver broadcastImportContactsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -292,8 +300,8 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
     private void updateUI(Intent intent) {
     	String counter = intent.getStringExtra("text");
     	
-    	if(progressDialog!=null)
-    		progressDialog.dismiss();
+    	if(mProgressDialog!=null)
+    		mProgressDialog.dismiss();
     	
     	if(counter.equals("Refreshed")){
     		refreshContactsData();	
@@ -369,10 +377,10 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 			cr.close();
 		}
 		
-//		contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_all_contacts, contacts);SU ZM004
-//		contactsGridView.setAdapter(contactAdapter); 
-		contactAdapter = new ContactAdapter(getActivity(), R.id.listview_all_contacts, contacts);
-		contactsListView.setAdapter(contactAdapter); //EU ZM004
+//		mAdapter = new ContactAdapter(getActivity(), R.id.gridview_all_contacts, contacts);SU ZM004
+//		contactsGridView.setAdapter(mAdapter); 
+		mAdapter = new ContactAdapter(getActivity(), R.id.listview_all_contacts, contacts);
+		mListView.setAdapter(mAdapter); //EU ZM004
 	}
 	
 	public void showInputDialog(String name,String number,String photoUri)

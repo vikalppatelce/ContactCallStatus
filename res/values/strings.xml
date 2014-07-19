@@ -5,7 +5,7 @@
         <item>Notifications</item>
         <item>App Settings</item>
         <item>Share Zname</item>
-        <item>Contact Zname</item>
+        <item>Feedback</item>
     </string-array>
     <string-array name="drawer_menu_detail_array">
         <item>Zname</item>

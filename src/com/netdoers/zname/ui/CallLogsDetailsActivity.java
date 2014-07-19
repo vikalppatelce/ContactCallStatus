@@ -11,6 +11,22 @@
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED 
  * ZM002      VIKALP PATEL     16/06/2014                       CHANGE LAYOUT
  * --------------------------------------------------------------------------------------------------------------------
+ * 
+ * *****************************************METHODS INFORMATION******************************************************** 
+ * ********************************************************************************************************************
+ * DEVELOPER		  METHOD								DESCRIPTION
+ * ********************************************************************************************************************
+ * VIKALP PATEL       onCreate                   			CALLED AT TIME OF ACTIVITY CREATION(COME FRONT)
+ * VIKALP PATEL       initUi                     			INITIALISING UI COMPONENTS FROM XML OR JAVA CODE
+ * VIKALP PATEL       setFontStyle                  		SETTING FONT STYLE ON UI COMPONENETS
+ * VIKALP PATEL       setUniversalImageLoader               SETTING UNIVERSAL IMAGE LOADER CONFIGURATION
+ * VIKALP PATEL       setEventListeners			            SETTING EVENT LISTENER ON UI COMPONENTS
+ * VIKALP PATEL       isNetworkAvailable		            WHETHER NETWORK AVAILABLE OR NOT
+ * VIKALP PATEL       onBackPressed				            ON PRESSING BACK
+ * VIKALP PATEL       getCallLogDetail			            GETTING CALL LOGS FROM CONTENT PROVIDER
+ * VIKALP PATEL       getCallLogDate			            GETTING CALL LOG DATE FROM EPOCH TIME
+ * VIKALP PATEL       getCallLogTime			            GETTING CALL LOGS TIME FROM EPOCH TIME
+ * ********************************************************************************************************************
  */
 package com.netdoers.zname.ui;
 
@@ -47,15 +63,15 @@ import com.netdoers.zname.beans.CallLog;
 public class CallLogsDetailsActivity extends SherlockFragmentActivity {
 
 	//VIEW
-	private ListView callLogDetailListView;
-	private ProgressBar callLogDetailProgress;
+	private ListView mListView;
+	private ProgressBar mProgress;
 	private ActionBar mActionBar;
 	
 	//DECLARE COLLECTION
 	private ArrayList<CallLog> arrayListCallLogDetail = null;
 		
 	//ADAPTER
-	private CallLogDetailAdapter callLogDetailAdapter = null;
+	private CallLogDetailAdapter mAdapter = null;
 	
 	//TYPEFACE
 	static Typeface styleFont;
@@ -64,42 +80,25 @@ public class CallLogsDetailsActivity extends SherlockFragmentActivity {
 	public static final String TAG = CallLogsDetailsActivity.class.getSimpleName();
 	
 	//VARIABLES
-	private String intentName=null, intentNumber=null;
+	private String mIntentName=null, mIntentNumber=null;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_call_logs_detail);
 		
-		callLogDetailListView = (ListView)findViewById(R.id.call_logs_detail_list_view);
-		callLogDetailProgress = (ProgressBar)findViewById(R.id.call_logs_detail_progress);
+		initUi();
+		setFontStyle();
 		
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		mIntentName = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NAME);
+		mIntentNumber = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NUMBER);
 		
-		intentName = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NAME);
-		intentNumber = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NUMBER);
-		
-		mActionBar = getSupportActionBar();
-		mActionBar.setHomeButtonEnabled(true);
-		mActionBar.setDisplayHomeAsUpEnabled(true);
-		
-		mActionBar.setTitle(intentName);
-		
-		fontActionBar(mActionBar.getTitle().toString());
-
+        setActionBar(mIntentName);
+        
 		arrayListCallLogDetail = new ArrayList<CallLog>();
 		
-		new AsyncLoadCallLogDetail(intentNumber).execute();
+		new AsyncLoadCallLogDetail(mIntentNumber).execute();
 		
-		callLogDetailListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				// TODO Auto-generated method stub
-				Intent callIntent = new Intent(Intent.ACTION_CALL);
-		        callIntent.setData(Uri.parse("tel:"+Uri.encode(intentNumber)));
-		        startActivity(callIntent);
-			}
-		});
+		setEventListeners();
 	}
 	
 	@Override
@@ -120,6 +119,37 @@ public class CallLogsDetailsActivity extends SherlockFragmentActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+	
+	private void initUi(){
+		mListView = (ListView)findViewById(R.id.call_logs_detail_list_view);
+		mProgress = (ProgressBar)findViewById(R.id.call_logs_detail_progress);
+	}
+	
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+	}
+	
+	private void setActionBar(String str){
+		mActionBar = getSupportActionBar();
+		mActionBar.setHomeButtonEnabled(true);
+		mActionBar.setDisplayHomeAsUpEnabled(true);
+		mActionBar.setTitle(str);
+		fontActionBar(mActionBar.getTitle().toString());
+	}
+	
+	private void setEventListeners(){
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				Intent callIntent = new Intent(Intent.ACTION_CALL);
+		        callIntent.setData(Uri.parse("tel:"+Uri.encode(mIntentNumber)));
+		        startActivity(callIntent);
+			}
+		});
+	}
+	
 	public void fontActionBar(String str)
 	{
 		try {
@@ -194,7 +224,7 @@ public class CallLogsDetailsActivity extends SherlockFragmentActivity {
 		}
 		@Override
 		protected void onPreExecute() {
-			callLogDetailProgress.setVisibility(View.VISIBLE);
+			mProgress.setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -209,10 +239,10 @@ public class CallLogsDetailsActivity extends SherlockFragmentActivity {
 			super.onPostExecute(result);
 			// set contact adapter
 			// set the progress to GONE
-			callLogDetailProgress.setVisibility(View.GONE);
+			mProgress.setVisibility(View.GONE);
 			if (arrayListCallLogDetail != null && arrayListCallLogDetail.size() > 0) {
-				callLogDetailAdapter = new CallLogDetailAdapter(arrayListCallLogDetail);
-				callLogDetailListView.setAdapter(callLogDetailAdapter);
+				mAdapter = new CallLogDetailAdapter(arrayListCallLogDetail);
+				mListView.setAdapter(mAdapter);
 			}
 		}
 	}

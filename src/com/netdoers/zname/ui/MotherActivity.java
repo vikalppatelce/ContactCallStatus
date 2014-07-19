@@ -148,29 +148,10 @@ public class MotherActivity extends SherlockFragmentActivity {
 		styleFont = Typeface.createFromAsset(getAssets(),
 				AppConstants.fontStyle);
 
-		imageLoader = ImageLoader.getInstance();
-		// Initialize ImageLoader with configuration. Do it once.
-		// imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
-		imageLoader.init(Zname.getImageLoaderConfiguration());
-
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.def_contact) // resource or
-																// drawable
-				.showImageForEmptyUri(R.drawable.def_contact) // resource or
-																// drawable
-				.showImageOnFail(R.drawable.def_contact) // this is the image
-															// that will be
-															// displayed if
-															// download fails
-				.cacheInMemory().cacheOnDisc().build();
+		setUniversalImageLoader();
 
 		// Activate Navigation Mode Tabs
 		mActionBar = getSupportActionBar();
-
-		/**
-		 * ACTIONBAR TABS
-		 */
-		// mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Locate ViewPager in activity_main.xml
 		mPager = (ViewPager) findViewById(R.id.pager);
@@ -179,10 +160,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
 				// Find the ViewPager Position
-				/**
-				 * ACTIONBAR TABS
-				 */
-				// mActionBar.setSelectedNavigationItem(position);
 				switch (position) {
 				case 0:
 					setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment));
@@ -196,11 +173,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 				}
 			}
 		};
-
-		/**
-		 * ACTIONBAR TAB
-		 */
-		// mPager.setOnPageChangeListener(ViewPagerListener);
 
 		// Locate the adapter class called ViewPagerAdapter.java
 		ViewPagerAdapter viewpageradapter = new ViewPagerAdapter(
@@ -224,68 +196,6 @@ public class MotherActivity extends SherlockFragmentActivity {
 		pagerSlidingTabStrp.setShouldExpand(true);
 		pagerSlidingTabStrp.setViewPager(mPager);
 		pagerSlidingTabStrp.setOnPageChangeListener(ViewPagerListener);
-
-		/**
-		 * ACTIONBAR TABS
-		 */
-
-		/*
-		 * // CREATE CONTACTS TAB tab =
-		 * mActionBar.newTab().setText("Tab1").setTabListener(tabListener);
-		 * //PAGER SLIDING TAB STRIP tab =
-		 * mActionBar.newTab().setIcon(R.drawable
-		 * .tab_icon_zname_contact_selector).setTabListener(tabListener);
-		 * mActionBar.addTab(tab);
-		 * setMotherActionBarTitle(getString(R.string.str_all_contacts_fragment
-		 * ));
-		 * 
-		 * // CREATE GROUPS TAB tab =
-		 * mActionBar.newTab().setText("Tab2").setTabListener(tabListener);
-		 * //PAGER SLIDING TAB STRIP tab =
-		 * mActionBar.newTab().setIcon(R.drawable
-		 * .tab_icon_zname_friends_selector).setTabListener(tabListener);
-		 * mActionBar.addTab(tab);
-		 * setMotherActionBarTitle(getString(R.string.str_friends_contacts_fragment
-		 * ));
-		 * 
-		 * // CREATE CALL LOG TAB tab =
-		 * mActionBar.newTab().setText("Tab4").setTabListener(tabListener); tab
-		 * =
-		 * mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_call_log_selector
-		 * ).setTabListener(tabListener); //PAGER SLIDING TAB STRIP
-		 * mActionBar.addTab(tab);
-		 * setMotherActionBarTitle(getString(R.string.str_call_logs_fragment));
-		 */
-
-		/**
-		 * DEPRECEATED AS FIXED GROUPING HAS BEEN REMOVED
-		 */
-
-		/*
-		 * // CREATE FRIENDS GROUP TAB // tab =
-		 * mActionBar.newTab().setText("Tab2").setTabListener(tabListener); tab
-		 * =
-		 * mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_friends_selector
-		 * ).setTabListener(tabListener); mActionBar.addTab(tab);
-		 * setMotherActionBarTitle
-		 * (getString(R.string.str_friends_contacts_fragment));
-		 * 
-		 * // CREATE FAMILY GROUP TAB // tab =
-		 * mActionBar.newTab().setText("Tab3").setTabListener(tabListener); tab
-		 * =
-		 * mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_family_selector
-		 * ).setTabListener(tabListener); mActionBar.addTab(tab);
-		 * setMotherActionBarTitle
-		 * (getString(R.string.str_family_contacts_fragment));
-		 * 
-		 * // CREATE WORK GROUP TAB // tab =
-		 * mActionBar.newTab().setText("Tab4").setTabListener(tabListener); tab
-		 * =
-		 * mActionBar.newTab().setIcon(R.drawable.tab_icon_zname_work_selector)
-		 * .setTabListener(tabListener); mActionBar.addTab(tab);
-		 * setMotherActionBarTitle
-		 * (getString(R.string.str_work_contacts_fragment));
-		 */
 
 		// SA ZM003
 		Zname.getPreferences().setLastSyncPhoneBook(
@@ -362,7 +272,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
-
+				
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the sliding drawer and the action bar app icon
 		mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
@@ -393,6 +303,24 @@ public class MotherActivity extends SherlockFragmentActivity {
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		// EU ZM002
 		getProfileImageVolley();
+	}
+
+	private void setUniversalImageLoader() {
+		imageLoader = ImageLoader.getInstance();
+		// Initialize ImageLoader with configuration. Do it once.
+		// imageLoader.init(ImageLoaderConfiguration.createDefault(getActivity()));
+		imageLoader.init(Zname.getImageLoaderConfiguration());
+
+		options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.def_contact) // resource or
+															// drawable
+				.showImageForEmptyUri(R.drawable.def_contact) // resource or
+																// drawable
+				.showImageOnFail(R.drawable.def_contact) // this is the image
+															// that will be
+															// displayed if
+															// download fails
+				.cacheInMemory().cacheOnDisc().build();
 	}
 
 	// SA GCM
@@ -839,6 +767,15 @@ public class MotherActivity extends SherlockFragmentActivity {
 		case 2:
 			drawerIntent = new Intent(this, SettingsActivity.class);
 			break;
+		case 3:
+			drawerIntent = new Intent(Intent.ACTION_SEND);
+			drawerIntent.setType("text/plain");
+			drawerIntent
+					.putExtra(
+							Intent.EXTRA_TEXT,
+							"Catch person call status using Z:name \n\n"
+									+ "https://play.google.com/store/apps/details?id=com.netdoers.zname");
+			break;
 		default:
 			break;
 		}
@@ -846,7 +783,7 @@ public class MotherActivity extends SherlockFragmentActivity {
 		// // update selected item and title, then close the drawer
 		// mDrawerList.setItemChecked(position, true);
 		// setTitle(mPlanetTitles[position]);
-		// mDrawerLayout.closeDrawer(mDrawerList); COMMENTED ZM002
+		mDrawerLayout.closeDrawer(mDrawerList); // COMMENTED ZM002
 
 		if (drawerIntent != null)
 			startActivity(drawerIntent);

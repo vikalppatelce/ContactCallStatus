@@ -51,37 +51,16 @@ public class VerificationActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_verification_layout);
 		
-		//GET VIEW FROM LAYOUT
-		codeTxt = (TextView)findViewById(R.id.verification_txt_zname);
-		codeTxtVerify = (TextView)findViewById(R.id.verification_txt_verify);
-		proceed = (Button)findViewById(R.id.verification_btn);
-		
-		
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-		
-		codeTxt.setTypeface(styleFont);
-		codeTxtVerify.setTypeface(styleFont);
-		proceed.setTypeface(styleFont);
-		
-		//GET ACTION BAR
-		mActionBar = getSupportActionBar();
-		mActionBar.setTitle("Verification");
-		fontActionBar("Verification");
+		initUi();
+		setFontStyle();
+		setActionBar();
 		
 		intentCode = getIntent().getStringExtra(SignInActivity.CODE);
 		
 		if(!TextUtils.isEmpty(intentCode))
 			codeTxt.setText(intentCode);
-		//LISTENERS
-		proceed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				onVerification(v);
-			}
-		});
 		
+		setEventListeners();
 		messageReceiver = new VerificationSMSReceiver();
 	}
 	
@@ -99,6 +78,39 @@ public class VerificationActivity extends SherlockFragmentActivity {
 		registerReceiver(messageReceiver, new IntentFilter("android.provider.Telephony.SMS_RECEIVED"));
 	}
 
+	private void initUi(){
+		//GET VIEW FROM LAYOUT
+		codeTxt = (TextView)findViewById(R.id.verification_txt_zname);
+		codeTxtVerify = (TextView)findViewById(R.id.verification_txt_verify);
+		proceed = (Button)findViewById(R.id.verification_btn);
+	}
+	
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		codeTxt.setTypeface(styleFont);
+		codeTxtVerify.setTypeface(styleFont);
+		proceed.setTypeface(styleFont);
+	}
+	
+	private void setActionBar(){
+		//GET ACTION BAR
+		mActionBar = getSupportActionBar();
+		mActionBar.setTitle("Verification");
+		fontActionBar("Verification");
+	}
+	
+	private void setEventListeners(){
+		//LISTENERS
+		proceed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onVerification(v);
+			}
+		});
+	}
+	
 	public void fontActionBar(String str)
 	{
 		try {

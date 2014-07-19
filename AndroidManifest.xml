@@ -60,7 +60,9 @@
         </activity>
         <activity
             android:name="com.netdoers.zname.ui.MotherActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Zname.Drawer"
+             />
         <activity
             android:name="com.netdoers.zname.ui.SignUpActivity"
             android:screenOrientation="portrait" />
@@ -112,6 +114,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.netdoers.zname.ui.NotificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.netdoers.zname.ui.PhotoViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.netdoers.zname.ui.ProfileEditActivity"
             android:screenOrientation="portrait" />
 
         <provider

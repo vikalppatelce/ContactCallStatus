@@ -29,11 +29,11 @@
                 android:id="@+id/pager_sliding_tab_strip"
                 android:layout_width="fill_parent"
                 android:layout_height="45dip"
-                android:background="@color/white"
+                android:background="@android:color/white"
                 app:pstsDividerColor="#FFFFA500"
                 app:pstsIndicatorColor="#FFFFA500"
                 app:pstsTabPaddingLeftRight="14dip"
-                app:pstsUnderlineColor="#FFFFA500" />
+                app:pstsUnderlineColor="@android:color/darker_gray" />
             <!-- PAGER SLIDING TAB STRIP -->
 
             <android.support.v4.view.ViewPager

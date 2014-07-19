@@ -25,8 +25,8 @@ implements IconTabProvider
 	/**
 	 * PAGERSLIDINGTABSTRIPS
 	 */
-	private final int[] ICONS = { R.drawable.tab_icon_zname_contacts_selected, R.drawable.tab_icon_zname_friends_selected, 
-			R.drawable.tab_icon_zname_call_log_selected };
+	private final int[] ICONS = { R.drawable.tab_icon_zname_contact_selector, R.drawable.tab_icon_zname_friends_selector, 
+			R.drawable.tab_icon_zname_call_log_selector };
 	/**
 	 * SLIDINGTABLAYOUT
 	 */
@@ -74,24 +74,6 @@ implements IconTabProvider
 		case 2:
 			CallLogsFragment callLogsFragment = new CallLogsFragment();
 			return callLogsFragment;
-			
-	/**
-	 * DEPRECEATED FIXED GROUPS 
-	 */
-		/*case 1:
-			FriendsContactsFragment placeOrderFragment = new FriendsContactsFragment();
-			return placeOrderFragment;
-
-			// Open NewArrivalFragment.java
-		case 2:
-			FamilyContactsFragment newArrivalFragment = new FamilyContactsFragment();
-			return newArrivalFragment;
-		case 3:
-			WorkContactsFragment aboutFragment = new WorkContactsFragment();
-			return aboutFragment;
-		case 4:
-			CallLogsFragment callLogsFragment = new CallLogsFragment();
-			return callLogsFragment;*/		
 			}
 		return null;
 	}

@@ -32,7 +32,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -76,20 +75,20 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 public class GroupContactsActivity extends FragmentActivity {
 	
 	//DECLARE VARIABLES
-	ListView contactsListView;
-	Button addContact;
-	ImageLoader imageLoader;
-	DisplayImageOptions options;
-	EditText searchTxt;
-	TextView titleTxt;
-	LinearLayout actionBarLayout, searchLayout;
-	ImageView searchImg, addContactImg, searchClose, actionBarBack, searchBack;
+	private ListView mListView;
+	private Button mAddContact;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
+	private EditText mSearchTxt;
+	private TextView mTitleTxt;
+	private LinearLayout mActionBarLayout, mSearchLayout;
+	private ImageView mSearchImg, mAddContactImg, mSearchClose, mActionBarBack, mSearchBack;
 	
 	//TYPEFACE
 	static Typeface styleFont;
 	
     //ADAPTER
-	private ContactAdapter contactAdapter = null;
+	private ContactAdapter mAdapter = null;
 	
 	//REFERENCES VARIABLE - HELPER
 	private ArrayList<Contact> contacts = null;
@@ -98,9 +97,9 @@ public class GroupContactsActivity extends FragmentActivity {
 	private boolean mIsScrollingUp;	 
 	
 	//INTENT VARIABLES
-	private String intentGroupID;
-	private String intentGroupName;
-	private String intentGroupDp;
+	private String mIntentGroupID;
+	private String mIntentGroupName;
+	private String mIntentGroupDp;
 	
 	//INDEXING FOR THE LIST
 	HashMap<String, Integer> alphaIndexer;
@@ -115,8 +114,36 @@ public class GroupContactsActivity extends FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_group_contacts);
 		
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		initUi();
+		setUniversalImageLoader();
+		setFontStyle();
 		
+		contacts = new ArrayList<Contact>();
+		
+		mIntentGroupID = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_ID);
+		mIntentGroupName = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NAME);
+		mIntentGroupDp = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_PHOTO);
+		
+		mTitleTxt.setText(mIntentGroupName);
+		
+        setEventListeners();	
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+			refreshContactsData();
+	}
+
+	@Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        super.onBackPressed();
+        finish();
+    }
+	
+	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
         // Initialize ImageLoader with configuration. Do it once.
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -128,32 +155,31 @@ public class GroupContactsActivity extends FragmentActivity {
         .cacheInMemory()
         .cacheOnDisc()
         .build();
-        
-		contactsListView = (ListView)findViewById(R.id.listview_friends); //EU ZM004
-		addContact = (Button)findViewById(R.id.friends_btn_add);
-		titleTxt = (TextView)findViewById(R.id.group_contacts_actionbar_title);
-		searchTxt = (EditText)findViewById(R.id.group_contacts_searchlayout_txt);
-		actionBarLayout = (LinearLayout)findViewById(R.id.group_contacts_actionbar);
-		searchLayout = (LinearLayout)findViewById(R.id.group_contacts_searchlayout);
-		
-		searchBack = (ImageView)findViewById(R.id.group_contacts_searchlayout_back);
-		actionBarBack = (ImageView)findViewById(R.id.group_contacts_actionbar_back);
-		searchClose = (ImageView)findViewById(R.id.group_contacts_searchlayout_clear);
-		searchImg = (ImageView)findViewById(R.id.group_contacts_actionbar_search);
-		addContactImg = (ImageView)findViewById(R.id.group_contacts_actionbar_add);
+	}
 	
-		titleTxt.setTypeface(styleFont);
-		searchTxt.setTypeface(styleFont);
+	private void initUi(){
+		mListView = (ListView)findViewById(R.id.listview_friends); //EU ZM004
+		mAddContact = (Button)findViewById(R.id.friends_btn_add);
+		mTitleTxt = (TextView)findViewById(R.id.group_contacts_actionbar_title);
+		mSearchTxt = (EditText)findViewById(R.id.group_contacts_searchlayout_txt);
+		mActionBarLayout = (LinearLayout)findViewById(R.id.group_contacts_actionbar);
+		mSearchLayout = (LinearLayout)findViewById(R.id.group_contacts_searchlayout);
 		
-		contacts = new ArrayList<Contact>();
-		
-		intentGroupID = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_ID);
-		intentGroupName = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_NAME);
-		intentGroupDp = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_PHOTO);
-		
-		titleTxt.setText(intentGroupName);
-		
-		searchImg.setOnClickListener(new View.OnClickListener() {
+		mSearchBack = (ImageView)findViewById(R.id.group_contacts_searchlayout_back);
+		mActionBarBack = (ImageView)findViewById(R.id.group_contacts_actionbar_back);
+		mSearchClose = (ImageView)findViewById(R.id.group_contacts_searchlayout_clear);
+		mSearchImg = (ImageView)findViewById(R.id.group_contacts_actionbar_search);
+		mAddContactImg = (ImageView)findViewById(R.id.group_contacts_actionbar_add);
+	}
+	
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		mTitleTxt.setTypeface(styleFont);
+		mSearchTxt.setTypeface(styleFont);
+	}
+	
+	private void setEventListeners(){
+		mSearchImg.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -161,7 +187,7 @@ public class GroupContactsActivity extends FragmentActivity {
 			}
 		});
 		
-		searchBack.setOnClickListener(new View.OnClickListener() {
+		mSearchBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -169,7 +195,7 @@ public class GroupContactsActivity extends FragmentActivity {
 			}
 		});
 		
-		searchClose.setOnClickListener(new View.OnClickListener() {
+		mSearchClose.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -177,7 +203,7 @@ public class GroupContactsActivity extends FragmentActivity {
 			}
 		});
 		
-		actionBarBack.setOnClickListener(new View.OnClickListener() {
+		mActionBarBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -185,14 +211,14 @@ public class GroupContactsActivity extends FragmentActivity {
 			}
 		});
 		
-		addContactImg.setOnClickListener(new View.OnClickListener() {
+		mAddContactImg.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				openAddContactsLayout();
 			}
 		});
-		contactsListView.setOnItemLongClickListener(new OnItemLongClickListener() {// EU ZM004
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {// EU ZM004
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
@@ -210,7 +236,7 @@ public class GroupContactsActivity extends FragmentActivity {
 		}
 	});
 
-		contactsListView.setOnItemClickListener(new OnItemClickListener() {
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -242,7 +268,7 @@ public class GroupContactsActivity extends FragmentActivity {
 			}
 		});
 
-	addContact.setOnClickListener(new View.OnClickListener() {
+	mAddContact.setOnClickListener(new View.OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
@@ -251,7 +277,7 @@ public class GroupContactsActivity extends FragmentActivity {
 		}
 	});
 	
-	searchTxt.addTextChangedListener(new TextWatcher() {
+	mSearchTxt.addTextChangedListener(new TextWatcher() {
 		@Override
 		public void afterTextChanged(Editable s) {
 		}
@@ -261,63 +287,22 @@ public class GroupContactsActivity extends FragmentActivity {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// call the filter with the current text on the editbox
-			if(contactAdapter!=null)
-				contactAdapter.getFilter().filter(s.toString());
+			if(mAdapter!=null)
+				mAdapter.getFilter().filter(s.toString());
 			}
 		});
-	
-//	 SA ZM005
-	/*contactsListView.setOnScrollListener(new OnScrollListener() {
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			// TODO Auto-generated method stub
-			final ListView lw = contactsListView;
-		    if (view.getId() == lw.getId()) {
-		        final int currentFirstVisibleItem = lw.getFirstVisiblePosition();
-		        if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-		            mIsScrollingUp = false;
-		            addContact.setVisibility(View.GONE);
-		        } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-		            mIsScrollingUp = true;
-		            addContact.setVisibility(View.VISIBLE);
-		        }
-		        mLastFirstVisibleItem = currentFirstVisibleItem;
-		    } 
-		}
-		
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,
-				int visibleItemCount, int totalItemCount) {
-			// TODO Auto-generated method stub
-		}
-	});*/
-	
 	}
-	
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-			refreshContactsData();
-	}
-
-	@Override
-    public void onBackPressed() {
-        // TODO Auto-generated method stub
-        super.onBackPressed();
-        finish();
-    }
 	
 	public void onSearchClick(){
-		actionBarLayout.setVisibility(View.GONE);
-		searchLayout.setVisibility(View.VISIBLE);
-		searchTxt.requestFocus();
+		mActionBarLayout.setVisibility(View.GONE);
+		mSearchLayout.setVisibility(View.VISIBLE);
+		mSearchTxt.requestFocus();
 	}
 	
 	public void openAddContactsLayout()
 	{
-		Intent addContacts = new Intent(this, ContactPickerManager.class);
-		startActivityForResult(addContacts, ADD_CONTACT);
+		Intent mAddContacts = new Intent(this, ContactPickerManager.class);
+		startActivityForResult(mAddContacts, ADD_CONTACT);
 	}
 	
 	public void onSearchBack1(){
@@ -330,11 +315,11 @@ public class GroupContactsActivity extends FragmentActivity {
 	
 	public void onSearchClear(View v)
 	{
-		if(TextUtils.isEmpty(searchTxt.getText().toString())){
-			searchLayout.setVisibility(View.GONE);
-			actionBarLayout.setVisibility(View.VISIBLE);
+		if(TextUtils.isEmpty(mSearchTxt.getText().toString())){
+			mSearchLayout.setVisibility(View.GONE);
+			mActionBarLayout.setVisibility(View.VISIBLE);
 		}else{
-			searchTxt.setText("");	
+			mSearchTxt.setText("");	
 		}
 	}
 	public void fontActionBar(String str)
@@ -422,7 +407,7 @@ public class GroupContactsActivity extends FragmentActivity {
 	
 	public void refreshContactsData()
 	{
-		Cursor cr = getContentResolver().query(DBConstant.Groups_Contacts_Columns.CONTENT_URI, null, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?", new String[]{intentGroupID}, DBConstant.Groups_Contacts_Columns.COLUMN_NAME + " ASC");
+		Cursor cr = getContentResolver().query(DBConstant.Groups_Contacts_Columns.CONTENT_URI, null, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?", new String[]{mIntentGroupID}, DBConstant.Groups_Contacts_Columns.COLUMN_NAME + " ASC");
 		Cursor crAll = getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
 		Cursor cursor = null;
 		if(cr.getCount() > 0)
@@ -475,10 +460,10 @@ public class GroupContactsActivity extends FragmentActivity {
 		}
 		
 		if(contacts.size() > 0){
-//			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_friends, contacts); SU ZM004
-//			contactsGridView.setAdapter(contactAdapter);	
-			contactAdapter = new ContactAdapter(this, R.id.listview_friends, contacts);
-			contactsListView.setAdapter(contactAdapter); //EU ZM004
+//			mAdapter = new ContactAdapter(getActivity(), R.id.gridview_friends, contacts); SU ZM004
+//			contactsGridView.setAdapter(mAdapter);	
+			mAdapter = new ContactAdapter(this, R.id.listview_friends, contacts);
+			mListView.setAdapter(mAdapter); //EU ZM004
 		}
 	}
 	
@@ -496,15 +481,21 @@ public class GroupContactsActivity extends FragmentActivity {
 								final ContactPicker contact = iterContacts.next();
 								ContentValues values = new ContentValues();
 								try {
-								values.put(DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID, intentGroupID);
-								values.put(DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID, contact.getContactId().toString());
-								values.put(DBConstant.Groups_Contacts_Columns.COLUMN_NAME, contact.getContactName().toString());
-								getContentResolver().insert(DBConstant.Groups_Contacts_Columns.CONTENT_URI, values);
-								refreshContactsData();
+								Cursor cr = getContentResolver().query(DBConstant.Groups_Contacts_Columns.CONTENT_URI, null, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID+"=?" + " AND " + DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID+ "=?", new String[]{mIntentGroupID,contact.getContactId().toString()}, null);
+								if(cr.getCount() == 0){
+									values.put(DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID, mIntentGroupID);
+									values.put(DBConstant.Groups_Contacts_Columns.COLUMN_CONTACT_ID, contact.getContactId().toString());
+									values.put(DBConstant.Groups_Contacts_Columns.COLUMN_NAME, contact.getContactName().toString());
+									getContentResolver().insert(DBConstant.Groups_Contacts_Columns.CONTENT_URI, values);									
+								}
+								if(cr!=null)
+									cr.close();
+								
 							} catch (Exception e) {
 								Log.e(TAG, e.toString());
 							}
 						}
+						refreshContactsData();						
 					}
 				}
 			}
@@ -600,8 +591,8 @@ public class GroupContactsActivity extends FragmentActivity {
 						displayPicture.setImageResource(R.drawable.def_contact);
 				}
 
-				if(!TextUtils.isEmpty(searchTxt.getText().toString())){
-					displayName.setText(Utilities.highlight(searchTxt.getText().toString(), contact.getContactName()));	
+				if(!TextUtils.isEmpty(mSearchTxt.getText().toString())){
+					displayName.setText(Utilities.highlight(mSearchTxt.getText().toString(), contact.getContactName()));	
 				}else{
 					displayName.setText(contact.getContactName());
 				}

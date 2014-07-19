@@ -6,7 +6,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="57dp"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:orientation="vertical" >
@@ -26,14 +25,13 @@
 
     <Button
         android:id="@+id/fragment_groups_add"
-        android:layout_width="fill_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom|center"
-        android:drawableLeft="@drawable/ic_add_person_white_20"
-        android:paddingLeft="55dp"
-        android:paddingRight="55dp"
-        android:background="@drawable/zname_btn_default_holo_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/ic_group_plus"
         android:textColor="@android:color/white"
-        android:text="Create New group" />
+        android:text="" />
 
 </FrameLayout>

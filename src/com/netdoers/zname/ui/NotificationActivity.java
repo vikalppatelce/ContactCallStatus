@@ -75,14 +75,14 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  */
 @SuppressLint("NewApi")
 public class NotificationActivity extends SherlockFragmentActivity {
-	ListView notificationListView;
-	ProgressBar notificationProgress;
-	ImageLoader imageLoader;
-	ActionBar mActionBar;
-	DisplayImageOptions options;
+	private ListView mListView;
+	private ProgressBar mProgress;
+	private ImageLoader imageLoader;
+	private ActionBar mActionBar;
+	private DisplayImageOptions options;
 	
 	//ADAPTER
-	NotificationAdapter notificationListAdapter;
+	private NotificationAdapter mAdapter;
 
 	// TYPEFACE
 	static Typeface styleFont;
@@ -101,12 +101,36 @@ public class NotificationActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification);
 
-		styleFont = Typeface.createFromAsset(getAssets(),
-				AppConstants.fontStyle);
+        initUi();
+        setFontStyle();
+		setUniversalImageLoader();
+		setActionBar("Notification");
+		arrListNotification = new ArrayList<NotificationDTO>();
+		
+		if(isNetworkAvailable()){
+			arrListNotification.clear();
+			new FetchNotificationTask(imageLoader, options).execute();
+		}
+	}
 
-		notificationListView = (ListView) findViewById(R.id.listview_notification);
-		notificationProgress = (ProgressBar) findViewById(R.id.list_view_notification_progress);
-
+	private void setActionBar(String str){
+		mActionBar = getSupportActionBar();
+		mActionBar.setHomeButtonEnabled(true);
+		mActionBar.setDisplayHomeAsUpEnabled(true);
+		mActionBar.setTitle(str);
+		fontActionBar(mActionBar.getTitle().toString());
+	}
+	
+	private void initUi(){
+		mListView = (ListView) findViewById(R.id.listview_notification);
+		mProgress = (ProgressBar) findViewById(R.id.list_view_notification_progress);
+	}
+	
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(),AppConstants.fontStyle);
+	}
+	
+	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
 		// Initialize ImageLoader with configuration. Do it once.
 		imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -121,20 +145,8 @@ public class NotificationActivity extends SherlockFragmentActivity {
 															// displayed if
 															// download fails
 				.cacheInMemory().cacheOnDisc().build();
-
-		mActionBar = getSupportActionBar();
-		mActionBar.setHomeButtonEnabled(true);
-		mActionBar.setDisplayHomeAsUpEnabled(true);
-		mActionBar.setTitle("Notification");
-		fontActionBar(mActionBar.getTitle().toString());
-		arrListNotification = new ArrayList<NotificationDTO>();
-		
-		if(isNetworkAvailable()){
-			arrListNotification.clear();
-			new FetchNotificationTask(imageLoader, options).execute();
-		}
 	}
-
+	
 	private boolean isNetworkAvailable() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager
@@ -228,10 +240,10 @@ public class NotificationActivity extends SherlockFragmentActivity {
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			notificationProgress.setVisibility(View.GONE);
+			mProgress.setVisibility(View.GONE);
 			if(arrListNotification.size() > 0){
-				notificationListAdapter = new NotificationAdapter(arrListNotification, NotificationActivity.this);
-				notificationListView.setAdapter(notificationListAdapter);
+				mAdapter = new NotificationAdapter(arrListNotification, NotificationActivity.this);
+				mListView.setAdapter(mAdapter);
 			}
 		}
 
@@ -299,7 +311,7 @@ public class NotificationActivity extends SherlockFragmentActivity {
 				progressDialog.dismiss();
 			
 			arrListNotification.remove(position);
-			notificationListAdapter.notifyDataSetChanged();
+			mAdapter.notifyDataSetChanged();
 			
 			showEditNameDialog(zname,fullName,znumber,profilepic);
 		}
@@ -445,7 +457,7 @@ public class NotificationActivity extends SherlockFragmentActivity {
 						                   VolleyLog.v("Response:%n %s", response.toString(4));
 						                   if(response.getBoolean("status")){
 						                	   arrListNotification.remove(position);
-						                	   notificationListAdapter.notifyDataSetChanged();
+						                	   mAdapter.notifyDataSetChanged();
 						                   }
 						               } catch (JSONException e) {
 						                   e.printStackTrace();

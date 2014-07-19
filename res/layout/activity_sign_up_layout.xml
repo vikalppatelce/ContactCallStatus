@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/signup_light_orange"
     android:orientation="vertical" >
 
     <ScrollView
@@ -11,25 +13,30 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-                
-                <TextView 
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="20sp"
-                    />
+
+                <com.netdoers.zname.utils.CircleImageView
+                    android:id="@+id/sign_up_display_picture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:onClick="onDisplayPicture"
+                    android:src="@drawable/def_contact"
+                    circle:border_color="@android:color/white"
+                    circle:border_width="2dp" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
+                    android:background="@color/signup_dark_orange"
                     android:orientation="horizontal" >
 
                     <ImageView
@@ -37,23 +44,28 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:layout_marginLeft="7dp"
-                        android:background="@drawable/accounts_glyph_name_default" />
+                        android:background="@drawable/accounts_glyph_name_default"
+                        android:contentDescription="@string/app_name" />
 
                     <EditText
                         android:id="@+id/sign_up_name"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/zname_edit_text_holo_light"
-                        android:hint="Full Name"
+                        android:background="@color/signup_medium_orange"
                         android:gravity="left|center"
+                        android:hint="Full Name"
                         android:inputType="text"
-                        android:paddingLeft="15dp" />
+                        android:paddingLeft="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/signup_dark_orange"
                     android:orientation="horizontal" >
 
                     <ImageView
@@ -61,87 +73,96 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center"
                         android:layout_marginLeft="7dp"
-                        android:background="@drawable/accounts_glyph_username_default" />
+                        android:background="@drawable/accounts_glyph_username_default"
+                        android:contentDescription="@string/app_name" />
 
                     <EditText
                         android:id="@+id/sign_up_zname"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/zname_edit_text_holo_light"
+                        android:background="@color/signup_medium_orange"
+                        android:gravity="left|center"
                         android:hint="Book your : Zname"
                         android:inputType="text"
-                        android:gravity="left|center"
-                        android:paddingLeft="15dp" />
+                        android:paddingLeft="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/signup_light_orange"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|center"
-                        android:layout_marginLeft="7dp"
-                        android:background="@drawable/accounts_glyph_phone_default" />
+                        android:layout_height="match_parent"
+                        android:background="@color/signup_dark_orange"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginRight="9dp"
+                            android:background="@drawable/accounts_glyph_phone_default"
+                            android:contentDescription="@string/app_name" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/sign_up_zname_country_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/signup_medium_orange"
+                        android:gravity="center"
+                        android:maxLength="3"
+                        android:text="+91"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/sign_up_zname_znumber"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/zname_edit_text_holo_light"
-                        android:hint="Contact Number"
+                        android:layout_height="match_parent"
+                        android:background="@color/signup_medium_orange"
                         android:gravity="left|center"
+                        android:hint="Contact Number"
                         android:inputType="number"
-                        android:paddingLeft="15dp" />
+                        android:paddingLeft="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white" />
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dip"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <com.netdoers.zname.utils.SquareImageView
-                    android:id="@+id/sign_up_display_picture"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:onClick="onDisplayPicture"
-                    android:scaleType="fitCenter"
-                    android:background="@drawable/face_stamp"
-                    android:src="@drawable/def_contact" />
-
-                <TextView
-                    android:id="@+id/sign_up_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/zname_btn_default_holo_light"
-                    android:gravity="center"
-                    android:text="Sign Up"
-                    android:textColor="#ffffff"
-                    android:textSize="22sp" />
-            </LinearLayout>
-            
             <TextView
-                    android:id="@+id/sign_up_txt_agree" 
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="10dp"                
-                	android:textSize="16sp"
-                	android:layout_gravity="center_horizontal"
-                	android:gravity="center"
-                />
+                android:id="@+id/sign_up_button"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/signup_random_orange"
+                android:gravity="center"
+                android:text="Sign Up"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/sign_up_txt_agree"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+            
         </LinearLayout>
     </ScrollView>
 

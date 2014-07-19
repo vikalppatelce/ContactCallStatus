@@ -12,6 +12,21 @@
  * ZM001      VIKALP PATEL     16/05/2014                       CREATED
  * ZM002      VIKALP PATEL     09/06/2014                       MIGRATION: GRIDVIEW INTO LISTVIEW
  * --------------------------------------------------------------------------------------------------------------------
+ * 
+ *
+ * *****************************************METHODS INFORMATION******************************************************** 
+ * ********************************************************************************************************************
+ * DEVELOPER		  METHOD								DESCRIPTION
+ * ********************************************************************************************************************
+ * VIKALP PATEL       onCreate                   			CALLED AT TIME OF ACTIVITY CREATION(COME FRONT)
+ * VIKALP PATEL       initUi                     			INITIALISING UI COMPONENTS FROM XML OR JAVA CODE
+ * VIKALP PATEL       setFontStyle                  		SETTING FONT STYLE ON UI COMPONENETS
+ * VIKALP PATEL       setUniversalImageLoader               SETTING UNIVERSAL IMAGE LOADER CONFIGURATION
+ * VIKALP PATEL       setEventListeners			            SETTING EVENT LISTENER ON UI COMPONENTS
+ * VIKALP PATEL       isNetworkAvailable		            WHETHER NETWORK AVAILABLE OR NOT
+ * VIKALP PATEL       onSearchClear				            CALLED ON SEARCH CLEAR
+ * VIKALP PATEL       onSearchBack				            CALLED ON SEARCH BACK
+ * ********************************************************************************************************************
  */
 package com.netdoers.zname.ui;
 
@@ -67,10 +82,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  */
 @SuppressLint("NewApi")
 public class AddZnameActivity extends FragmentActivity {
-	ListView searchListView;//EU ZM002
-	ImageView searchClose,searchBack;	
-	EditText searchField;
-	ProgressBar searchProgress;
+	private ListView mListView;
+	private ImageView mSearchClose, mSearchBack;
+	private EditText mSearchField;
+	private ProgressBar mProgress;
 	ImageLoader imageLoader;
 	DisplayImageOptions options;
 	
@@ -93,19 +108,29 @@ public class AddZnameActivity extends FragmentActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_search_zname);
 		
-		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-		
-		searchListView = (ListView)findViewById(R.id.listview_search_zname);
-		searchClose = (ImageView)findViewById(R.id.search_clear);
-		searchField = (EditText)findViewById(R.id.search_txt);
-		searchBack = (ImageView)findViewById(R.id.search_back);
-		searchProgress = (ProgressBar)findViewById(R.id.list_view_search_progress);
-
+		initUi();
 		arrZnameSearch = new ArrayList<ZnameSearch>();
+		
+		setUniversalImageLoader();
+		setFontStyle();
+		mSearchField.requestFocus();
+		
+		setEventListeners();
+				
+		emptyAdapter = new CustomArrayAdapter<CharSequence>(this, emptyItems);
+	}
 	
+		private boolean isNetworkAvailable() {
+		    ConnectivityManager connectivityManager 
+		          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		    return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+		}
+		
+	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
         // Initialize ImageLoader with configuration. Do it once.
-        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
+        imageLoader.init(Zname.getImageLoaderConfiguration());
         
         options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.def_contact) // resource or drawable
@@ -114,8 +139,23 @@ public class AddZnameActivity extends FragmentActivity {
         .cacheInMemory()
         .cacheOnDisc()
         .build();
-        
-		searchListView.setOnItemClickListener(new OnItemClickListener() {
+	}
+
+	private void setFontStyle(){
+		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
+		mSearchField.setTypeface(styleFont);
+	}
+	
+	private void initUi(){
+		mListView = (ListView)findViewById(R.id.listview_search_zname);
+		mSearchClose = (ImageView)findViewById(R.id.search_clear);
+		mSearchField = (EditText)findViewById(R.id.search_txt);
+		mSearchBack = (ImageView)findViewById(R.id.search_back);
+		mProgress = (ProgressBar)findViewById(R.id.list_view_search_progress);
+	}
+	
+	private void setEventListeners(){
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parentView, View view, int position,
@@ -137,11 +177,9 @@ public class AddZnameActivity extends FragmentActivity {
 				}
 			}
 		});
-		searchField.requestFocus();
-		searchField.setTypeface(styleFont);
 		
 		// Add text listner to the edit text for filtering the List
-		searchField.addTextChangedListener(new TextWatcher() {
+		mSearchField.addTextChangedListener(new TextWatcher() {
 		@Override
 		public void afterTextChanged(Editable s) {
 		}
@@ -151,40 +189,30 @@ public class AddZnameActivity extends FragmentActivity {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// call the filter with the current text on the editbox
-			if(searchField.getText().toString().length() > 2){
+			if(mSearchField.getText().toString().length() > 2){
 				if(isNetworkAvailable()){
 					try{
-						searchListView.setAdapter(null);	
+						mListView.setAdapter(null);	
 					}catch(Exception e){
 						Log.e(TAG, e.toString());
 					}
 					
 					if(Build.VERSION.SDK_INT > 11){
-						new SearchZnameTask(searchField.getText().toString(),imageLoader,options).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
+						new SearchZnameTask(mSearchField.getText().toString(),imageLoader,options).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
 					}else{
-						new SearchZnameTask(searchField.getText().toString(),imageLoader,options).execute();
+						new SearchZnameTask(mSearchField.getText().toString(),imageLoader,options).execute();
 					}
 				}
 			}
 		}
 		});
-		
-		emptyAdapter = new CustomArrayAdapter<CharSequence>(this, emptyItems);
 	}
-	
-		private boolean isNetworkAvailable() {
-		    ConnectivityManager connectivityManager 
-		          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-		    return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-		}
-
 	///////////////////////////////////////////////
 	// LISTENER OBJECTS ON VIEW
 	///////////////////////////////////////////////
 	
 	public void onSearchClear(View v){
-		searchField.setText("");
+		mSearchField.setText("");
 	}
 	
 	public void onSearchBack(View v){
@@ -246,8 +274,8 @@ public class AddZnameActivity extends FragmentActivity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			searchProgress.setVisibility(View.VISIBLE);
-			searchListView.invalidate();
+			mProgress.setVisibility(View.VISIBLE);
+			mListView.invalidate();
 		}
 
 		@Override
@@ -255,11 +283,11 @@ public class AddZnameActivity extends FragmentActivity {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if(arrZnameSearch.size()>0){
-				searchProgress.setVisibility(View.GONE);
-				searchListView.setAdapter(new SearchAdapter(arrZnameSearch,AddZnameActivity.this));
+				mProgress.setVisibility(View.GONE);
+				mListView.setAdapter(new SearchAdapter(arrZnameSearch,AddZnameActivity.this));
 			}else{
-				searchProgress.setVisibility(View.GONE);
-				searchListView.setAdapter(emptyAdapter);
+				mProgress.setVisibility(View.GONE);
+				mListView.setAdapter(emptyAdapter);
 			}
 		}
 		

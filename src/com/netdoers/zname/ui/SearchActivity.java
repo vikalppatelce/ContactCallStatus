@@ -68,19 +68,18 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 public class SearchActivity extends FragmentActivity {
 
 	//View reference variable
-//	GridView contactsGridView; SU ZM002
-	ListView contactsListView;//EU ZM002
-	ImageView searchClose,searchBack;	
-	EditText searchField;
-	ImageLoader imageLoader;
-	DisplayImageOptions options;
+	private ListView mListView;//EU ZM002
+	private ImageView mSearchClose,mSearchBack;	
+	private EditText mSearchField;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
 	
 	
 	//TYPEFACE
 	static Typeface styleFont;
 
 	//Android helping reference variable
-	private ContactAdapter contactAdapter = null;
+	private ContactAdapter mAdapter = null;
 	
 	//Helping reference variable
 	private ArrayList<Contact> contacts = null;
@@ -100,9 +99,24 @@ public class SearchActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_search);
-		
 		styleFont = Typeface.createFromAsset(getAssets(), AppConstants.fontStyle);
-		
+		initUi();
+		setUniversalImageLoader();
+		contacts = new ArrayList<Contact>();
+		refreshContactsData();	
+		mSearchField.requestFocus();
+		mSearchField.setTypeface(styleFont);
+		setEventListeners();
+	}
+	
+	private void initUi(){
+		mListView = (ListView)findViewById(R.id.listview_all_contacts); //EU ZM002
+		mSearchClose = (ImageView)findViewById(R.id.search_clear);
+		mSearchField = (EditText)findViewById(R.id.search_txt);
+		mSearchBack = (ImageView)findViewById(R.id.search_back);
+	}
+	
+	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
         // Initialize ImageLoader with configuration. Do it once.
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
@@ -114,21 +128,10 @@ public class SearchActivity extends FragmentActivity {
         .cacheInMemory()
         .cacheOnDisc()
         .build();
-        
-//		contactsGridView = (GridView)findViewById(R.id.gridview_all_contacts); SU ZM002
-		contactsListView = (ListView)findViewById(R.id.listview_all_contacts); //EU ZM002
-		searchClose = (ImageView)findViewById(R.id.search_clear);
-		searchField = (EditText)findViewById(R.id.search_txt);
-		searchBack = (ImageView)findViewById(R.id.search_back);
-
-		contacts = new ArrayList<Contact>();
-		
-		
-		refreshContactsData();	
-
-		
-//		contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() { SU ZM002
-		contactsListView.setOnItemLongClickListener(new OnItemLongClickListener() { //EU ZM002
+	}
+	
+	private void setEventListeners(){
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() { 
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -147,7 +150,7 @@ public class SearchActivity extends FragmentActivity {
 			}
 		});
 		
-		contactsListView.setOnItemClickListener(new OnItemClickListener() {
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -177,11 +180,8 @@ public class SearchActivity extends FragmentActivity {
 			}
 		});
 		
-		searchField.requestFocus();
-		searchField.setTypeface(styleFont);
-		
 		// Add text listner to the edit text for filtering the List
-		searchField.addTextChangedListener(new TextWatcher() {
+		mSearchField.addTextChangedListener(new TextWatcher() {
 		@Override
 		public void afterTextChanged(Editable s) {
 		}
@@ -191,18 +191,20 @@ public class SearchActivity extends FragmentActivity {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// call the filter with the current text on the editbox
-		contactAdapter.getFilter().filter(s.toString());
+		mAdapter.getFilter().filter(s.toString());
 			}
 		});
+
 	}
+	
 // LISTENERS
 	
 	public void onSearchClear(View v)
 	{
-		if(TextUtils.isEmpty(searchField.getText().toString())){
+		if(TextUtils.isEmpty(mSearchField.getText().toString())){
 			finish();
 		}else{
-			searchField.setText("");	
+			mSearchField.setText("");	
 		}
 	}
 	
@@ -245,105 +247,9 @@ public class SearchActivity extends FragmentActivity {
 			cr.close();
 		}
 		
-//		contactAdapter = new ContactAdapter(SearchActivity.this, R.id.gridview_all_contacts, contacts); SU ZM002
-		contactAdapter = new ContactAdapter(SearchActivity.this, R.id.listview_all_contacts, contacts);
-//		contactsGridView.setAdapter(contactAdapter);
-		contactsListView.setAdapter(contactAdapter); //EU ZM002
+		mAdapter = new ContactAdapter(SearchActivity.this, R.id.listview_all_contacts, contacts);
+		mListView.setAdapter(mAdapter); //EU ZM002
 	}
-	
-	/*public void refreshGroupContactsData(int groupType)
-	{
-		Cursor cr;
-		switch(groupType){
-		case 0:
-			cr = getContentResolver().query(DBConstant.Friends_Contacts_Columns.CONTENT_URI, null, null, null, DBConstant.Friends_Contacts_Columns.COLUMN_DISPLAY_NAME + " ASC");
-			searchField.setHint("Search Friends");
-			break;
-		case 1:
-			cr = getContentResolver().query(DBConstant.Family_Contacts_Columns.CONTENT_URI, null, null, null, DBConstant.Family_Contacts_Columns.COLUMN_DISPLAY_NAME + " ASC");
-			searchField.setHint("Search Family");
-			break;
-		case 2:
-			cr = getContentResolver().query(DBConstant.Work_Contacts_Columns.CONTENT_URI, null, null, null, DBConstant.Work_Contacts_Columns.COLUMN_DISPLAY_NAME + " ASC");
-			searchField.setHint("Search Work");
-			break;
-		default:
-			cr = getContentResolver().query(DBConstant.Friends_Contacts_Columns.CONTENT_URI, null, null, null, DBConstant.Friends_Contacts_Columns.COLUMN_DISPLAY_NAME + " ASC");
-			break;
-		}
-		
-		Cursor crAll = getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, null, null, null);
-		Cursor cursor = null;
-		if(cr.getCount() > 0)
-		{
-			contacts.clear();
-			int intColumnId = 0;
-			switch(groupType){
-			case 0:
-				intColumnId = cr.getColumnIndex(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID);
-				break;
-			case 1:
-				intColumnId = cr.getColumnIndex(DBConstant.Family_Contacts_Columns.COLUMN_CONTACT_ID);
-				break;
-			case 2:
-				intColumnId = cr.getColumnIndex(DBConstant.Work_Contacts_Columns.COLUMN_CONTACT_ID);
-				break;
-			case 3:
-				intColumnId = cr.getColumnIndex(DBConstant.Friends_Contacts_Columns.COLUMN_CONTACT_ID);
-				break;
-			default:
-				break;
-			}
-			
-			int intColumnContactNumber = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_CONTACT_NUMBER);
-			int intColumnDisplayName = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME);
-			int intColumnZname = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME);
-			int intColumnZnumber = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_NUMBER);
-			int intColumnZnameDp = crAll.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME_DP_URL_SMALL);
-			if(crAll!=null){
-				crAll.close();	
-			}
-			
-			Contact c;
-//			cr.moveToFirst();
-			while(cr.moveToNext())
-			{
-				c = new Contact();
-				c.setContactId(cr.getString(intColumnId));
-				
-				cursor = getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, null, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID+"=?", new String[]{cr.getString(intColumnId)}, null);
-				if(cursor.getCount() > 0)
-				{
-					cursor.moveToFirst();
-					
-					c.setContactNumber(
-							TextUtils.isEmpty(cursor.getString(intColumnZnumber))
-							?cursor.getString(intColumnContactNumber)
-							:cursor.getString(intColumnZnumber));
-					c.setContactZname(cursor.getString(intColumnZname));
-					c.setContactName(cursor.getString(intColumnDisplayName));
-					c.setContactPhotoUri(Uri.parse(cursor.getString(intColumnZnameDp)));
-					contacts.add(c);
-				}
-				if(cursor!=null){
-					cursor.close();
-				}
-			}
-		}
-		if(cr!=null){
-			cr.close();
-		}
-		if(cursor!=null){
-			cursor.close();
-		}
-		
-		if(contacts.size() > 0){
-//			contactAdapter = new ContactAdapter(getActivity(), R.id.gridview_friends, contacts); SU ZM004
-//			contactsGridView.setAdapter(contactAdapter);	
-			contactAdapter = new ContactAdapter(SearchActivity.this, R.id.listview_friends, contacts);
-			contactsListView.setAdapter(contactAdapter); //EU ZM004
-		}
-	}*/
 	
 //	View Listeners
 	
@@ -509,8 +415,8 @@ public class SearchActivity extends FragmentActivity {
 
 //				SU ZM003				
 //				displayName.setText(contact.getContactName());
-				if(!TextUtils.isEmpty(searchField.getText().toString())){
-					displayName.setText(Utilities.highlight(searchField.getText().toString(), contact.getContactName()));	
+				if(!TextUtils.isEmpty(mSearchField.getText().toString())){
+					displayName.setText(Utilities.highlight(mSearchField.getText().toString(), contact.getContactName()));	
 				}else{
 					displayName.setText(contact.getContactName());
 				}

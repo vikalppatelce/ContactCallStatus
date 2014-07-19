@@ -41,14 +41,9 @@ public class ProfileApproveUserActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_approve);
 
-		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_approve_img);
-		mContactName = (TextView) findViewById(R.id.activity_profile_approve_name);
-		mUserName = (TextView) findViewById(R.id.activity_profile_approve_zname);
-		mBtnApprove = (TextView) findViewById(R.id.activity_profile_approve_call_txt);
-		mBtnReject = (TextView) findViewById(R.id.activity_profile_approve_msg_txt);
+		initUi();
 
-		styleFont = Typeface.createFromAsset(getAssets(),
-				AppConstants.fontStyle);
+		setFontStyle();
 
 		setUniversalImageLoader();
 
@@ -103,7 +98,15 @@ public class ProfileApproveUserActivity extends SherlockFragmentActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
+	private void initUi(){
+		mCircleImgProfile = (CircleImageView) findViewById(R.id.activity_profile_approve_img);
+		mContactName = (TextView) findViewById(R.id.activity_profile_approve_name);
+		mUserName = (TextView) findViewById(R.id.activity_profile_approve_zname);
+		mBtnApprove = (TextView) findViewById(R.id.activity_profile_approve_call_txt);
+		mBtnReject = (TextView) findViewById(R.id.activity_profile_approve_msg_txt);
+	}
+	
 	public void setActionBar(String str) {
 		mActionBar = getSupportActionBar();
 		mActionBar.setHomeButtonEnabled(true);
@@ -113,6 +116,7 @@ public class ProfileApproveUserActivity extends SherlockFragmentActivity {
 	}
 
 	public void setFontStyle() {
+		styleFont = Typeface.createFromAsset(getAssets(),AppConstants.fontStyle);
 		mContactName.setTypeface(styleFont);
 		mUserName.setTypeface(styleFont);
 		mBtnApprove.setTypeface(styleFont);

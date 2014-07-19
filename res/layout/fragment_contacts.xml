@@ -10,70 +10,17 @@
 
         <!-- Your content, here we're using a ScrollView -->
 
-
-        <!-- <LinearLayout -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="fill_parent" -->
-        <!-- android:layout_marginLeft="3dp" -->
-        <!-- android:layout_marginRight="1dp" -->
-        <!-- android:orientation="vertical" > -->
-
-
-        <!-- <LinearLayout -->
-        <!-- android:id="@+id/search_txt_layout" -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:visibility="gone" -->
-        <!-- android:orientation="horizontal" > -->
-
-
-        <!-- <EditText -->
-        <!-- android:id="@+id/search_txt" -->
-        <!-- android:layout_width="0dp" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_weight="9" -->
-        <!-- android:background="@drawable/zname_textfield_default_holo_light" -->
-        <!-- android:drawableLeft="@drawable/zname_ic_menu_add_selected" -->
-        <!-- android:inputType="textNoSuggestions" -->
-        <!-- android:singleLine="true" /> -->
-
-
-        <!-- <ImageView -->
-        <!-- android:id="@+id/clear_srch_button" -->
-        <!-- android:layout_width="0dp" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_gravity="center" -->
-        <!-- android:layout_weight="1" -->
-        <!-- android:scaleType="fitCenter" -->
-        <!-- android:src="@drawable/abs__ic_clear_search_api_holo_light" /> -->
-        <!-- </LinearLayout> -->
-
-
-        <!-- <GridView -->
-        <!-- android:id="@+id/gridview_all_contacts" -->
-        <!-- android:layout_width="match_parent" -->
-        <!-- android:layout_height="match_parent" -->
-        <!-- android:drawSelectorOnTop="true" -->
-        <!-- android:fastScrollEnabled="true" -->
-        <!-- android:horizontalSpacing="3dp" -->
-        <!-- android:listSelector="@drawable/zname_list_selector_holo_light" -->
-        <!-- android:numColumns="auto_fit" -->
-        <!-- android:scrollbarStyle="outsideInset" -->
-        <!-- android:stretchMode="columnWidth" -->
-        <!-- android:verticalSpacing="3dp" /> -->
-
         <ListView
             android:id="@+id/listview_all_contacts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@drawable/list_divider_inset"
+            android:dividerHeight="1dp"
             android:drawSelectorOnTop="true"
+            android:fadingEdge="none"
             android:fastScrollEnabled="true"
             android:listSelector="@drawable/zname_list_selector_holo_light"
-            android:scrollbarStyle="outsideInset"
-            android:fadingEdge="none"
-            android:dividerHeight="1dp"
-            android:divider="@drawable/list_divider_inset"/>
-        <!-- </LinearLayout> -->
+            android:scrollbarStyle="outsideInset" />
     </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout>
 
 </RelativeLayout>
