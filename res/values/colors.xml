@@ -13,4 +13,7 @@
     <color name="signup_medium_orange">#F49600</color>
     <color name="signup_dark_orange">#E9510E</color>
     <color name="signup_random_orange">#FF4E50</color>
+    <color name="swarm_tab">#FEA633</color>
+<!--     <color name="swarm_action_bar">#FD9627</color> -->
+    <color name="swarm_action_bar">#F4842D</color>
 </resources>

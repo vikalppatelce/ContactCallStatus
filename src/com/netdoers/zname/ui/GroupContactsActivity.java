@@ -25,9 +25,11 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -40,11 +42,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
@@ -126,7 +131,8 @@ public class GroupContactsActivity extends FragmentActivity {
 		
 		mTitleTxt.setText(mIntentGroupName);
 		
-        setEventListeners();	
+        setEventListeners();
+//        registerForContextMenu(mListView);
 	}
 	
 	@Override
@@ -142,6 +148,68 @@ public class GroupContactsActivity extends FragmentActivity {
         super.onBackPressed();
         finish();
     }
+
+/*	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    android.view.MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.context_menu_group, menu);
+	}
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.menu_group_delete:
+	        	showAlertDialogDelete(contacts.get(info.position).getContactId(), contacts.get(info.position).getContactName());
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}*/
+	
+	public void showAlertDialogDelete(final String viewTagId, String viewTagName){
+		final Dialog dialog = new Dialog(GroupContactsActivity.this);
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_delete_info);
+		
+		TextView mDialogTitle = (TextView)dialog.findViewById(R.id.dialog_delete_info_title);
+		TextView mDialogText = (TextView)dialog.findViewById(R.id.dialog_delete_into_txt);
+		Button mDialogBtnCancel = (Button)dialog.findViewById(R.id.dialog_delete_info_cancel);
+		Button mDialogBtnOk = (Button)dialog.findViewById(R.id.dialog_delete_info_ok);
+		
+		mDialogText.setText("Do want to delete contact "+ viewTagName +"?");
+		
+		mDialogTitle.setTypeface(styleFont);
+		mDialogText.setTypeface(styleFont);
+		mDialogBtnCancel.setTypeface(styleFont);
+		mDialogBtnOk.setTypeface(styleFont);
+		
+		mDialogBtnOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getContentResolver().delete(DBConstant.All_Contacts_Columns.CONTENT_URI, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +"=?", new String[]{viewTagId});
+	        	getContentResolver().delete(DBConstant.All_Contacts_Columns.CONTENT_URI, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +"=?" , new String[]{viewTagId});
+	        	refreshContactsData();
+	        	mAdapter.notifyDataSetChanged();
+	        	dialog.cancel();
+			}
+		});
+		
+		mDialogBtnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.cancel();
+			}
+		});
+		
+		dialog.show();
+	}
 	
 	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
@@ -218,6 +286,7 @@ public class GroupContactsActivity extends FragmentActivity {
 				openAddContactsLayout();
 			}
 		});
+		
 		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {// EU ZM004
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -230,11 +299,12 @@ public class GroupContactsActivity extends FragmentActivity {
 			String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
 			String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
 			String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
+			String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
 			
-			showInputDialog(viewTagName,viewTagNumber,viewTagDp);
+			showAlertDialogDelete(viewTagId, viewTagName);
 			return false;
 		}
-	});
+		});
 
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 

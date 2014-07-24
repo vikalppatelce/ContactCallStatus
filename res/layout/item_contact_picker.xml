@@ -20,7 +20,6 @@
             android:layout_height="50dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:background="@drawable/def_contact"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter" />
     </LinearLayout>

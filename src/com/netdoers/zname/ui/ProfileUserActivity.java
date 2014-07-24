@@ -1,12 +1,22 @@
 package com.netdoers.zname.ui;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,19 +26,24 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.netdoers.zname.AppConstants;
+import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
+import com.netdoers.zname.service.RequestBuilder;
+import com.netdoers.zname.service.RestClient;
 import com.netdoers.zname.utils.CircleImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ProfileUserActivity extends SherlockFragmentActivity {
+public class ProfileUserActivity extends SherlockFragmentActivity implements OnRefreshListener{
 
 	// DECLARE VIEWS
-	CircleImageView mCircleImgProfile;
-	ActionBar mActionBar;
-	TextView mContactName, mUserName, mBtnCall, mBtnMsg;
-	RelativeLayout mCall, mMsg;
+	private CircleImageView mCircleImgProfile;
+	private ActionBar mActionBar;
+	private TextView mContactName, mUserName, mBtnCall, mBtnMsg, mStatus,mStatusHead;
+	private ImageView mImgCall;
+	private RelativeLayout mCall, mMsg;
+	private PullToRefreshLayout mPullToRefreshLayout;
 
 	// DECLARE STYLE TYPEFACE
 	Typeface styleFont;
@@ -50,7 +65,7 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		setContentView(R.layout.activity_profile_user);
 
 		initUi();
-
+		initPullToRefresh();
 		setUniversalImageLoader();
 
 		intentID = getIntent().getStringExtra(AppConstants.TAGS.INTENT.TAG_ID);
@@ -79,6 +94,8 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
                 imageLoader.displayImage(intentPhoto, mCircleImgProfile, options);
             }
         });
+		
+		new FetchProfileDataAysnc(intentZname).execute();
 	}
 
 	@Override
@@ -118,8 +135,12 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		mUserName = (TextView) findViewById(R.id.activity_profile_user_zname);
 		mBtnCall = (TextView) findViewById(R.id.activity_profile_user_call_txt);
 		mBtnMsg = (TextView) findViewById(R.id.activity_profile_user_msg_txt);
+		mStatus = (TextView)findViewById(R.id.activity_profile_user_status);
+		mStatusHead = (TextView)findViewById(R.id.activity_profile_user_status_head);
 		mCall = (RelativeLayout)findViewById(R.id.activity_profile_user_call);
 		mMsg = (RelativeLayout)findViewById(R.id.activity_profile_user_msg);
+		mImgCall = (ImageView)findViewById(R.id.fragment_profile_user_call_img);
+		mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.activity_profile_user_ptr_layout);
 	}
 	
 	public void setActionBar(String str) {
@@ -136,6 +157,8 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		mUserName.setTypeface(styleFont);
 		mBtnCall.setTypeface(styleFont);
 		mBtnMsg.setTypeface(styleFont);
+		mStatus.setTypeface(styleFont);
+		mStatusHead.setTypeface(styleFont);
 	}
 
 	public void setUniversalImageLoader() {
@@ -186,6 +209,17 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		});
 	}
 	
+	private void initPullToRefresh(){
+		ActionBarPullToRefresh.from(this)
+        .allChildrenArePullable()
+        .listener(this)
+        .setup(mPullToRefreshLayout);
+	}
+	
+	private void setPullToRefreshLoader(){
+		mPullToRefreshLayout.setRefreshing(true);
+	}
+	
 	private void onPhotoView(){
 		Intent photoViewIntent = new Intent(ProfileUserActivity.this, PhotoViewActivity.class);
     	photoViewIntent.putExtra(PhotoViewActivity.mIntentPhoto, intentPhoto);
@@ -202,6 +236,28 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
         startActivity(intent);
 	}
 	
+	public void setStatusEditIcon(String statusType){
+		try{
+			if(!TextUtils.isEmpty(statusType)){
+				switch (Integer.parseInt(statusType)) {
+				case 0:
+					mStatus.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_random), null, null, null);
+					break;
+				case 1:
+					mStatus.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_read), null, null, null);
+					break;
+				case 2:
+					mStatus.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_places), null, null, null);
+					break;
+				case 3:
+					mStatus.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_work), null, null, null);
+					break;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	public void fontActionBar(String str) {
 		try {
 			int titleId;
@@ -219,4 +275,78 @@ public class ProfileUserActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	private String buildZnameStringRequest(String intentZname){
+		return "{\"zname\":["+"\""+intentZname+"\""+"]}";
+	}
+	
+	@Override
+	public void onRefreshStarted(View view) {
+		// TODO Auto-generated method stub
+		new FetchProfileDataAysnc(intentZname).execute();
+	}
+	
+	private class FetchProfileDataAysnc extends AsyncTask<Void, Void, Void>{
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			setPullToRefreshLoader();
+		}
+
+		private String zname;
+		private String callStatus;
+		private String status;
+		private String statusType;
+		private static final String ASYNC_TAG = "FetchProfileDataAysnc";
+		public FetchProfileDataAysnc(String zname){
+			this.zname = zname;
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			try {
+				String url = AppConstants.URLS.GET_STATUS_URL+Zname.getPreferences().getApiKey()+"/users/status";
+				JSONObject dataToSend = RequestBuilder.getSyncCallData(zname);
+				String str = RestClient.postData(url, dataToSend);
+				if (BuildConfig.DEBUG) {
+					Log.i(ASYNC_TAG, url);
+					Log.i("Request-->", dataToSend.toString());
+					Log.i("Response-->", str);
+				}
+				JSONObject userObj = new JSONObject(str);
+
+				try {
+					callStatus = userObj.getString("call_status");
+					status = userObj.getString("status_text");
+					statusType = userObj.getString("status_category");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (Exception e) {
+				Log.e(ASYNC_TAG, e.toString());
+			}
+			return null;
+		}
+		
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+			if (Integer.parseInt(callStatus) == 0) {
+				mBtnCall.setText("Available");
+				mImgCall.setImageResource(R.drawable.zname_ic_call_selected_avail);
+			} else {
+				mBtnCall.setText("Busy");
+				mImgCall.setImageResource(R.drawable.zname_ic_call_selected_busy);
+			}
+			if(!TextUtils.isEmpty(status)){
+				mStatus.setVisibility(View.VISIBLE);
+				mStatus.setText(status);
+				setStatusEditIcon(statusType);
+			}
+			
+            mPullToRefreshLayout.setRefreshComplete();
+        }
+	}
 }

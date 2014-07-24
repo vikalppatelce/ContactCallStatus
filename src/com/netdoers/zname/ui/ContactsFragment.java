@@ -26,21 +26,22 @@ import java.util.Set;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
@@ -49,14 +50,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.TranslateAnimation;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -76,7 +75,6 @@ import com.netdoers.zname.service.ImportContactsService;
 import com.netdoers.zname.service.SyncCallStatusService;
 import com.netdoers.zname.service.SyncContactsService;
 import com.netdoers.zname.sqlite.DBConstant;
-import com.netdoers.zname.utils.QuickReturnListView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -94,6 +92,7 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 	private PullToRefreshLayout mPullToRefreshLayout;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
+	private boolean isShowPullToRefreshLoader = false;
 	
 	//TYPEFACE
 	static Typeface styleFont;
@@ -159,17 +158,21 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 			mProgressDialog.show();
 			Intent i =  new Intent(Zname.getApplication().getApplicationContext(), ImportContactsService.class);
 			getActivity().startService(i);
-		}else if(Zname.getPreferences().getRefreshContact()){
-			Zname.getPreferences().setRefreshContact(false);
 		}else{
 			refreshContactsData();
-			Intent pushPullService =  new Intent(Zname.getApplication().getApplicationContext(), SyncContactsService.class);
+			if(!isShowPullToRefreshLoader){
+				new SyncDataAysnc().execute();
+				isShowPullToRefreshLoader = true;
+			}
+				
+			/*Intent pushPullService =  new Intent(Zname.getApplication().getApplicationContext(), SyncContactsService.class);
 			getActivity().startService(pushPullService);
 			Intent syncCallStatusService =  new Intent(Zname.getApplication().getApplicationContext(), SyncCallStatusService.class);
-			getActivity().startService(syncCallStatusService);
+			getActivity().startService(syncCallStatusService);*/
 		}
 		
 		setEventListeners();
+//		registerForContextMenu(mListView);
 	}
 
 	/* (non-Javadoc)
@@ -222,6 +225,27 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 	}
 //	EC ZM002
 
+/*	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	                                ContextMenuInfo menuInfo) {
+	    super.onCreateContextMenu(menu, v, menuInfo);
+	    android.view.MenuInflater inflater = getSherlockActivity().getMenuInflater();
+	    inflater.inflate(R.menu.context_menu_groups_fragment, menu);
+	}
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.menu_groups_delete:
+	        	showAlertDialogDelete(contacts.get(info.position).getContactId(), contacts.get(info.position).getContactName());
+	            return true;
+	        case R.id.menu_groups_edit:
+	        	showAlertDialogEdit(contacts.get(info.position).getContactId(), contacts.get(info.position).getContactName());
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}*/
+	
 	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
         // Initialize ImageLoader with configuration. Do it once.
@@ -237,8 +261,7 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 	}
 	
 	private void setEventListeners(){
-//		contactsGridView.setOnItemLongClickListener(new OnItemLongClickListener() { SU ZM004
-		mListView.setOnItemLongClickListener(new OnItemLongClickListener() { //EU ZM004
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() { 
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -251,13 +274,13 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 				String viewTagNumber = view.getTag(R.id.TAG_CONTACT_NUMBER).toString();
 				String viewTagDp = view.getTag(R.id.TAG_CONTACT_DP).toString();
 				String viewTagName =  view.getTag(R.id.TAG_CONTACT_NAME).toString();
+				String viewTagId = view.getTag(R.id.TAG_CONTACT_ID).toString();
 				
-				showInputDialog(viewTagName,viewTagNumber,viewTagDp);
+				showAlertModifyDialog(viewTagName, viewTagId);
 				return false;
 			}
 		});
 		
-//		contactsGridView.setOnItemClickListener(new OnItemClickListener() { SU ZM004
 		mListView.setOnItemClickListener(new OnItemClickListener() { //EU ZM004
 
 			@Override
@@ -382,7 +405,6 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 		mAdapter = new ContactAdapter(getActivity(), R.id.listview_all_contacts, contacts);
 		mListView.setAdapter(mAdapter); //EU ZM004
 	}
-	
 	public void showInputDialog(String name,String number,String photoUri)
 	{
 		final Dialog dialog = new Dialog(getActivity());
@@ -447,13 +469,160 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
 		dialog.show();
 	}
 	
+	
+	public void showAlertModifyDialog(final String name,final String id)
+	{
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_display_info);
+		
+		TextView mDialogTitle = (TextView)dialog.findViewById(R.id.dialog_display_info_title);
+		TextView mDialogText = (TextView)dialog.findViewById(R.id.dialog_display_into_txt);
+		Button mDialogBtnEdit = (Button)dialog.findViewById(R.id.dialog_display_info_ok);
+		Button mDialogBtnDelete = (Button)dialog.findViewById(R.id.dialog_display_info_cancel);
+		
+		mDialogTitle.setText(name);
+		
+		mDialogTitle.setTypeface(styleFont);
+		mDialogText.setTypeface(styleFont);
+		mDialogBtnEdit.setTypeface(styleFont);
+		mDialogBtnDelete.setTypeface(styleFont);
+		
+		mDialogBtnDelete.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showAlertDialogDelete(id, name);
+				dialog.dismiss();
+			}
+		});
+		
+		mDialogBtnEdit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showAlertDialogEdit(id, name);
+				dialog.dismiss();
+			}
+		});
+		
+		dialog.show();
+	}
+
+	public void showAlertDialogEdit(final String viewTagId,final String viewTagName) {
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_add_group);
+
+		TextView groupTitle = (TextView) dialog
+				.findViewById(R.id.dialog_add_group_title);
+		final EditText groupName = (EditText) dialog
+				.findViewById(R.id.dialog_group_name_txt);
+		Button groupAdd = (Button) dialog
+				.findViewById(R.id.dialog_group_name_ok);
+		Button groupCancel = (Button) dialog
+				.findViewById(R.id.dialog_group_name_cancel);
+
+		groupTitle.setTypeface(styleFont);
+		groupName.setTypeface(styleFont);
+		groupAdd.setTypeface(styleFont);
+		groupCancel.setTypeface(styleFont);
+		
+		groupTitle.setText("Contact");
+		groupName.append(viewTagName);
+
+		groupAdd.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (!TextUtils.isEmpty(groupName.getText().toString())) {
+					ContentValues values = new ContentValues();
+					values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME, groupName.getText().toString());
+					int c = getActivity().getContentResolver().update(DBConstant.All_Contacts_Columns.CONTENT_URI, values, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID+"=?", new String[]{viewTagId});
+
+					refreshContactsData();
+		        	mAdapter.notifyDataSetChanged();
+		        	dialog.dismiss();
+		        	
+		        	if(BuildConfig.DEBUG)
+		        		Log.i(TAG, "Contact "+viewTagName + "changed to "+ groupName.getText().toString() +" "+c);
+					
+				} else {
+					groupName.setError("Please enter valid contact name");
+				}
+			}
+		});
+
+		groupCancel.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+	
+	public void showAlertDialogDelete(final String viewTagId, String viewTagName){
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_delete_info);
+		
+		TextView mDialogTitle = (TextView)dialog.findViewById(R.id.dialog_delete_info_title);
+		TextView mDialogText = (TextView)dialog.findViewById(R.id.dialog_delete_into_txt);
+		Button mDialogBtnCancel = (Button)dialog.findViewById(R.id.dialog_delete_info_cancel);
+		Button mDialogBtnOk = (Button)dialog.findViewById(R.id.dialog_delete_info_ok);
+		
+		mDialogText.setText("Do want to delete contact "+ viewTagName +"?");
+		
+		mDialogTitle.setTypeface(styleFont);
+		mDialogText.setTypeface(styleFont);
+		mDialogBtnCancel.setTypeface(styleFont);
+		mDialogBtnOk.setTypeface(styleFont);
+		
+		mDialogBtnOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				getActivity().getContentResolver().delete(DBConstant.All_Contacts_Columns.CONTENT_URI, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +"=?", new String[]{viewTagId});
+	        	getActivity().getContentResolver().delete(DBConstant.All_Contacts_Columns.CONTENT_URI, DBConstant.All_Contacts_Columns.COLUMN_CONTACT_ID +"=?" , new String[]{viewTagId});
+	        	refreshContactsData();
+	        	mAdapter.notifyDataSetChanged();
+	        	dialog.cancel();
+			}
+		});
+		
+		mDialogBtnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.cancel();
+			}
+		});
+		
+		dialog.show();
+	}
+	
 	@Override
 	public void onRefreshStarted(View view) {
 		// TODO Auto-generated method stub
         /**
          * Simulate Refresh with 4 seconds sleep
          */
-        new AsyncTask<Void, Void, Void>() {
+/*        new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -488,9 +657,51 @@ public class ContactsFragment extends SherlockFragment implements OnRefreshListe
                 // Notify PullToRefreshLayout that the refresh has finished
                 mPullToRefreshLayout.setRefreshComplete();
             }
-        }.execute();
+        }.execute();*/
+		
+		new SyncDataAysnc().execute();
 	}
 
+	private void setPullToRefreshLoader(){
+		mPullToRefreshLayout.setRefreshing(true);
+	}
+	
+	private class SyncDataAysnc extends AsyncTask<Void, Void, Void>{
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			setPullToRefreshLoader();
+		}
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+            	if(!isMyServiceRunning(SyncCallStatusService.class)){
+            		Intent syncCallStatusService =  new Intent(Zname.getApplication().getApplicationContext(), SyncCallStatusService.class);
+        			getActivity().startService(syncCallStatusService);	
+            	}
+            	if(!isMyServiceRunning(SyncContactsService.class)){
+            		Intent pushPullService =  new Intent(Zname.getApplication().getApplicationContext(), SyncContactsService.class);
+        			getActivity().startService(pushPullService);	
+            	}
+            	if(BuildConfig.DEBUG){
+            		Log.i("PushPullContactsService", "PushPullContactsService : "+isMyServiceRunning(SyncContactsService.class));
+            		Log.i("SyncCallStatusService", "SyncCallStatusService : "+isMyServiceRunning(SyncCallStatusService.class));
+            	}
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            mPullToRefreshLayout.setRefreshComplete();
+        }
+	}
+	
 	private boolean isMyServiceRunning(Class<?> serviceClass) {
 	    ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

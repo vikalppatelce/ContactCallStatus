@@ -9,6 +9,8 @@ import com.netdoers.zname.Zname;
 import com.netdoers.zname.utils.SquareImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
+import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 
 public class PhotoViewActivity extends SherlockFragmentActivity{
 
@@ -45,6 +47,13 @@ public class PhotoViewActivity extends SherlockFragmentActivity{
 		intentPhoto = getIntent().getStringExtra(mIntentPhoto);
 	}
 	
+	@Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        super.onBackPressed();
+        finish();
+    }
+	
 	private void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
         // Initialize ImageLoader with configuration. Do it once.
@@ -65,7 +74,7 @@ public class PhotoViewActivity extends SherlockFragmentActivity{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					imageLoader.displayImage(Zname.getPreferences().getProfilePicPath(), mPhotoView, options);
+					imageLoader.displayImage(intentPhoto, mPhotoView, options);
 				}
 			});
 		}else{

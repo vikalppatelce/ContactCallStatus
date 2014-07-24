@@ -28,8 +28,8 @@
 
     <LinearLayout
         android:id="@+id/call_logs_menu"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="bottom|center_horizontal"
         android:background="@color/transparent"
         android:orientation="horizontal"
@@ -48,9 +48,9 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/transparent" />
 
         <ImageView
             android:id="@+id/call_logs_menu_missed"
@@ -65,9 +65,9 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/transparent" />
 
         <ImageView
             android:id="@+id/call_logs_menu_incoming"
@@ -82,9 +82,9 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/transparent" />
 
         <ImageView
             android:id="@+id/call_logs_menu_outgoing"

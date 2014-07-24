@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -130,8 +131,21 @@ public class ProfileAddZnameActivity extends SherlockFragmentActivity{
 				onAddFriend(v);
 			}
 		});
+		
+		mCircleImgProfile.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onPhotoView();
+			}
+		});
 	}
-	
+
+	private void onPhotoView(){
+		Intent photoViewIntent = new Intent(ProfileAddZnameActivity.this, PhotoViewActivity.class);
+    	photoViewIntent.putExtra(PhotoViewActivity.mIntentPhoto, intentPhoto);
+    	startActivity(photoViewIntent);
+	}
 	public void setUniversalImageLoader(){
 		imageLoader = ImageLoader.getInstance();
 		// Initialize ImageLoader with configuration. Do it once.

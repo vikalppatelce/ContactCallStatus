@@ -40,6 +40,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -72,9 +73,9 @@ import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
 import com.netdoers.zname.beans.ZnameSearch;
 import com.netdoers.zname.service.RestClient;
+import com.netdoers.zname.sqlite.DBConstant;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 /**
  * @author Vikalp Patel(vikalppatelce@yahoo.com)
@@ -99,6 +100,8 @@ public class AddZnameActivity extends FragmentActivity {
 	private ArrayList<ZnameSearch> arrZnameSearch;
 	ArrayAdapter<CharSequence> emptyAdapter;
 	String emptyItems[] = {"No Results Found"};
+	private ArrayList<String> arrZnameAlreadyAdded;
+	private boolean isZnameAlreadyAdded = false;
 	////////////////////////////////////////////////
 	// CALLED WHEN ACTIVITY CREATED
 	////////////////////////////////////////////////
@@ -110,12 +113,15 @@ public class AddZnameActivity extends FragmentActivity {
 		
 		initUi();
 		arrZnameSearch = new ArrayList<ZnameSearch>();
+		arrZnameAlreadyAdded = new ArrayList<String>();
 		
 		setUniversalImageLoader();
 		setFontStyle();
 		mSearchField.requestFocus();
 		
 		setEventListeners();
+		
+		setSearchFilterFromApi();
 				
 		emptyAdapter = new CustomArrayAdapter<CharSequence>(this, emptyItems);
 	}
@@ -219,11 +225,34 @@ public class AddZnameActivity extends FragmentActivity {
 		finish();
 	}
 	
+	private void setSearchFilterFromApi(){
+		String[] projection = { DBConstant.All_Contacts_Columns.COLUMN_ID,
+				DBConstant.All_Contacts_Columns.COLUMN_ZNAME };
+		Cursor cr = getContentResolver().query(DBConstant.All_Contacts_Columns.CONTENT_URI, projection, DBConstant.All_Contacts_Columns.COLUMN_ZNAME + " IS NOT NULL", null, null);
+		
+		if(cr.getCount() > 0){
+			int intColumnZname = cr.getColumnIndex(DBConstant.All_Contacts_Columns.COLUMN_ZNAME);
+			isZnameAlreadyAdded = true;
+			while(cr.moveToNext()){
+				if(!TextUtils.isEmpty(cr.getString(intColumnZname))){
+					arrZnameAlreadyAdded.add(cr.getString(intColumnZname));
+				}
+			}
+		}
+		
+		if(cr!=null)
+			cr.close();
+	}
+	
 	private void parseSearchJSON(JSONObject jsonObject){
 		try {
 			JSONArray userArray = jsonObject.getJSONArray("users");
 			for(int i=0; i< userArray.length();i++){
 				JSONObject userObj = (JSONObject) userArray.get(i);
+				
+				if(arrZnameAlreadyAdded.contains(userObj.getString("zname")) && isZnameAlreadyAdded)
+						continue;
+				
                 ZnameSearch item = new ZnameSearch();
                 item.setFullName(userObj.getString("full_name"));
                 item.setzName(userObj.getString("zname"));

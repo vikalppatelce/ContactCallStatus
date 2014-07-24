@@ -30,7 +30,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="Add Group Name"
-                android:textColor="@color/background_action_bar_orange"
+                android:textColor="@color/swarm_action_bar"
                 android:textSize="22sp"
                 tools:ignore="NewApi" />
         </LinearLayout>
@@ -38,7 +38,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dip"
-            android:background="@color/background_action_bar_orange"
+            android:background="@color/swarm_action_bar"
             android:visibility="visible"
             tools:ignore="NewApi" />
     </LinearLayout>
@@ -66,8 +66,7 @@
                 android:paddingBottom="8dip"
                 android:paddingEnd="16dip"
                 android:paddingStart="16dip"
-                android:paddingTop="8dip"
-                android:textColor="@android:color/darker_gray" />
+                android:paddingTop="8dip"/>
         </LinearLayout>
 
         <LinearLayout
@@ -81,13 +80,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/background_action_bar_orange"
+                android:background="@color/swarm_action_bar"
                 android:paddingBottom="8dip"
                 android:paddingEnd="16dip"
                 android:paddingStart="16dip"
                 android:paddingTop="8dip"
                 android:text="@string/str_profile_update_cancel"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF" 
+                android:textSize="20sp"
+                />
 
             <View
                 android:layout_width="1dp"
@@ -102,11 +103,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/background_action_bar_orange"
+                android:background="@color/swarm_action_bar"
                 android:paddingBottom="8dip"
                 android:paddingEnd="16dip"
                 android:paddingStart="16dip"
                 android:paddingTop="8dip"
+                android:textSize="20sp"
                 android:text="@string/str_profile_update_ok"
                 android:textColor="#FFFFFF" />
         </LinearLayout>

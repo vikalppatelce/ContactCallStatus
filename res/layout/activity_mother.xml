@@ -28,19 +28,17 @@
             <com.netdoers.zname.utils.PagerSlidingTabStrip
                 android:id="@+id/pager_sliding_tab_strip"
                 android:layout_width="fill_parent"
-                android:layout_height="45dip"
-                android:background="@android:color/white"
-                app:pstsDividerColor="#FFFFA500"
-                app:pstsIndicatorColor="#FFFFA500"
-                app:pstsTabPaddingLeftRight="14dip"
-                app:pstsUnderlineColor="@android:color/darker_gray" />
+                android:layout_height="48dip"
+                android:background="@drawable/background_tabs"
+                app:pstsIndicatorColor="@color/swarm_action_bar"
+                app:pstsTabPaddingLeftRight="14dip" />
             <!-- PAGER SLIDING TAB STRIP -->
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="45dp" >
+                android:layout_marginTop="48dp" >
             </android.support.v4.view.ViewPager>
         </RelativeLayout>
         <!--

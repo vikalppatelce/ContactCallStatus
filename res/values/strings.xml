@@ -1,14 +1,14 @@
 <resources>
 
     <string-array name="drawer_menu_array">
-        <item>Zname</item>
+        <item>Z:name</item>
         <item>Notifications</item>
         <item>App Settings</item>
         <item>Share Zname</item>
         <item>Feedback</item>
     </string-array>
     <string-array name="drawer_menu_detail_array">
-        <item>Zname</item>
+        <item>Z:name</item>
         <item>Pending request</item>
         <item>Notifcation, account, and other settings</item>
         <item>Sharing is caring</item>
@@ -26,14 +26,14 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <!-- Intro view -->
-    <string name="Page1Title">Zname</string>
+    <string name="Page1Title">Z:name</string>
     <string name="Page2Title">Place</string>
     <string name="Page3Title">Share</string>
     <string name="Page4Title">Available</string>
     <string name="Page5Title">Feed</string>
     <string name="Page6Title">Cloud-Based</string>
     <string name="Page7Title">Private</string>
-    <string name="Page1Message"><![CDATA[<b>Zname</b>]]> is ur new identity.. pick any name u want.. now on<![CDATA[<br/>]]>, ur Z:name becomes ur mobile number</string>
+    <string name="Page1Message"><![CDATA[<b>Z:name</b>]]> is ur new identity.. pick any name u want.. now on<![CDATA[<br/>]]>, ur Z:name becomes ur mobile number</string>
     <string name="Page2Message"><![CDATA[<b>Changed</b>]]>  ur city or ur service provider? Don’t worry with Z:name<![CDATA[<br/>]]>u don’t need to communicate ur new number anymore</string>
     <string name="Page3Message"><![CDATA[<b>Be known</b>]]> by ur Z:name &amp; share ur Z:name<![CDATA[<br/>]]> instead of ur Mobile number</string>
     <string name="Page4Message"><![CDATA[<b>Want</b>]]> to know if your friend is free to talk?<![CDATA[<br/>]]> check his calling status on Z:name</string>
@@ -42,8 +42,8 @@
     <string name="Page7Message"><![CDATA[<b>Classes</b>]]> messages are heavily encrypted<![CDATA[<br/>]]>and can self-destruct</string>
 
     <!-- Sign Up -->
-    <string name="SignUpAgree"><![CDATA[<b>By signing up</b>]]> I agree to the <![CDATA[<br/>]]>Zname Terms of Use.</string>
-    <string name="app_name">Zname</string>
+    <string name="SignUpAgree"><![CDATA[<b>By signing up</b>]]> I agree to the <![CDATA[<br/>]]>Z:name Terms of Use.</string>
+    <string name="app_name">Z:name</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">ABS ViewPager Tabs Tutorial</string>
     <string name="str_all_contacts_fragment">Contacts</string>
@@ -61,6 +61,7 @@
     <string name="str_add_member">Add members</string>
 
     <!-- Profile User -->
+     <string name="str_profile_status_title">Select status category</string>
     <string name="str_profile_status_work">Watch</string>
     <string name="str_profile_status_read">Read</string>
     <string name="str_profile_status_place">Place</string>
@@ -77,7 +78,7 @@
 
     <!-- Settings -->
     <string name="about">About</string>
-    <string name="about_summary">About Zname</string>
+    <string name="about_summary">About Z:name</string>
     <string name="feedback">Feedback</string>
     <string name="feedback_summary">Send Feedback</string>
 
@@ -91,4 +92,7 @@
     <string name="str_profile_update_contact">Update Contact</string>
     <string name="str_profile_update_status">Update Status</string>
 
+    
+    <!-- General -->
+    <string name="str_no_internet">Please check your internet connection</string>
 </resources>

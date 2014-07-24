@@ -675,19 +675,19 @@ public class CallLogsFragment extends SherlockFragment /*implements OnRefreshLis
 			switch(Integer.parseInt(arrayListCallLog.get(position).getCallLogType()))
 			{
 			case 0:
-				imgLogType.setImageResource(R.drawable.btn_ic_call_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_call_selected);
 				break;
 			case 1:
-				imgLogType.setImageResource(R.drawable.btn_ic_incoming_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_incoming_selected);
 				break;
 			case 2:
-				imgLogType.setImageResource(R.drawable.btn_ic_outgoing_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_outgoing_selected);
 				break;
 			case 3:
-				imgLogType.setImageResource(R.drawable.btn_ic_missed_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_missed_selected);
 				break;
 			default:
-				imgLogType.setImageResource(R.drawable.btn_ic_call_selector);
+				imgLogType.setImageResource(R.drawable.btn_ic_call_selected);
 				break;
 			}
 			

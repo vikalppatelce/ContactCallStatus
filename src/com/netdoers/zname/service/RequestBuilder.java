@@ -56,6 +56,19 @@ public class RequestBuilder {
 		}
 		return stringBuffer;
 	}
+	
+	public static JSONObject getStatusData(String status, String statusType)// EDITED
+	{
+		JSONObject stringBuffer = new JSONObject();
+		try {
+			stringBuffer.put("status_text", status);
+			stringBuffer.put("status_category", statusType);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return stringBuffer;
+	}
 
 	public static JSONObject getVerificationData(String username, String code)// EDITED
 	// X0001

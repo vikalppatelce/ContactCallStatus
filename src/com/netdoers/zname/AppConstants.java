@@ -40,6 +40,8 @@ public class AppConstants {
 		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String GCM_URL          = "http://myzname.netdoers.com/api/v1/znames/";
 		public static final String CALL_SYNC_URL    = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String STATUS_URL       = "http://myzname.netdoers.com/api/v1/znames/";
+		public static final String GET_STATUS_URL   = "http://myzname.netdoers.com/api/v1/znames/";
 		
 //		public static final String MEDIA_BASE_URL 	= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/profilepic";
 //		public static final String CALL_URL 		= "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/callstatus/1"; //1 : BUSY , 0 : AVAILABLE		
@@ -50,6 +52,8 @@ public class AppConstants {
 //		public static final String APPROVE_URL      = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/approverequests";
 //		public static final String GCM_URL          = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/appregistraion";
 //		public static final String CALL_SYNC_URL    = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/users/callstatus";
+//		public static final String STATUS_URL       = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/status";
+//		public static final String GET_STATUS_URL   = "http://myzname.netdoers.com/api/v1/znames/ca8e181ea0ac582564de322da694f8280e293764/users/status";
 	}
 
 	/////////////////////////////////////

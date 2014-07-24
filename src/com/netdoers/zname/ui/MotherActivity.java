@@ -23,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,8 +49,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,12 +78,15 @@ import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
+import com.netdoers.zname.errorreporting.DefaultExceptionHandler.MailTask;
 import com.netdoers.zname.service.NetworkVolley;
 import com.netdoers.zname.service.NetworkVolley.VolleyGetJsonRequest;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.RestClient;
 import com.netdoers.zname.service.SyncPhoneBookService;
+import com.netdoers.zname.sqlite.DBConstant;
 import com.netdoers.zname.utils.CircleImageView;
+import com.netdoers.zname.utils.Mail;
 import com.netdoers.zname.utils.PagerSlidingTabStrip;
 import com.netdoers.zname.utils.SlidingTabLayout;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -776,6 +784,8 @@ public class MotherActivity extends SherlockFragmentActivity {
 							"Catch person call status using Z:name \n\n"
 									+ "https://play.google.com/store/apps/details?id=com.netdoers.zname");
 			break;
+		case 4:
+			showAlertFeedBack();
 		default:
 			break;
 		}
@@ -869,4 +879,96 @@ public class MotherActivity extends SherlockFragmentActivity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	public void showAlertFeedBack(){
+		final Dialog dialog = new Dialog(MotherActivity.this);
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_feedback);
+
+		TextView mFeedbackTitle = (TextView) dialog
+				.findViewById(R.id.dialog_feedback_title);
+		final EditText mFeedbackTxt = (EditText) dialog
+				.findViewById(R.id.dialog_feedback_txt);
+		Button mSubmit = (Button) dialog
+				.findViewById(R.id.dialog_feedback_ok);
+		Button mCancel = (Button) dialog
+				.findViewById(R.id.dialog_feedback_cancel);
+
+		mFeedbackTitle.setTypeface(styleFont);
+		mFeedbackTxt.setTypeface(styleFont);
+		mSubmit.setTypeface(styleFont);
+		mCancel.setTypeface(styleFont);
+		
+
+		mSubmit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (!TextUtils.isEmpty(mFeedbackTxt.getText().toString())) {
+					new FeedBackMailTask(mFeedbackTxt.getText().toString()).execute();
+				    dialog.dismiss();
+				    Toast.makeText(MotherActivity.this, "Thanks for Feedback", Toast.LENGTH_SHORT).show(); 
+		        	if(BuildConfig.DEBUG)
+		        		Log.i(TAG, "Feedback"+mFeedbackTxt.getText().toString());
+					
+				} else {
+					mFeedbackTxt.setError("Please enter valid contact name");
+				}
+			}
+		});
+
+		mCancel.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+	
+	public class FeedBackMailTask extends AsyncTask<String,Void,String>{
+
+		private String feedback;
+		public FeedBackMailTask(String feedback){
+			this.feedback = feedback;
+		}
+		@Override
+		protected String doInBackground(String... params) {
+			/*
+			 * MAIL SENDING
+			 */
+			 Mail m = new Mail("androidbugtrace@gmail.com", "android1"); 
+		      String[] toArr = {"androidbugnetdoers@gmail.com", "androidbugtrace@gmail.com","dhaval_dms@yahoo.com"}; 
+		      m.setTo(toArr);
+		      m.setFrom("androidbugnetdoers@gmail.com"); 
+		      m.setSubject("Z:name | Feedback");
+			  m.setBody("Username :: Z:"
+					+ Zname.getPreferences().getUserName()
+					+ "\nContact :: "
+					+ Zname.getPreferences().getUserNumber()
+					+ "   \n\n-----------------------FEEDBACK--------------------------------\n\n\n"
+					+ feedback); 
+		      try { 
+		        if(m.send()) { 
+		        	Log.i("MailApp", "Mail sent successfully!"); 
+		        } else { 
+		        	Log.e("MailApp", "Could not send email"); 
+		        } 
+		      } catch(Exception e) { 
+		        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show(); 
+		        Log.e("MailApp", "Could not send email", e); 
+		      } 
+			return "MailSent";
+		}
+		@Override
+		protected void onPostExecute(String result) {
+        }
+        @Override
+		protected void onPreExecute() {}
+	}
 }

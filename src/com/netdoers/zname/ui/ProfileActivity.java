@@ -13,10 +13,11 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -35,6 +36,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,10 +56,8 @@ import com.netdoers.zname.beans.RegistrationDTO;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.ResponseParser;
 import com.netdoers.zname.service.RestClient;
-import com.netdoers.zname.sqlite.DBConstant;
 import com.netdoers.zname.utils.CircleImageView;
 import com.netdoers.zname.utils.ImageCompression;
-import com.netdoers.zname.utils.ScrollableGridView;
 import com.netdoers.zname.utils.SegmentedButton;
 import com.netdoers.zname.utils.SegmentedButton.OnClickListenerSegmentedButton;
 import com.netdoers.zname.utils.Utilities;
@@ -69,10 +69,10 @@ public class ProfileActivity extends SherlockFragmentActivity{
 	//DECLARE VIEWS
 	private CircleImageView mCircleImgProfile;
 	private ActionBar mActionBar;
-	private SegmentedButton statusSegmentedButton;
-	private ScrollableGridView statusSelectGrid;
+//	private SegmentedButton statusSegmentedButton;
+//	private ScrollableGridView statusSelectGrid;
 	private TextView statusEdit;
-	private TextView  zNumberTxt, statusHeadTxt, statusSelectHead, nameTxt;
+	private TextView  zNumberTxt, statusHeadTxt, statusSelectHead, nameTxt, znameTxt;
 	private ImageView statusUpdate,  imageUpdate;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
@@ -100,26 +100,23 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		setContentView(R.layout.activity_profile);
 
 		initUi();
-		
 		try {
 			zNumberTxt.setText(Zname.getPreferences().getUserNumber());
-		} catch (NullPointerException e) {
-			Log.e(TAG, e.toString());
-		}
-		
-		try {
 			nameTxt.setText(Zname.getPreferences().getFullName());
+			znameTxt.setText(Zname.getPreferences().getUserName());
+			statusEdit.setText(Zname.getPreferences().getUserStatus());
+			setStatusEditIcon(Zname.getPreferences().getUserStatusType());
 		} catch (NullPointerException e) {
 			Log.e(TAG, e.toString());
 		}
-		
+				
 		intentName = Zname.getPreferences().getUserName();
 
 		setUniversalImageLoader();
 		setFontStyle();
 		setActionBar("Profile");
 
-		statusSegmentedButton.clearButtons();
+		/*statusSegmentedButton.clearButtons();
 		statusSegmentedButton.addButtons(
                 getString(R.string.str_profile_status_work),
                 getString(R.string.str_profile_status_read),
@@ -143,7 +140,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		}
 
 			
-		onStatusAdapter(0);
+		onStatusAdapter(0);*/
 
 		new GetProfileImageTask(this, imageLoader, options).execute();
 		
@@ -182,7 +179,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		
         // Some example click handlers. Note the click won't get executed
         // if the segmented button is already selected (dark blue)
-		statusSegmentedButton.setOnClickListener(new OnClickListenerSegmentedButton() {
+		/*statusSegmentedButton.setOnClickListener(new OnClickListenerSegmentedButton() {
             @Override
             public void onClick(int index) {
             	Cursor cr = null;
@@ -236,7 +233,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 					cr.close();
 				}
             }
-        });
+        });*/
 		
 //		statusUpdate.setOnClickListener(new View.OnClickListener() {
 //			@Override
@@ -256,7 +253,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		onStatusAdapter(0);
+//		onStatusAdapter(0);
 		zNumberTxt.setText(Zname.getPreferences().getUserNumber());
 		nameTxt.setText(Zname.getPreferences().getFullName());
 	}
@@ -291,16 +288,17 @@ public class ProfileActivity extends SherlockFragmentActivity{
 
 	public void initUi(){
 		mCircleImgProfile = (CircleImageView)findViewById(R.id.fragment_profile_img_zname);
-		statusSegmentedButton = (SegmentedButton)findViewById(R.id.segmented);
 		statusEdit = (TextView)findViewById(R.id.fragment_profile_zname_edit_status);
 		zNumberTxt = (TextView)findViewById(R.id.fragment_profile_txt_call_1);
 		nameTxt = (TextView)findViewById(R.id.fragment_profile_txt_name);
+		znameTxt = (TextView)findViewById(R.id.fragment_profile_txt_zname);
 		statusUpdate = (ImageView)findViewById(R.id.fragment_profile_zname_status_update);
 		imageUpdate = (ImageView)findViewById(R.id.fragment_profile_img_change);
 		statusHeadTxt = (TextView)findViewById(R.id.fragment_profile_txt_zname_status_head);
-		statusSelectHead = (TextView)findViewById(R.id.fragment_profile_zname_update_gridview_head);
+		/*statusSelectHead = (TextView)findViewById(R.id.fragment_profile_zname_update_gridview_head);
+		statusSegmentedButton = (SegmentedButton)findViewById(R.id.segmented);
 		statusSelectGrid = (ScrollableGridView)findViewById(R.id.fragment_profile_zname_update_gridview);
-		statusSelectGrid.setExpanded(true);
+		statusSelectGrid.setExpanded(true);*/
 	}
 	
 	public void setFontStyle(){
@@ -309,8 +307,9 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		statusEdit.setTypeface(styleFont);
 		zNumberTxt.setTypeface(styleFont);
 		nameTxt.setTypeface(styleFont);
+		znameTxt.setTypeface(styleFont);
 		statusHeadTxt.setTypeface(styleFont);
-		statusSelectHead.setTypeface(styleFont);
+//		statusSelectHead.setTypeface(styleFont);
 	}
 	
 	public void setActionBar(String str){
@@ -336,7 +335,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
         .build();
 	}
 	
-	public void onUpdateStatusSegment(String s){
+	/*public void onUpdateStatusSegment(String s){
 		if(!TextUtils.isEmpty(s)){
 			ContentValues values = new ContentValues();
 			values.put(DBConstant.User_Status_Columns.COLUMN_STATUS, s);
@@ -347,9 +346,9 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			
 			statusEdit.setText(s);
 		}
-	}
+	}*/
 	
-	public void onStatusUpdate(View v){
+	/*public void onStatusUpdate(View v){
 		switch(statusSegmentedButton.getSelectedButtonIndex()){
 		case 0: // watch
 			showUpdateDialog(getString(R.string.str_profile_status_update), getString(R.string.str_profile_status_work_hint), getResources().getDrawable(R.drawable.ic_hint_work), 0);
@@ -366,7 +365,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		default:
 			break;
 		}
-	}
+	}*/
 	
 	public void onContactUpdate(View v){
 		showUpdateDialog(getString(R.string.str_profile_update_contact),Zname.getPreferences().getUserNumber(),getResources().getDrawable(R.drawable.accounts_glyph_phone_default),4);
@@ -446,7 +445,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 						}
 						break;
 					default:
-						onUpdateStatusSegment(updateTxt.getText().toString());
+//						onUpdateStatusSegment(updateTxt.getText().toString());
 						break;
 					}
 					dialog.dismiss();
@@ -513,7 +512,122 @@ public class ProfileActivity extends SherlockFragmentActivity{
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
-	public void onStatusAdapter(int statusType){
+	
+	public void onStatusUpdate(View v){
+		showUpdateStatusDialog();
+	}
+	
+/*	public void showDialogToChooseStatus() {
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+				ProfileActivity.this);
+		builderSingle.setTitle(getResources().getString(R.string.str_profile_status_title));
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+				ProfileActivity.this,
+				android.R.layout.select_dialog_singlechoice);
+
+		arrayAdapter.add(getResources().getString(R.string.str_profile_status_random));
+		arrayAdapter.add(getResources().getString(R.string.str_profile_status_read));
+		arrayAdapter.add(getResources().getString(R.string.str_profile_status_place));
+		arrayAdapter.add(getResources().getString(R.string.str_profile_status_work));
+
+		builderSingle.setNegativeButton("CANCEL",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+
+		builderSingle.setAdapter(arrayAdapter,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						String strName = arrayAdapter.getItem(which);
+						showUpdateStatusDialog(strName, which);
+					}
+				});
+		builderSingle.show();
+	}*/
+
+	public void showUpdateStatusDialog()
+	{
+		final Dialog dialog = new Dialog(ProfileActivity.this);
+		try {
+			dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("Dialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_profile_status);
+		
+		final EditText mUpdateTxt = (EditText)dialog.findViewById(R.id.dialog_profile_status_txt);
+		Button mBtnUpdateOk = (Button)dialog.findViewById(R.id.dialog_profile_status_ok);
+		Button mBtnUpdateCancel = (Button)dialog.findViewById(R.id.dialog_profile_status_cancel);
+		final SegmentedButton mStatusSegmentedButton = (SegmentedButton)dialog.findViewById(R.id.dialog_profile_status_segmented);
+		
+		mStatusSegmentedButton.clearButtons();
+		mStatusSegmentedButton.addButtons(
+                getString(R.string.str_profile_status_work),
+                getString(R.string.str_profile_status_read),
+                getString(R.string.str_profile_status_place),
+                getString(R.string.str_profile_status_random)
+                );
+
+        // First button is selected
+		mStatusSegmentedButton.setPushedButtonIndex(0);
+
+		mStatusSegmentedButton.setOnClickListener( new OnClickListenerSegmentedButton() {
+            @Override
+            public void onClick(int index) {
+            	switch (index) {
+        		case 0:
+        			mUpdateTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_random), null, null, null);
+        			break;
+        		case 1:
+        			mUpdateTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_read), null, null, null);
+        			break;
+        		case 2:
+        			mUpdateTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_places), null, null, null);
+        			break;
+        		case 3:
+        			mUpdateTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_work), null, null, null);
+        			break;
+        		}
+              }
+            });
+		
+		
+		
+		mUpdateTxt.setTypeface(styleFont);
+		mBtnUpdateOk.setTypeface(styleFont);
+		mBtnUpdateCancel.setTypeface(styleFont);
+		
+		mBtnUpdateOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(!TextUtils.isEmpty(mUpdateTxt.getText().toString())){
+					if(isNetworkAvailable()){
+						new UpdateStatusAsync(ProfileActivity.this, mUpdateTxt.getText().toString(), String.valueOf(mStatusSegmentedButton.getSelectedButtonIndex())).execute();
+						dialog.dismiss();
+					}else{
+						Toast.makeText(ProfileActivity.this, getResources().getString(R.string.str_no_internet), Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+		mBtnUpdateCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
+	}
+
+	
+	
+	/*public void onStatusAdapter(int statusType){
 		Cursor c = getContentResolver().query(DBConstant.User_Status_Columns.CONTENT_URI, null, DBConstant.User_Status_Columns.COLUMN_STATUS_TYPE+"="+statusType, null, DBConstant.User_Status_Columns.COLUMN_ID + " DESC");
 		if(c.getCount() > 0){
 			ArrayList<String> arrWorkStatus = new ArrayList<String>();
@@ -533,7 +647,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		if (c != null) {
 			c.close();
 		}
-	}
+	}*/
 	
 	public void fontActionBar(String str)
 	{
@@ -633,6 +747,29 @@ public class ProfileActivity extends SherlockFragmentActivity{
 			}
 		}
 
+	public void setStatusEditIcon(String statusType){
+		try{
+			if(!TextUtils.isEmpty(statusType))
+				switch (Integer.parseInt(statusType)) {
+				case 0:
+					statusEdit.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_random), null, null, null);
+					break;
+				case 1:
+					statusEdit.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_read), null, null, null);
+					break;
+				case 2:
+					statusEdit.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_places), null, null, null);
+					break;
+				case 3:
+					statusEdit.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_hint_work), null, null, null);
+					break;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public class UpdateProfilePictureUploadTask extends AsyncTask<Void, Void, Void>
 	{
 		Context context;
@@ -756,7 +893,7 @@ public class ProfileActivity extends SherlockFragmentActivity{
 					Toast.makeText(ProfileActivity.this, errorvalue, Toast.LENGTH_SHORT).show();
 			}
 			
-			onStatusAdapter(statusSegmentedButton.getSelectedButtonIndex());
+//			onStatusAdapter(statusSegmentedButton.getSelectedButtonIndex());
 		}
 	}
 
@@ -813,6 +950,71 @@ public class ProfileActivity extends SherlockFragmentActivity{
 		}
 
 	}
+	
+	private class UpdateStatusAsync extends AsyncTask<Void, Void, Void>{
+		private Context mContext;
+		private String status;
+		private String statusType;
+		private ProgressDialog mProgressDialog;
+		private boolean successValue = false;
+		private String errorValue;
+	
+		
+		public UpdateStatusAsync(Context context, String status, String statusType){
+			mContext=context;
+			this.status =status;
+			this.statusType=statusType;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			mProgressDialog = new ProgressDialog(mContext);
+			mProgressDialog.setMessage("Updating...");
+			mProgressDialog.show();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			JSONObject dataToSend = RequestBuilder.getStatusData(status, statusType);
+			try {
+				String str = RestClient.postData(AppConstants.URLS.STATUS_URL+Zname.getPreferences().getApiKey()+"/status", dataToSend);
+				JSONObject object = new JSONObject(str);
+				if(!(successValue = object.getBoolean("status"))){
+					try{
+						errorValue = object.getString("errors");
+					}
+					catch(JSONException e){
+						Log.e(TAG, e.toString());
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Log.e(TAG, e.toString());
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			if(successValue){
+				Zname.getPreferences().setUserStatus(status);
+				Zname.getPreferences().setUserStatusType(statusType);
+				statusEdit.setText(Zname.getPreferences().getUserStatus());
+				setStatusEditIcon(Zname.getPreferences().getUserStatusType());
+			}
+			if(mProgressDialog!=null)
+				mProgressDialog.dismiss();
+		}
+
+	}
+	
+	
 	public class StatusAdapter extends BaseAdapter{
 		ArrayList<String> arrStatus;
 		

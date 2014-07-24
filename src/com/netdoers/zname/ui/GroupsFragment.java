@@ -29,6 +29,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -41,6 +42,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,7 +126,7 @@ public class GroupsFragment extends SherlockFragment {
         
 		arrListGroups = new ArrayList<GroupDTO>();
 		
-		registerForContextMenu(mListView);
+//		registerForContextMenu(mListView);
 	}
 
 	@Override
@@ -134,7 +136,7 @@ public class GroupsFragment extends SherlockFragment {
 		refreshGroupsData();
 	}
 
-	@Override
+	/*@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 	                                ContextMenuInfo menuInfo) {
 	    super.onCreateContextMenu(menu, v, menuInfo);
@@ -153,7 +155,7 @@ public class GroupsFragment extends SherlockFragment {
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
-	}
+	}*/
 	
 	private void setEventListeners(){
 		mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -170,6 +172,24 @@ public class GroupsFragment extends SherlockFragment {
 				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_NAME,viewTagName);
 				groupIntent.putExtra(AppConstants.TAGS.INTENT.TAG_PHOTO,viewTagPhoto);
 				startActivity(groupIntent);
+			}
+		});
+		
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() { 
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+			
+				// vibration for 100 milliseconds
+				((Vibrator)getActivity().getApplication().getApplicationContext().getSystemService(getActivity().VIBRATOR_SERVICE)).vibrate(50);
+				
+				String viewTagId = view.getTag(R.id.TAG_GROUP_ID).toString();
+				String viewTagName = view.getTag(R.id.TAG_GROUP_NAME).toString();
+				
+				showAlertModifyDialog(viewTagName, viewTagId);
+				return false;
 			}
 		});
 
@@ -191,30 +211,105 @@ public class GroupsFragment extends SherlockFragment {
 	}
 
 	// ALERT DIALOG
-	public void showAlertDialogDelete(final String viewTagId, String viewTagName){
-		new AlertDialog.Builder(getActivity())
-	    .setTitle("Delete entry")
-	    .setMessage("Do want to modify group "+ viewTagName +"?")
-	    .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with delete
-	        	dialog.cancel();
-	        }
-	     })
-	    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        	getActivity().getContentResolver().delete(DBConstant.Groups_Columns.CONTENT_URI, DBConstant.Groups_Columns.COLUMN_GROUP_ID +"=?", new String[]{viewTagId});
-	        	getActivity().getContentResolver().delete(DBConstant.Groups_Contacts_Columns.CONTENT_URI, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?" , new String[]{viewTagId});
-	        	refreshGroupsData();
-	        	mAdapter.notifyDataSetChanged();
-	        	dialog.cancel();
-	        }
-	     })
-	    .setIcon(android.R.drawable.ic_delete)
-	     .show();
+	public void showInputDialog() {
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_add_group);
 
+		TextView groupTitle = (TextView) dialog
+				.findViewById(R.id.dialog_add_group_title);
+		final EditText groupName = (EditText) dialog
+				.findViewById(R.id.dialog_group_name_txt);
+		Button groupAdd = (Button) dialog
+				.findViewById(R.id.dialog_group_name_ok);
+		Button groupCancel = (Button) dialog
+				.findViewById(R.id.dialog_group_name_cancel);
+
+		groupTitle.setTypeface(styleFont);
+		groupName.setTypeface(styleFont);
+		groupAdd.setTypeface(styleFont);
+		groupCancel.setTypeface(styleFont);
+
+		groupAdd.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (!TextUtils.isEmpty(groupName.getText().toString())) {
+					ContentValues values = new ContentValues();
+					values.put(DBConstant.Groups_Columns.COLUMN_GROUP_ID,
+							System.currentTimeMillis());
+					values.put(DBConstant.Groups_Columns.COLUMN_GROUP_NAME,
+							groupName.getText().toString().trim());
+					getActivity().getContentResolver().insert(
+							DBConstant.Groups_Columns.CONTENT_URI, values);
+
+					refreshGroupsData();
+
+					dialog.dismiss();
+				} else {
+					groupName.setError("Please enter valid group name");
+				}
+			}
+		});
+
+		groupCancel.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
 	}
+	
+	public void showAlertModifyDialog(final String name,final String id)
+	{
+		final Dialog dialog = new Dialog(getActivity());
+		try {
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		} catch (Exception e) {
+			Log.e("inputDialog", e.toString());
+		}
+		dialog.setContentView(R.layout.dialog_display_info);
+		
+		TextView mDialogTitle = (TextView)dialog.findViewById(R.id.dialog_display_info_title);
+		TextView mDialogText = (TextView)dialog.findViewById(R.id.dialog_display_into_txt);
+		Button mDialogBtnEdit = (Button)dialog.findViewById(R.id.dialog_display_info_ok);
+		Button mDialogBtnDelete = (Button)dialog.findViewById(R.id.dialog_display_info_cancel);
+		
+		mDialogTitle.setText(name);
+		
+		mDialogTitle.setTypeface(styleFont);
+		mDialogText.setTypeface(styleFont);
+		mDialogBtnEdit.setTypeface(styleFont);
+		mDialogBtnDelete.setTypeface(styleFont);
+		
+		mDialogBtnDelete.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showAlertDialogDelete(id, name);
+				dialog.dismiss();
+			}
+		});
+		
+		mDialogBtnEdit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				showAlertDialogEdit(id, name);
+				dialog.dismiss();
+			}
+		});
+		
+		dialog.show();
+	}
+
 	public void showAlertDialogEdit(final String viewTagId,final String viewTagName) {
 		final Dialog dialog = new Dialog(getActivity());
 		try {
@@ -272,61 +367,52 @@ public class GroupsFragment extends SherlockFragment {
 		});
 		dialog.show();
 	}
-	public void showInputDialog() {
+
+	public void showAlertDialogDelete(final String viewTagId, String viewTagName){
+		
 		final Dialog dialog = new Dialog(getActivity());
 		try {
 			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		} catch (Exception e) {
 			Log.e("inputDialog", e.toString());
 		}
-		dialog.setContentView(R.layout.dialog_add_group);
-
-		TextView groupTitle = (TextView) dialog
-				.findViewById(R.id.dialog_add_group_title);
-		final EditText groupName = (EditText) dialog
-				.findViewById(R.id.dialog_group_name_txt);
-		Button groupAdd = (Button) dialog
-				.findViewById(R.id.dialog_group_name_ok);
-		Button groupCancel = (Button) dialog
-				.findViewById(R.id.dialog_group_name_cancel);
-
-		groupTitle.setTypeface(styleFont);
-		groupName.setTypeface(styleFont);
-		groupAdd.setTypeface(styleFont);
-		groupCancel.setTypeface(styleFont);
-
-		groupAdd.setOnClickListener(new View.OnClickListener() {
+		dialog.setContentView(R.layout.dialog_delete_info);
+		
+		TextView mDialogTitle = (TextView)dialog.findViewById(R.id.dialog_delete_info_title);
+		TextView mDialogText = (TextView)dialog.findViewById(R.id.dialog_delete_into_txt);
+		Button mDialogBtnCancel = (Button)dialog.findViewById(R.id.dialog_delete_info_cancel);
+		Button mDialogBtnOk = (Button)dialog.findViewById(R.id.dialog_delete_info_ok);
+		
+		mDialogText.setText("Do want to delete group "+ viewTagName +"?");
+		
+		mDialogTitle.setTypeface(styleFont);
+		mDialogText.setTypeface(styleFont);
+		mDialogBtnCancel.setTypeface(styleFont);
+		mDialogBtnOk.setTypeface(styleFont);
+		
+		mDialogBtnOk.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (!TextUtils.isEmpty(groupName.getText().toString())) {
-					ContentValues values = new ContentValues();
-					values.put(DBConstant.Groups_Columns.COLUMN_GROUP_ID,
-							System.currentTimeMillis());
-					values.put(DBConstant.Groups_Columns.COLUMN_GROUP_NAME,
-							groupName.getText().toString().trim());
-					getActivity().getContentResolver().insert(
-							DBConstant.Groups_Columns.CONTENT_URI, values);
-
-					refreshGroupsData();
-
-					dialog.dismiss();
-				} else {
-					groupName.setError("Please enter valid group name");
-				}
+		    	getActivity().getContentResolver().delete(DBConstant.Groups_Columns.CONTENT_URI, DBConstant.Groups_Columns.COLUMN_GROUP_ID +"=?", new String[]{viewTagId});
+	        	getActivity().getContentResolver().delete(DBConstant.Groups_Contacts_Columns.CONTENT_URI, DBConstant.Groups_Contacts_Columns.COLUMN_GROUP_ID +"=?" , new String[]{viewTagId});
+	        	refreshGroupsData();
+	        	mAdapter.notifyDataSetChanged();
+	        	dialog.cancel();
 			}
 		});
-
-		groupCancel.setOnClickListener(new View.OnClickListener() {
-
+		
+		mDialogBtnCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				dialog.dismiss();
+				dialog.cancel();
 			}
 		});
 		dialog.show();
 	}
+
+	
 	// ADD CONTACTS TO CONTACTS ADAPTER
 
 	public void refreshGroupsData() {
