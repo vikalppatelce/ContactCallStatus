@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:foursquared="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dip"
+    android:layout_marginStart="8dip"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:orientation="horizontal" >
+
+            <com.netdoers.zname.utils.SegmentedButton
+                android:id="@+id/dialog_profile_status_segmented"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                foursquared:btnPaddingBottom="10dip"
+                foursquared:btnPaddingTop="10dip"
+                foursquared:cornerRadius="1dip"
+                foursquared:gradientColorOffEnd="#e59400"
+                foursquared:gradientColorOffStart="#ce8500"
+                foursquared:gradientColorOnEnd="@color/swarm_action_bar"
+                foursquared:gradientColorOnStart="@color/swarm_action_bar"
+                foursquared:gradientColorSelectedEnd="#B77600"
+                foursquared:gradientColorSelectedStart="#B77600"
+                foursquared:strokeColor="@color/swarm_action_bar"
+                foursquared:strokeWidth="1dip"
+                foursquared:textStyle="@style/TextViewStyleHeaderButtonBlue" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:background="@color/background_action_bar_orange"
+            android:visibility="visible"
+            tools:ignore="NewApi" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/dialog_profile_status_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dip"
+                android:layout_marginRight="16dip"
+                android:background="@drawable/zname_edit_text_holo_light"
+                android:drawableLeft="@drawable/accounts_glyph_phone_default"
+                android:inputType="text"
+                android:paddingBottom="8dip"
+                android:paddingEnd="16dip"
+                android:paddingStart="16dip"
+                android:paddingTop="8dip"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_action_bar_orange"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/dialog_profile_status_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/swarm_action_bar"
+                android:paddingBottom="8dip"
+                android:paddingEnd="16dip"
+                android:paddingStart="16dip"
+                android:paddingTop="8dip"
+                android:text="@string/str_profile_update_cancel"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#FFFFFF" />
+
+            <Button
+                android:id="@+id/dialog_profile_status_ok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/swarm_action_bar"
+                android:paddingBottom="8dip"
+                android:paddingEnd="16dip"
+                android:paddingStart="16dip"
+                android:paddingTop="8dip"
+                android:text="@string/str_profile_update_ok"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

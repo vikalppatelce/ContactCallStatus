@@ -19,6 +19,7 @@ import com.netdoers.zname.R;
 import com.netdoers.zname.sqlite.DBConstant;
 import com.netdoers.zname.ui.MotherActivity;
 import com.netdoers.zname.ui.NotificationActivity;
+import com.netdoers.zname.utils.JSONFileWriter;
 
 public class GcmIntentService extends IntentService {
     
@@ -111,6 +112,16 @@ public class GcmIntentService extends IntentService {
 					values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME, msgJsonObject.getString("full_name"));
 					getContentResolver().insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
 					sendNotification("Zname", msgJsonObject.getString("zname") + " added you as a friend", messageType);
+					try{
+						JSONFileWriter.jsonFriendList(
+								String.valueOf(System.currentTimeMillis()),
+								msgJsonObject.getString("zname"),
+								msgJsonObject.getString("contact_number"),
+								msgJsonObject.getString("full_name"),
+								msgJsonObject.getString("profile_pic"));
+					}catch(Exception e){
+						Log.i(TAG, e.toString());
+					}
 				} 
 				catch (Exception e){
 				}

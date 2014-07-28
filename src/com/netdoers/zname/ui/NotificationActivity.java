@@ -16,7 +16,6 @@
 package com.netdoers.zname.ui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,20 +50,15 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.netdoers.zname.AppConstants;
 import com.netdoers.zname.BuildConfig;
 import com.netdoers.zname.R;
 import com.netdoers.zname.Zname;
 import com.netdoers.zname.beans.NotificationDTO;
-import com.netdoers.zname.service.NetworkVolley;
-import com.netdoers.zname.service.NetworkVolley.VolleyPostJsonRequest;
 import com.netdoers.zname.service.RequestBuilder;
 import com.netdoers.zname.service.RestClient;
 import com.netdoers.zname.sqlite.DBConstant;
+import com.netdoers.zname.utils.JSONFileWriter;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -318,7 +312,7 @@ public class NotificationActivity extends SherlockFragmentActivity {
 
 	}
 	
-	public void showEditNameDialog(String zname, final String fullName, String znumber, String profilepic){
+	public void showEditNameDialog(final String zname, final String fullName, final String znumber, final String profilepic){
 		final Dialog dialog = new Dialog(NotificationActivity.this);
 		try {
 			dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
@@ -353,6 +347,13 @@ public class NotificationActivity extends SherlockFragmentActivity {
 				// TODO Auto-generated method stub
 				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME, fullName);
 				Zname.getApplication().getApplicationContext().getContentResolver().insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
+				try{
+					JSONFileWriter.jsonFriendList(
+							String.valueOf(System.currentTimeMillis()), zname,
+							znumber, fullName, profilepic);
+				}catch(Exception e){
+					Log.e(TAG, e.toString());
+				}
 				dialog.dismiss();
 				Toast.makeText(Zname.getApplication().getApplicationContext(),  fullName + " has been added in your contacts", Toast.LENGTH_SHORT).show();
 			}
@@ -366,6 +367,14 @@ public class NotificationActivity extends SherlockFragmentActivity {
 			if(!TextUtils.isEmpty(updateTxt.getText().toString())){
 				values.put(DBConstant.All_Contacts_Columns.COLUMN_DISPLAY_NAME, updateTxt.getText().toString());
 				Zname.getApplication().getApplicationContext().getContentResolver().insert(DBConstant.All_Contacts_Columns.CONTENT_URI, values);
+				try{
+						JSONFileWriter.jsonFriendList(
+								String.valueOf(System.currentTimeMillis()),
+								zname, znumber, updateTxt.getText().toString(),
+								profilepic);
+				}catch(Exception e){
+					Log.e(TAG, e.toString());
+				}
 				dialog.dismiss();
 				Toast.makeText(Zname.getApplication().getApplicationContext(),  fullName + " has been added in your contacts", Toast.LENGTH_SHORT).show();
 			}

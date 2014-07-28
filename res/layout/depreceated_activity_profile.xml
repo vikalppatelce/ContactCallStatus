@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:foursquared="http://schemas.android.com/apk/res-auto"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_action_bar_orange"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                     android:layout_marginTop="20dp"
+                     >
+
+                    <com.netdoers.zname.utils.CircleImageView
+                        android:id="@+id/fragment_profile_img_zname"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/def_contact"
+                        circle:border_color="@android:color/white"
+                        circle:border_width="2dp" />
+
+                    <ImageView
+                        android:id="@+id/fragment_profile_img_change"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="30dp"
+                        android:onClick="onProfilePicUpdate"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_signup_editphoto" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/fragment_profile_txt_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="Zname"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/fragment_profile_txt_call_1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="Zname"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/fragment_profile_txt_zname_status_head"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/str_profile_status"
+                android:textColor="@color/background_action_bar_orange"
+                android:textSize="@dimen/dim_txt_head" />
+
+            <com.netdoers.zname.utils.SegmentedButton
+                android:id="@+id/segmented"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                foursquared:btnPaddingBottom="3dip"
+                foursquared:btnPaddingTop="3dip"
+                foursquared:cornerRadius="1dip"
+                foursquared:gradientColorOffEnd="#e59400"
+                foursquared:gradientColorOffStart="#ce8500"
+                foursquared:gradientColorOnEnd="@color/background_action_bar_orange"
+                foursquared:gradientColorOnStart="@color/background_action_bar_orange"
+                foursquared:gradientColorSelectedEnd="#B77600"
+                foursquared:gradientColorSelectedStart="#B77600"
+                foursquared:strokeColor="@color/background_action_bar_orange"
+                foursquared:strokeWidth="1dip"
+                foursquared:textStyle="@style/TextViewStyleHeaderButtonBlue" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/fragment_profile_zname_edit_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.99"
+                    android:gravity="left|center"
+                    android:paddingLeft="7dp"
+                    android:textColor="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/lighter_gray" />
+
+                <ImageView
+                    android:id="@+id/fragment_profile_zname_status_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="0.01"
+                    android:onClick="onStatusUpdate"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_profile_edit" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/fragment_profile_zname_update_gridview_head"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/str_profile_status_grid_head"
+                android:textColor="@color/background_action_bar_orange"
+                android:textSize="@dimen/dim_txt_head" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/background_action_bar_orange" />
+
+            <com.netdoers.zname.utils.ScrollableGridView
+                android:id="@+id/fragment_profile_zname_update_gridview"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="2.0dip"
+                android:layout_marginLeft="15.0dip"
+                android:layout_marginRight="15.0dip"
+                android:drawSelectorOnTop="true"
+                android:horizontalSpacing="2.0dip"
+                android:listSelector="@drawable/list_item_selected"
+                android:numColumns="1"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="2.0dip" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
